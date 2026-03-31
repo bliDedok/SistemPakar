@@ -1,14 +1,20 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import { symptomRoutes } from "../modules/symptom/interface-http/symptom.routes.js";
 import { diagnosisRoutes } from "../modules/diagnosis/interface-http/diagnosis.routes.js";
 
-const app = Fastify({
-  logger: true,
-});
+const app = Fastify({ logger: true });
 
 await app.register(cors, {
   origin: true,
   credentials: true,
+});
+
+app.get("/", async () => {
+  return {
+    ok: true,
+    message: "SPK Anak API is running",
+  };
 });
 
 app.get("/health", async () => {
@@ -19,6 +25,7 @@ app.get("/health", async () => {
   };
 });
 
+await app.register(symptomRoutes);
 await app.register(diagnosisRoutes);
 
 const port = Number(process.env.PORT ?? 3001);

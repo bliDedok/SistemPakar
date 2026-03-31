@@ -10,4 +10,21 @@ export class PrismaDiagnosisRepository {
       },
     });
   }
+
+  async getDiseasesByIds(ids: string[]) {
+    return prisma.disease.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      select: {
+        id: true,
+        code: true,
+        name: true,
+        description: true,
+        recommendation: true,
+      },
+    });
+  }
 }
