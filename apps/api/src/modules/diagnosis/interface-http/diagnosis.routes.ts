@@ -26,11 +26,11 @@ export async function diagnosisRoutes(app: FastifyInstance) {
     const repository = new PrismaDiagnosisRepository();
     const useCase = new RunDiagnosisUseCase(repository);
 
-    const result = await useCase.execute(parsed.data.answers);
+    const data = await useCase.execute(parsed.data.answers);
 
     return {
       ok: true,
-      data: result,
+      data,
     };
   });
 }
