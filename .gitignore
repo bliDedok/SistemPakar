@@ -9,6 +9,12 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+.next
+apps/web/.next
+apps/api/node_modules
+apps/web/node_modules
+.env
+.env.local
 
 # testing
 /coverage

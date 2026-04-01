@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/main/server.ts",
+    "dev": "tsx watch src/main/index.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/main/server.js",
+    "start": "node dist/main/index.js",
     "lint": "eslint .",
     "prisma:generate": "prisma generate --schema ./prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema ./prisma/schema.prisma",
