@@ -4,6 +4,7 @@ import { adminRoutes } from "../modules/admin/interface-http/admin.routes";
 import { symptomRoutes } from "../modules/symptom/interface-http/symptom.routes";
 import { diagnosisRoutes } from "../modules/diagnosis/interface-http/diagnosis.routes";
 import { diseaseRoutes } from "../modules/disease/interface-http/disease.routes";
+import { weightRoutes } from "../modules/weight/interface-http/weight.routes";
 
 export async function buildServer() {
   const app = Fastify({ logger: true });
@@ -32,8 +33,9 @@ export async function buildServer() {
 
   await app.register(adminRoutes);
   await app.register(symptomRoutes);
-  await app.register(diagnosisRoutes);
   await app.register(diseaseRoutes);
+  await app.register(weightRoutes);
+  await app.register(diagnosisRoutes);
 
   return app;
 }

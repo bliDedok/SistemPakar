@@ -262,3 +262,119 @@ export async function deleteAdminDisease(id: string) {
 
   return data;
 }
+
+
+
+
+// API CF Weights Admin
+export async function fetchAdminWeights() {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/weights`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat bobot CF");
+  }
+
+  return data;
+}
+
+export async function fetchAdminWeightById(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/weights/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat detail bobot CF");
+  }
+
+  return data;
+}
+
+export async function createAdminWeight(payload: {
+  diseaseId: string;
+  symptomId: string;
+  cfExpert: number;
+  note?: string;
+}) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/weights`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menambah bobot CF");
+  }
+
+  return data;
+}
+
+export async function updateAdminWeight(
+  id: string,
+  payload: {
+    diseaseId: string;
+    symptomId: string;
+    cfExpert: number;
+    note?: string;
+  }
+) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/weights/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal mengubah bobot CF");
+  }
+
+  return data;
+}
+
+export async function deleteAdminWeight(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/weights/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menghapus bobot CF");
+  }
+
+  return data;
+}
