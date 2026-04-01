@@ -384,15 +384,14 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  Symptom: 'Symptom',
   Disease: 'Disease',
+  Symptom: 'Symptom',
   Rule: 'Rule',
-  RuleCondition: 'RuleCondition',
+  RuleDetail: 'RuleDetail',
   DiseaseSymptomWeight: 'DiseaseSymptomWeight',
   Consultation: 'Consultation',
-  ConsultationMessage: 'ConsultationMessage',
   ConsultationAnswer: 'ConsultationAnswer',
-  DiagnosisResult: 'DiagnosisResult'
+  ConsultationResult: 'ConsultationResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,84 +407,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "symptom" | "disease" | "rule" | "ruleCondition" | "diseaseSymptomWeight" | "consultation" | "consultationMessage" | "consultationAnswer" | "diagnosisResult"
+    modelProps: "disease" | "symptom" | "rule" | "ruleDetail" | "diseaseSymptomWeight" | "consultation" | "consultationAnswer" | "consultationResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    Symptom: {
-      payload: Prisma.$SymptomPayload<ExtArgs>
-      fields: Prisma.SymptomFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SymptomFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SymptomFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
-        }
-        findFirst: {
-          args: Prisma.SymptomFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SymptomFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
-        }
-        findMany: {
-          args: Prisma.SymptomFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>[]
-        }
-        create: {
-          args: Prisma.SymptomCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
-        }
-        createMany: {
-          args: Prisma.SymptomCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SymptomCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>[]
-        }
-        delete: {
-          args: Prisma.SymptomDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
-        }
-        update: {
-          args: Prisma.SymptomUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
-        }
-        deleteMany: {
-          args: Prisma.SymptomDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SymptomUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SymptomUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>[]
-        }
-        upsert: {
-          args: Prisma.SymptomUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
-        }
-        aggregate: {
-          args: Prisma.SymptomAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSymptom>
-        }
-        groupBy: {
-          args: Prisma.SymptomGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SymptomGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SymptomCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SymptomCountAggregateOutputType> | number
-        }
-      }
-    }
     Disease: {
       payload: Prisma.$DiseasePayload<ExtArgs>
       fields: Prisma.DiseaseFieldRefs
@@ -557,6 +482,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DiseaseCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DiseaseCountAggregateOutputType> | number
+        }
+      }
+    }
+    Symptom: {
+      payload: Prisma.$SymptomPayload<ExtArgs>
+      fields: Prisma.SymptomFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SymptomFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SymptomFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
+        }
+        findFirst: {
+          args: Prisma.SymptomFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SymptomFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
+        }
+        findMany: {
+          args: Prisma.SymptomFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>[]
+        }
+        create: {
+          args: Prisma.SymptomCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
+        }
+        createMany: {
+          args: Prisma.SymptomCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SymptomCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>[]
+        }
+        delete: {
+          args: Prisma.SymptomDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
+        }
+        update: {
+          args: Prisma.SymptomUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
+        }
+        deleteMany: {
+          args: Prisma.SymptomDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SymptomUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SymptomUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>[]
+        }
+        upsert: {
+          args: Prisma.SymptomUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomPayload>
+        }
+        aggregate: {
+          args: Prisma.SymptomAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSymptom>
+        }
+        groupBy: {
+          args: Prisma.SymptomGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SymptomGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SymptomCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SymptomCountAggregateOutputType> | number
         }
       }
     }
@@ -634,77 +633,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    RuleCondition: {
-      payload: Prisma.$RuleConditionPayload<ExtArgs>
-      fields: Prisma.RuleConditionFieldRefs
+    RuleDetail: {
+      payload: Prisma.$RuleDetailPayload<ExtArgs>
+      fields: Prisma.RuleDetailFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.RuleConditionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload> | null
+          args: Prisma.RuleDetailFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.RuleConditionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>
+          args: Prisma.RuleDetailFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>
         }
         findFirst: {
-          args: Prisma.RuleConditionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload> | null
+          args: Prisma.RuleDetailFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.RuleConditionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>
+          args: Prisma.RuleDetailFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>
         }
         findMany: {
-          args: Prisma.RuleConditionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>[]
+          args: Prisma.RuleDetailFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>[]
         }
         create: {
-          args: Prisma.RuleConditionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>
+          args: Prisma.RuleDetailCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>
         }
         createMany: {
-          args: Prisma.RuleConditionCreateManyArgs<ExtArgs>
+          args: Prisma.RuleDetailCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.RuleConditionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>[]
+          args: Prisma.RuleDetailCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>[]
         }
         delete: {
-          args: Prisma.RuleConditionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>
+          args: Prisma.RuleDetailDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>
         }
         update: {
-          args: Prisma.RuleConditionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>
+          args: Prisma.RuleDetailUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>
         }
         deleteMany: {
-          args: Prisma.RuleConditionDeleteManyArgs<ExtArgs>
+          args: Prisma.RuleDetailDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.RuleConditionUpdateManyArgs<ExtArgs>
+          args: Prisma.RuleDetailUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.RuleConditionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>[]
+          args: Prisma.RuleDetailUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>[]
         }
         upsert: {
-          args: Prisma.RuleConditionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleConditionPayload>
+          args: Prisma.RuleDetailUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuleDetailPayload>
         }
         aggregate: {
-          args: Prisma.RuleConditionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateRuleCondition>
+          args: Prisma.RuleDetailAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRuleDetail>
         }
         groupBy: {
-          args: Prisma.RuleConditionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.RuleConditionGroupByOutputType>[]
+          args: Prisma.RuleDetailGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RuleDetailGroupByOutputType>[]
         }
         count: {
-          args: Prisma.RuleConditionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.RuleConditionCountAggregateOutputType> | number
+          args: Prisma.RuleDetailCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RuleDetailCountAggregateOutputType> | number
         }
       }
     }
@@ -856,80 +855,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    ConsultationMessage: {
-      payload: Prisma.$ConsultationMessagePayload<ExtArgs>
-      fields: Prisma.ConsultationMessageFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ConsultationMessageFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ConsultationMessageFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>
-        }
-        findFirst: {
-          args: Prisma.ConsultationMessageFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ConsultationMessageFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>
-        }
-        findMany: {
-          args: Prisma.ConsultationMessageFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>[]
-        }
-        create: {
-          args: Prisma.ConsultationMessageCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>
-        }
-        createMany: {
-          args: Prisma.ConsultationMessageCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ConsultationMessageCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>[]
-        }
-        delete: {
-          args: Prisma.ConsultationMessageDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>
-        }
-        update: {
-          args: Prisma.ConsultationMessageUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>
-        }
-        deleteMany: {
-          args: Prisma.ConsultationMessageDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ConsultationMessageUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ConsultationMessageUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>[]
-        }
-        upsert: {
-          args: Prisma.ConsultationMessageUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationMessagePayload>
-        }
-        aggregate: {
-          args: Prisma.ConsultationMessageAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateConsultationMessage>
-        }
-        groupBy: {
-          args: Prisma.ConsultationMessageGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ConsultationMessageGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ConsultationMessageCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ConsultationMessageCountAggregateOutputType> | number
-        }
-      }
-    }
     ConsultationAnswer: {
       payload: Prisma.$ConsultationAnswerPayload<ExtArgs>
       fields: Prisma.ConsultationAnswerFieldRefs
@@ -1004,77 +929,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    DiagnosisResult: {
-      payload: Prisma.$DiagnosisResultPayload<ExtArgs>
-      fields: Prisma.DiagnosisResultFieldRefs
+    ConsultationResult: {
+      payload: Prisma.$ConsultationResultPayload<ExtArgs>
+      fields: Prisma.ConsultationResultFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.DiagnosisResultFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload> | null
+          args: Prisma.ConsultationResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.DiagnosisResultFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>
+          args: Prisma.ConsultationResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>
         }
         findFirst: {
-          args: Prisma.DiagnosisResultFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload> | null
+          args: Prisma.ConsultationResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.DiagnosisResultFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>
+          args: Prisma.ConsultationResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>
         }
         findMany: {
-          args: Prisma.DiagnosisResultFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>[]
+          args: Prisma.ConsultationResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>[]
         }
         create: {
-          args: Prisma.DiagnosisResultCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>
+          args: Prisma.ConsultationResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>
         }
         createMany: {
-          args: Prisma.DiagnosisResultCreateManyArgs<ExtArgs>
+          args: Prisma.ConsultationResultCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.DiagnosisResultCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>[]
+          args: Prisma.ConsultationResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>[]
         }
         delete: {
-          args: Prisma.DiagnosisResultDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>
+          args: Prisma.ConsultationResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>
         }
         update: {
-          args: Prisma.DiagnosisResultUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>
+          args: Prisma.ConsultationResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>
         }
         deleteMany: {
-          args: Prisma.DiagnosisResultDeleteManyArgs<ExtArgs>
+          args: Prisma.ConsultationResultDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.DiagnosisResultUpdateManyArgs<ExtArgs>
+          args: Prisma.ConsultationResultUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.DiagnosisResultUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>[]
+          args: Prisma.ConsultationResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>[]
         }
         upsert: {
-          args: Prisma.DiagnosisResultUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiagnosisResultPayload>
+          args: Prisma.ConsultationResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationResultPayload>
         }
         aggregate: {
-          args: Prisma.DiagnosisResultAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDiagnosisResult>
+          args: Prisma.ConsultationResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConsultationResult>
         }
         groupBy: {
-          args: Prisma.DiagnosisResultGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DiagnosisResultGroupByOutputType>[]
+          args: Prisma.ConsultationResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ConsultationResultGroupByOutputType>[]
         }
         count: {
-          args: Prisma.DiagnosisResultCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DiagnosisResultCountAggregateOutputType> | number
+          args: Prisma.ConsultationResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ConsultationResultCountAggregateOutputType> | number
         }
       }
     }
@@ -1117,27 +1042,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const SymptomScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  name: 'name',
-  description: 'description',
-  questionText: 'questionText',
-  isRedFlag: 'isRedFlag',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type SymptomScalarFieldEnum = (typeof SymptomScalarFieldEnum)[keyof typeof SymptomScalarFieldEnum]
-
-
 export const DiseaseScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
   description: 'description',
-  recommendation: 'recommendation',
+  advice: 'advice',
   severityLevel: 'severityLevel',
+  sourceUrl: 'sourceUrl',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1145,13 +1058,30 @@ export const DiseaseScalarFieldEnum = {
 export type DiseaseScalarFieldEnum = (typeof DiseaseScalarFieldEnum)[keyof typeof DiseaseScalarFieldEnum]
 
 
+export const SymptomScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  questionText: 'questionText',
+  category: 'category',
+  isRedFlag: 'isRedFlag',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SymptomScalarFieldEnum = (typeof SymptomScalarFieldEnum)[keyof typeof SymptomScalarFieldEnum]
+
+
 export const RuleScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
   diseaseId: 'diseaseId',
-  operatorDefault: 'operatorDefault',
-  minMatchCount: 'minMatchCount',
+  operator: 'operator',
+  minMatch: 'minMatch',
+  priority: 'priority',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1159,28 +1089,22 @@ export const RuleScalarFieldEnum = {
 export type RuleScalarFieldEnum = (typeof RuleScalarFieldEnum)[keyof typeof RuleScalarFieldEnum]
 
 
-export const RuleConditionScalarFieldEnum = {
+export const RuleDetailScalarFieldEnum = {
   id: 'id',
   ruleId: 'ruleId',
   symptomId: 'symptomId',
-  operator: 'operator',
-  weight: 'weight',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  isMandatory: 'isMandatory'
 } as const
 
-export type RuleConditionScalarFieldEnum = (typeof RuleConditionScalarFieldEnum)[keyof typeof RuleConditionScalarFieldEnum]
+export type RuleDetailScalarFieldEnum = (typeof RuleDetailScalarFieldEnum)[keyof typeof RuleDetailScalarFieldEnum]
 
 
 export const DiseaseSymptomWeightScalarFieldEnum = {
   id: 'id',
   diseaseId: 'diseaseId',
   symptomId: 'symptomId',
-  mb: 'mb',
-  md: 'md',
   cfExpert: 'cfExpert',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  note: 'note'
 } as const
 
 export type DiseaseSymptomWeightScalarFieldEnum = (typeof DiseaseSymptomWeightScalarFieldEnum)[keyof typeof DiseaseSymptomWeightScalarFieldEnum]
@@ -1188,52 +1112,35 @@ export type DiseaseSymptomWeightScalarFieldEnum = (typeof DiseaseSymptomWeightSc
 
 export const ConsultationScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  sessionTitle: 'sessionTitle',
-  status: 'status',
-  source: 'source',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ConsultationScalarFieldEnum = (typeof ConsultationScalarFieldEnum)[keyof typeof ConsultationScalarFieldEnum]
-
-
-export const ConsultationMessageScalarFieldEnum = {
-  id: 'id',
-  consultationId: 'consultationId',
-  role: 'role',
-  content: 'content',
+  childName: 'childName',
+  childAgeMonths: 'childAgeMonths',
+  gender: 'gender',
   createdAt: 'createdAt'
 } as const
 
-export type ConsultationMessageScalarFieldEnum = (typeof ConsultationMessageScalarFieldEnum)[keyof typeof ConsultationMessageScalarFieldEnum]
+export type ConsultationScalarFieldEnum = (typeof ConsultationScalarFieldEnum)[keyof typeof ConsultationScalarFieldEnum]
 
 
 export const ConsultationAnswerScalarFieldEnum = {
   id: 'id',
   consultationId: 'consultationId',
   symptomId: 'symptomId',
-  confidenceUser: 'confidenceUser',
-  durationDays: 'durationDays',
-  notes: 'notes',
-  createdAt: 'createdAt'
+  userCf: 'userCf'
 } as const
 
 export type ConsultationAnswerScalarFieldEnum = (typeof ConsultationAnswerScalarFieldEnum)[keyof typeof ConsultationAnswerScalarFieldEnum]
 
 
-export const DiagnosisResultScalarFieldEnum = {
+export const ConsultationResultScalarFieldEnum = {
   id: 'id',
   consultationId: 'consultationId',
   diseaseId: 'diseaseId',
-  scoreCf: 'scoreCf',
-  isPrimary: 'isPrimary',
-  explanationJson: 'explanationJson',
-  createdAt: 'createdAt'
+  matchCount: 'matchCount',
+  cfResult: 'cfResult',
+  rank: 'rank'
 } as const
 
-export type DiagnosisResultScalarFieldEnum = (typeof DiagnosisResultScalarFieldEnum)[keyof typeof DiagnosisResultScalarFieldEnum]
+export type ConsultationResultScalarFieldEnum = (typeof ConsultationResultScalarFieldEnum)[keyof typeof ConsultationResultScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1242,14 +1149,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1266,15 +1165,6 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1319,6 +1209,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'RuleOperator'
+ */
+export type EnumRuleOperatorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleOperator'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleOperator[]'
+ */
+export type ListEnumRuleOperatorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleOperator[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1347,16 +1251,16 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
- * Reference to a field of type 'Json'
+ * Reference to a field of type 'Gender'
  */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
     
 
 
 /**
- * Reference to a field of type 'QueryMode'
+ * Reference to a field of type 'Gender[]'
  */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
     
 
 /**
@@ -1454,15 +1358,14 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
-  symptom?: Prisma.SymptomOmit
   disease?: Prisma.DiseaseOmit
+  symptom?: Prisma.SymptomOmit
   rule?: Prisma.RuleOmit
-  ruleCondition?: Prisma.RuleConditionOmit
+  ruleDetail?: Prisma.RuleDetailOmit
   diseaseSymptomWeight?: Prisma.DiseaseSymptomWeightOmit
   consultation?: Prisma.ConsultationOmit
-  consultationMessage?: Prisma.ConsultationMessageOmit
   consultationAnswer?: Prisma.ConsultationAnswerOmit
-  diagnosisResult?: Prisma.DiagnosisResultOmit
+  consultationResult?: Prisma.ConsultationResultOmit
 }
 
 /* Types for Logging */

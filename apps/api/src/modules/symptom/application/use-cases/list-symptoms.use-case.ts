@@ -1,19 +1,9 @@
-type SymptomItem = {
-  id: string;
-  code: string;
-  name: string;
-  questionText: string | null;
-  description: string | null;
-};
-
-type SymptomRepository = {
-  findAll(): Promise<SymptomItem[]>;
-};
+import type { SymptomRepository } from "../../domain/repositories/symptom.repository";
 
 export class ListSymptomsUseCase {
-  constructor(private readonly repository: SymptomRepository) {}
+  constructor(private readonly symptomRepository: SymptomRepository) {}
 
   async execute() {
-    return this.repository.findAll();
+    return this.symptomRepository.findAll();
   }
 }

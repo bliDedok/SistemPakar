@@ -7,57 +7,73 @@ datasource db {
   provider = "postgresql"
 }
 
-model Symptom {
-  id             String                 @id @default(cuid())
-  code           String                 @unique
-  name           String
-  description    String?
-  questionText   String?
-  isRedFlag      Boolean                @default(false)
-  ruleConditions RuleCondition[]
-  diseaseWeights DiseaseSymptomWeight[]
-  answers        ConsultationAnswer[]
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
+enum RuleOperator {
+  AND
+  OR
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
 
 model Disease {
-  id             String                 @id @default(cuid())
-  code           String                 @unique
-  name           String
-  description    String?
-  recommendation String?
-  severityLevel  String?
-  rules          Rule[]
-  weights        DiseaseSymptomWeight[]
-  results        DiagnosisResult[]
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
+  id            String                 @id @default(cuid())
+  code          String                 @unique
+  name          String
+  description   String?
+  advice        String?
+  severityLevel String?
+  sourceUrl     String?
+  isActive      Boolean                @default(true)
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  rules         Rule[]
+  weights       DiseaseSymptomWeight[]
+  results       ConsultationResult[]
+}
+
+model Symptom {
+  id           String                 @id @default(cuid())
+  code         String                 @unique
+  name         String
+  questionText String
+  category     String?
+  isRedFlag    Boolean                @default(false)
+  isActive     Boolean                @default(true)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+
+  ruleDetails  RuleDetail[]
+  weights      DiseaseSymptomWeight[]
+  answers      ConsultationAnswer[]
 }
 
 model Rule {
-  id              String          @id @default(cuid())
-  code            String          @unique
-  name            String
-  diseaseId       String
-  operatorDefault String          @default("AND")
-  minMatchCount   Int?
-  disease         Disease         @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
-  conditions      RuleCondition[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id        String       @id @default(cuid())
+  code      String       @unique
+  name      String
+  diseaseId String
+  operator  RuleOperator @default(AND)
+  minMatch  Int          @default(1)
+  priority  Int          @default(0)
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  disease   Disease      @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  details   RuleDetail[]
 }
 
-model RuleCondition {
-  id        String   @id @default(cuid())
-  ruleId    String
-  symptomId String
-  operator  String?  @default("AND")
-  weight    Float?
-  rule      Rule     @relation(fields: [ruleId], references: [id], onDelete: Cascade)
-  symptom   Symptom  @relation(fields: [symptomId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model RuleDetail {
+  id          String   @id @default(cuid())
+  ruleId      String
+  symptomId   String
+  isMandatory Boolean  @default(false)
+
+  rule        Rule     @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  symptom     Symptom  @relation(fields: [symptomId], references: [id], onDelete: Cascade)
 
   @@unique([ruleId, symptomId])
 }
@@ -66,59 +82,48 @@ model DiseaseSymptomWeight {
   id        String   @id @default(cuid())
   diseaseId String
   symptomId String
-  mb        Float?
-  md        Float?
   cfExpert  Float
+  note      String?
+
   disease   Disease  @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
   symptom   Symptom  @relation(fields: [symptomId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@unique([diseaseId, symptomId])
 }
 
 model Consultation {
-  id           String                @id @default(cuid())
-  userId       String?
-  sessionTitle String?
-  status       String                @default("draft")
-  source       String                @default("chatbot")
-  messages     ConsultationMessage[]
-  answers      ConsultationAnswer[]
-  results      DiagnosisResult[]
-  createdAt    DateTime              @default(now())
-  updatedAt    DateTime              @updatedAt
-}
+  id             String               @id @default(cuid())
+  childName      String?
+  childAgeMonths Int
+  gender         Gender?
+  createdAt      DateTime             @default(now())
 
-model ConsultationMessage {
-  id             String        @id @default(cuid())
-  consultationId String
-  role           String
-  content        String
-  consultation   Consultation  @relation(fields: [consultationId], references: [id], onDelete: Cascade)
-  createdAt      DateTime      @default(now())
+  answers        ConsultationAnswer[]
+  results        ConsultationResult[]
 }
 
 model ConsultationAnswer {
   id             String        @id @default(cuid())
   consultationId String
   symptomId      String
-  confidenceUser Float
-  durationDays   Int?
-  notes          String?
+  userCf         Float
+
   consultation   Consultation  @relation(fields: [consultationId], references: [id], onDelete: Cascade)
   symptom        Symptom       @relation(fields: [symptomId], references: [id], onDelete: Cascade)
-  createdAt      DateTime      @default(now())
+
+  @@unique([consultationId, symptomId])
 }
 
-model DiagnosisResult {
-  id              String        @id @default(cuid())
-  consultationId  String
-  diseaseId       String
-  scoreCf         Float
-  isPrimary       Boolean       @default(false)
-  explanationJson Json?
-  consultation    Consultation  @relation(fields: [consultationId], references: [id], onDelete: Cascade)
-  disease         Disease       @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
-  createdAt       DateTime      @default(now())
+model ConsultationResult {
+  id             String        @id @default(cuid())
+  consultationId String
+  diseaseId      String
+  matchCount     Int
+  cfResult       Float
+  rank           Int
+
+  consultation   Consultation  @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  disease        Disease       @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+
+  @@unique([consultationId, diseaseId])
 }

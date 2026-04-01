@@ -20,70 +20,76 @@ export type ConsultationModel = runtime.Types.Result.DefaultSelection<Prisma.$Co
 
 export type AggregateConsultation = {
   _count: ConsultationCountAggregateOutputType | null
+  _avg: ConsultationAvgAggregateOutputType | null
+  _sum: ConsultationSumAggregateOutputType | null
   _min: ConsultationMinAggregateOutputType | null
   _max: ConsultationMaxAggregateOutputType | null
 }
 
+export type ConsultationAvgAggregateOutputType = {
+  childAgeMonths: number | null
+}
+
+export type ConsultationSumAggregateOutputType = {
+  childAgeMonths: number | null
+}
+
 export type ConsultationMinAggregateOutputType = {
   id: string | null
-  userId: string | null
-  sessionTitle: string | null
-  status: string | null
-  source: string | null
+  childName: string | null
+  childAgeMonths: number | null
+  gender: $Enums.Gender | null
   createdAt: Date | null
-  updatedAt: Date | null
 }
 
 export type ConsultationMaxAggregateOutputType = {
   id: string | null
-  userId: string | null
-  sessionTitle: string | null
-  status: string | null
-  source: string | null
+  childName: string | null
+  childAgeMonths: number | null
+  gender: $Enums.Gender | null
   createdAt: Date | null
-  updatedAt: Date | null
 }
 
 export type ConsultationCountAggregateOutputType = {
   id: number
-  userId: number
-  sessionTitle: number
-  status: number
-  source: number
+  childName: number
+  childAgeMonths: number
+  gender: number
   createdAt: number
-  updatedAt: number
   _all: number
 }
 
 
+export type ConsultationAvgAggregateInputType = {
+  childAgeMonths?: true
+}
+
+export type ConsultationSumAggregateInputType = {
+  childAgeMonths?: true
+}
+
 export type ConsultationMinAggregateInputType = {
   id?: true
-  userId?: true
-  sessionTitle?: true
-  status?: true
-  source?: true
+  childName?: true
+  childAgeMonths?: true
+  gender?: true
   createdAt?: true
-  updatedAt?: true
 }
 
 export type ConsultationMaxAggregateInputType = {
   id?: true
-  userId?: true
-  sessionTitle?: true
-  status?: true
-  source?: true
+  childName?: true
+  childAgeMonths?: true
+  gender?: true
   createdAt?: true
-  updatedAt?: true
 }
 
 export type ConsultationCountAggregateInputType = {
   id?: true
-  userId?: true
-  sessionTitle?: true
-  status?: true
-  source?: true
+  childName?: true
+  childAgeMonths?: true
+  gender?: true
   createdAt?: true
-  updatedAt?: true
   _all?: true
 }
 
@@ -125,6 +131,18 @@ export type ConsultationAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ConsultationAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ConsultationSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ConsultationMinAggregateInputType
@@ -155,19 +173,21 @@ export type ConsultationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: ConsultationCountAggregateInputType | true
+  _avg?: ConsultationAvgAggregateInputType
+  _sum?: ConsultationSumAggregateInputType
   _min?: ConsultationMinAggregateInputType
   _max?: ConsultationMaxAggregateInputType
 }
 
 export type ConsultationGroupByOutputType = {
   id: string
-  userId: string | null
-  sessionTitle: string | null
-  status: string
-  source: string
+  childName: string | null
+  childAgeMonths: number
+  gender: $Enums.Gender | null
   createdAt: Date
-  updatedAt: Date
   _count: ConsultationCountAggregateOutputType | null
+  _avg: ConsultationAvgAggregateOutputType | null
+  _sum: ConsultationSumAggregateOutputType | null
   _min: ConsultationMinAggregateOutputType | null
   _max: ConsultationMaxAggregateOutputType | null
 }
@@ -192,28 +212,22 @@ export type ConsultationWhereInput = {
   OR?: Prisma.ConsultationWhereInput[]
   NOT?: Prisma.ConsultationWhereInput | Prisma.ConsultationWhereInput[]
   id?: Prisma.StringFilter<"Consultation"> | string
-  userId?: Prisma.StringNullableFilter<"Consultation"> | string | null
-  sessionTitle?: Prisma.StringNullableFilter<"Consultation"> | string | null
-  status?: Prisma.StringFilter<"Consultation"> | string
-  source?: Prisma.StringFilter<"Consultation"> | string
+  childName?: Prisma.StringNullableFilter<"Consultation"> | string | null
+  childAgeMonths?: Prisma.IntFilter<"Consultation"> | number
+  gender?: Prisma.EnumGenderNullableFilter<"Consultation"> | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFilter<"Consultation"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Consultation"> | Date | string
-  messages?: Prisma.ConsultationMessageListRelationFilter
   answers?: Prisma.ConsultationAnswerListRelationFilter
-  results?: Prisma.DiagnosisResultListRelationFilter
+  results?: Prisma.ConsultationResultListRelationFilter
 }
 
 export type ConsultationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  sessionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  childName?: Prisma.SortOrderInput | Prisma.SortOrder
+  childAgeMonths?: Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  messages?: Prisma.ConsultationMessageOrderByRelationAggregateInput
   answers?: Prisma.ConsultationAnswerOrderByRelationAggregateInput
-  results?: Prisma.DiagnosisResultOrderByRelationAggregateInput
+  results?: Prisma.ConsultationResultOrderByRelationAggregateInput
 }
 
 export type ConsultationWhereUniqueInput = Prisma.AtLeast<{
@@ -221,28 +235,25 @@ export type ConsultationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ConsultationWhereInput | Prisma.ConsultationWhereInput[]
   OR?: Prisma.ConsultationWhereInput[]
   NOT?: Prisma.ConsultationWhereInput | Prisma.ConsultationWhereInput[]
-  userId?: Prisma.StringNullableFilter<"Consultation"> | string | null
-  sessionTitle?: Prisma.StringNullableFilter<"Consultation"> | string | null
-  status?: Prisma.StringFilter<"Consultation"> | string
-  source?: Prisma.StringFilter<"Consultation"> | string
+  childName?: Prisma.StringNullableFilter<"Consultation"> | string | null
+  childAgeMonths?: Prisma.IntFilter<"Consultation"> | number
+  gender?: Prisma.EnumGenderNullableFilter<"Consultation"> | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFilter<"Consultation"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Consultation"> | Date | string
-  messages?: Prisma.ConsultationMessageListRelationFilter
   answers?: Prisma.ConsultationAnswerListRelationFilter
-  results?: Prisma.DiagnosisResultListRelationFilter
+  results?: Prisma.ConsultationResultListRelationFilter
 }, "id">
 
 export type ConsultationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  sessionTitle?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  childName?: Prisma.SortOrderInput | Prisma.SortOrder
+  childAgeMonths?: Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ConsultationCountOrderByAggregateInput
+  _avg?: Prisma.ConsultationAvgOrderByAggregateInput
   _max?: Prisma.ConsultationMaxOrderByAggregateInput
   _min?: Prisma.ConsultationMinOrderByAggregateInput
+  _sum?: Prisma.ConsultationSumOrderByAggregateInput
 }
 
 export type ConsultationScalarWhereWithAggregatesInput = {
@@ -250,124 +261,106 @@ export type ConsultationScalarWhereWithAggregatesInput = {
   OR?: Prisma.ConsultationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ConsultationScalarWhereWithAggregatesInput | Prisma.ConsultationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Consultation"> | string
-  userId?: Prisma.StringNullableWithAggregatesFilter<"Consultation"> | string | null
-  sessionTitle?: Prisma.StringNullableWithAggregatesFilter<"Consultation"> | string | null
-  status?: Prisma.StringWithAggregatesFilter<"Consultation"> | string
-  source?: Prisma.StringWithAggregatesFilter<"Consultation"> | string
+  childName?: Prisma.StringNullableWithAggregatesFilter<"Consultation"> | string | null
+  childAgeMonths?: Prisma.IntWithAggregatesFilter<"Consultation"> | number
+  gender?: Prisma.EnumGenderNullableWithAggregatesFilter<"Consultation"> | $Enums.Gender | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Consultation"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Consultation"> | Date | string
 }
 
 export type ConsultationCreateInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.ConsultationMessageCreateNestedManyWithoutConsultationInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutConsultationInput
-  results?: Prisma.DiagnosisResultCreateNestedManyWithoutConsultationInput
+  results?: Prisma.ConsultationResultCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.ConsultationMessageUncheckedCreateNestedManyWithoutConsultationInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutConsultationInput
-  results?: Prisma.DiagnosisResultUncheckedCreateNestedManyWithoutConsultationInput
+  results?: Prisma.ConsultationResultUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.ConsultationMessageUpdateManyWithoutConsultationNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutConsultationNestedInput
-  results?: Prisma.DiagnosisResultUpdateManyWithoutConsultationNestedInput
+  results?: Prisma.ConsultationResultUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.ConsultationMessageUncheckedUpdateManyWithoutConsultationNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutConsultationNestedInput
-  results?: Prisma.DiagnosisResultUncheckedUpdateManyWithoutConsultationNestedInput
+  results?: Prisma.ConsultationResultUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateManyInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
 }
 
 export type ConsultationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConsultationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConsultationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  sessionTitle?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  childName?: Prisma.SortOrder
+  childAgeMonths?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+}
+
+export type ConsultationAvgOrderByAggregateInput = {
+  childAgeMonths?: Prisma.SortOrder
 }
 
 export type ConsultationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  sessionTitle?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  childName?: Prisma.SortOrder
+  childAgeMonths?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
 }
 
 export type ConsultationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  sessionTitle?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  childName?: Prisma.SortOrder
+  childAgeMonths?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+}
+
+export type ConsultationSumOrderByAggregateInput = {
+  childAgeMonths?: Prisma.SortOrder
 }
 
 export type ConsultationScalarRelationFilter = {
@@ -375,18 +368,8 @@ export type ConsultationScalarRelationFilter = {
   isNot?: Prisma.ConsultationWhereInput
 }
 
-export type ConsultationCreateNestedOneWithoutMessagesInput = {
-  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutMessagesInput, Prisma.ConsultationUncheckedCreateWithoutMessagesInput>
-  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutMessagesInput
-  connect?: Prisma.ConsultationWhereUniqueInput
-}
-
-export type ConsultationUpdateOneRequiredWithoutMessagesNestedInput = {
-  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutMessagesInput, Prisma.ConsultationUncheckedCreateWithoutMessagesInput>
-  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutMessagesInput
-  upsert?: Prisma.ConsultationUpsertWithoutMessagesInput
-  connect?: Prisma.ConsultationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationUpdateToOneWithWhereWithoutMessagesInput, Prisma.ConsultationUpdateWithoutMessagesInput>, Prisma.ConsultationUncheckedUpdateWithoutMessagesInput>
+export type NullableEnumGenderFieldUpdateOperationsInput = {
+  set?: $Enums.Gender | null
 }
 
 export type ConsultationCreateNestedOneWithoutAnswersInput = {
@@ -417,92 +400,22 @@ export type ConsultationUpdateOneRequiredWithoutResultsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationUpdateToOneWithWhereWithoutResultsInput, Prisma.ConsultationUpdateWithoutResultsInput>, Prisma.ConsultationUncheckedUpdateWithoutResultsInput>
 }
 
-export type ConsultationCreateWithoutMessagesInput = {
-  id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutConsultationInput
-  results?: Prisma.DiagnosisResultCreateNestedManyWithoutConsultationInput
-}
-
-export type ConsultationUncheckedCreateWithoutMessagesInput = {
-  id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutConsultationInput
-  results?: Prisma.DiagnosisResultUncheckedCreateNestedManyWithoutConsultationInput
-}
-
-export type ConsultationCreateOrConnectWithoutMessagesInput = {
-  where: Prisma.ConsultationWhereUniqueInput
-  create: Prisma.XOR<Prisma.ConsultationCreateWithoutMessagesInput, Prisma.ConsultationUncheckedCreateWithoutMessagesInput>
-}
-
-export type ConsultationUpsertWithoutMessagesInput = {
-  update: Prisma.XOR<Prisma.ConsultationUpdateWithoutMessagesInput, Prisma.ConsultationUncheckedUpdateWithoutMessagesInput>
-  create: Prisma.XOR<Prisma.ConsultationCreateWithoutMessagesInput, Prisma.ConsultationUncheckedCreateWithoutMessagesInput>
-  where?: Prisma.ConsultationWhereInput
-}
-
-export type ConsultationUpdateToOneWithWhereWithoutMessagesInput = {
-  where?: Prisma.ConsultationWhereInput
-  data: Prisma.XOR<Prisma.ConsultationUpdateWithoutMessagesInput, Prisma.ConsultationUncheckedUpdateWithoutMessagesInput>
-}
-
-export type ConsultationUpdateWithoutMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  answers?: Prisma.ConsultationAnswerUpdateManyWithoutConsultationNestedInput
-  results?: Prisma.DiagnosisResultUpdateManyWithoutConsultationNestedInput
-}
-
-export type ConsultationUncheckedUpdateWithoutMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutConsultationNestedInput
-  results?: Prisma.DiagnosisResultUncheckedUpdateManyWithoutConsultationNestedInput
-}
-
 export type ConsultationCreateWithoutAnswersInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.ConsultationMessageCreateNestedManyWithoutConsultationInput
-  results?: Prisma.DiagnosisResultCreateNestedManyWithoutConsultationInput
+  results?: Prisma.ConsultationResultCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutAnswersInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.ConsultationMessageUncheckedCreateNestedManyWithoutConsultationInput
-  results?: Prisma.DiagnosisResultUncheckedCreateNestedManyWithoutConsultationInput
+  results?: Prisma.ConsultationResultUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutAnswersInput = {
@@ -523,49 +436,37 @@ export type ConsultationUpdateToOneWithWhereWithoutAnswersInput = {
 
 export type ConsultationUpdateWithoutAnswersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.ConsultationMessageUpdateManyWithoutConsultationNestedInput
-  results?: Prisma.DiagnosisResultUpdateManyWithoutConsultationNestedInput
+  results?: Prisma.ConsultationResultUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutAnswersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.ConsultationMessageUncheckedUpdateManyWithoutConsultationNestedInput
-  results?: Prisma.DiagnosisResultUncheckedUpdateManyWithoutConsultationNestedInput
+  results?: Prisma.ConsultationResultUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateWithoutResultsInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.ConsultationMessageCreateNestedManyWithoutConsultationInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutResultsInput = {
   id?: string
-  userId?: string | null
-  sessionTitle?: string | null
-  status?: string
-  source?: string
+  childName?: string | null
+  childAgeMonths: number
+  gender?: $Enums.Gender | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.ConsultationMessageUncheckedCreateNestedManyWithoutConsultationInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutConsultationInput
 }
 
@@ -587,25 +488,19 @@ export type ConsultationUpdateToOneWithWhereWithoutResultsInput = {
 
 export type ConsultationUpdateWithoutResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.ConsultationMessageUpdateManyWithoutConsultationNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessionTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
+  childName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  childAgeMonths?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.ConsultationMessageUncheckedUpdateManyWithoutConsultationNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
@@ -615,13 +510,11 @@ export type ConsultationUncheckedUpdateWithoutResultsInput = {
  */
 
 export type ConsultationCountOutputType = {
-  messages: number
   answers: number
   results: number
 }
 
 export type ConsultationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  messages?: boolean | ConsultationCountOutputTypeCountMessagesArgs
   answers?: boolean | ConsultationCountOutputTypeCountAnswersArgs
   results?: boolean | ConsultationCountOutputTypeCountResultsArgs
 }
@@ -639,13 +532,6 @@ export type ConsultationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
 /**
  * ConsultationCountOutputType without action
  */
-export type ConsultationCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ConsultationMessageWhereInput
-}
-
-/**
- * ConsultationCountOutputType without action
- */
 export type ConsultationCountOutputTypeCountAnswersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ConsultationAnswerWhereInput
 }
@@ -654,19 +540,16 @@ export type ConsultationCountOutputTypeCountAnswersArgs<ExtArgs extends runtime.
  * ConsultationCountOutputType without action
  */
 export type ConsultationCountOutputTypeCountResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DiagnosisResultWhereInput
+  where?: Prisma.ConsultationResultWhereInput
 }
 
 
 export type ConsultationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  sessionTitle?: boolean
-  status?: boolean
-  source?: boolean
+  childName?: boolean
+  childAgeMonths?: boolean
+  gender?: boolean
   createdAt?: boolean
-  updatedAt?: boolean
-  messages?: boolean | Prisma.Consultation$messagesArgs<ExtArgs>
   answers?: boolean | Prisma.Consultation$answersArgs<ExtArgs>
   results?: boolean | Prisma.Consultation$resultsArgs<ExtArgs>
   _count?: boolean | Prisma.ConsultationCountOutputTypeDefaultArgs<ExtArgs>
@@ -674,37 +557,30 @@ export type ConsultationSelect<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type ConsultationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  sessionTitle?: boolean
-  status?: boolean
-  source?: boolean
+  childName?: boolean
+  childAgeMonths?: boolean
+  gender?: boolean
   createdAt?: boolean
-  updatedAt?: boolean
 }, ExtArgs["result"]["consultation"]>
 
 export type ConsultationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  sessionTitle?: boolean
-  status?: boolean
-  source?: boolean
+  childName?: boolean
+  childAgeMonths?: boolean
+  gender?: boolean
   createdAt?: boolean
-  updatedAt?: boolean
 }, ExtArgs["result"]["consultation"]>
 
 export type ConsultationSelectScalar = {
   id?: boolean
-  userId?: boolean
-  sessionTitle?: boolean
-  status?: boolean
-  source?: boolean
+  childName?: boolean
+  childAgeMonths?: boolean
+  gender?: boolean
   createdAt?: boolean
-  updatedAt?: boolean
 }
 
-export type ConsultationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "sessionTitle" | "status" | "source" | "createdAt" | "updatedAt", ExtArgs["result"]["consultation"]>
+export type ConsultationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "childName" | "childAgeMonths" | "gender" | "createdAt", ExtArgs["result"]["consultation"]>
 export type ConsultationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  messages?: boolean | Prisma.Consultation$messagesArgs<ExtArgs>
   answers?: boolean | Prisma.Consultation$answersArgs<ExtArgs>
   results?: boolean | Prisma.Consultation$resultsArgs<ExtArgs>
   _count?: boolean | Prisma.ConsultationCountOutputTypeDefaultArgs<ExtArgs>
@@ -715,18 +591,15 @@ export type ConsultationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type $ConsultationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Consultation"
   objects: {
-    messages: Prisma.$ConsultationMessagePayload<ExtArgs>[]
     answers: Prisma.$ConsultationAnswerPayload<ExtArgs>[]
-    results: Prisma.$DiagnosisResultPayload<ExtArgs>[]
+    results: Prisma.$ConsultationResultPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string | null
-    sessionTitle: string | null
-    status: string
-    source: string
+    childName: string | null
+    childAgeMonths: number
+    gender: $Enums.Gender | null
     createdAt: Date
-    updatedAt: Date
   }, ExtArgs["result"]["consultation"]>
   composites: {}
 }
@@ -1121,9 +994,8 @@ readonly fields: ConsultationFieldRefs;
  */
 export interface Prisma__ConsultationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  messages<T extends Prisma.Consultation$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   answers<T extends Prisma.Consultation$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  results<T extends Prisma.Consultation$resultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiagnosisResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  results<T extends Prisma.Consultation$resultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1154,12 +1026,10 @@ export interface Prisma__ConsultationClient<T, Null = never, ExtArgs extends run
  */
 export interface ConsultationFieldRefs {
   readonly id: Prisma.FieldRef<"Consultation", 'String'>
-  readonly userId: Prisma.FieldRef<"Consultation", 'String'>
-  readonly sessionTitle: Prisma.FieldRef<"Consultation", 'String'>
-  readonly status: Prisma.FieldRef<"Consultation", 'String'>
-  readonly source: Prisma.FieldRef<"Consultation", 'String'>
+  readonly childName: Prisma.FieldRef<"Consultation", 'String'>
+  readonly childAgeMonths: Prisma.FieldRef<"Consultation", 'Int'>
+  readonly gender: Prisma.FieldRef<"Consultation", 'Gender'>
   readonly createdAt: Prisma.FieldRef<"Consultation", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"Consultation", 'DateTime'>
 }
     
 
@@ -1553,30 +1423,6 @@ export type ConsultationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * Consultation.messages
- */
-export type Consultation$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ConsultationMessage
-   */
-  select?: Prisma.ConsultationMessageSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ConsultationMessage
-   */
-  omit?: Prisma.ConsultationMessageOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ConsultationMessageInclude<ExtArgs> | null
-  where?: Prisma.ConsultationMessageWhereInput
-  orderBy?: Prisma.ConsultationMessageOrderByWithRelationInput | Prisma.ConsultationMessageOrderByWithRelationInput[]
-  cursor?: Prisma.ConsultationMessageWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ConsultationMessageScalarFieldEnum | Prisma.ConsultationMessageScalarFieldEnum[]
-}
-
-/**
  * Consultation.answers
  */
 export type Consultation$answersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1605,23 +1451,23 @@ export type Consultation$answersArgs<ExtArgs extends runtime.Types.Extensions.In
  */
 export type Consultation$resultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the DiagnosisResult
+   * Select specific fields to fetch from the ConsultationResult
    */
-  select?: Prisma.DiagnosisResultSelect<ExtArgs> | null
+  select?: Prisma.ConsultationResultSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the DiagnosisResult
+   * Omit specific fields from the ConsultationResult
    */
-  omit?: Prisma.DiagnosisResultOmit<ExtArgs> | null
+  omit?: Prisma.ConsultationResultOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.DiagnosisResultInclude<ExtArgs> | null
-  where?: Prisma.DiagnosisResultWhereInput
-  orderBy?: Prisma.DiagnosisResultOrderByWithRelationInput | Prisma.DiagnosisResultOrderByWithRelationInput[]
-  cursor?: Prisma.DiagnosisResultWhereUniqueInput
+  include?: Prisma.ConsultationResultInclude<ExtArgs> | null
+  where?: Prisma.ConsultationResultWhereInput
+  orderBy?: Prisma.ConsultationResultOrderByWithRelationInput | Prisma.ConsultationResultOrderByWithRelationInput[]
+  cursor?: Prisma.ConsultationResultWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.DiagnosisResultScalarFieldEnum | Prisma.DiagnosisResultScalarFieldEnum[]
+  distinct?: Prisma.ConsultationResultScalarFieldEnum | Prisma.ConsultationResultScalarFieldEnum[]
 }
 
 /**

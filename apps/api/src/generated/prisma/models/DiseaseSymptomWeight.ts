@@ -27,14 +27,10 @@ export type AggregateDiseaseSymptomWeight = {
 }
 
 export type DiseaseSymptomWeightAvgAggregateOutputType = {
-  mb: number | null
-  md: number | null
   cfExpert: number | null
 }
 
 export type DiseaseSymptomWeightSumAggregateOutputType = {
-  mb: number | null
-  md: number | null
   cfExpert: number | null
 }
 
@@ -42,46 +38,33 @@ export type DiseaseSymptomWeightMinAggregateOutputType = {
   id: string | null
   diseaseId: string | null
   symptomId: string | null
-  mb: number | null
-  md: number | null
   cfExpert: number | null
-  createdAt: Date | null
-  updatedAt: Date | null
+  note: string | null
 }
 
 export type DiseaseSymptomWeightMaxAggregateOutputType = {
   id: string | null
   diseaseId: string | null
   symptomId: string | null
-  mb: number | null
-  md: number | null
   cfExpert: number | null
-  createdAt: Date | null
-  updatedAt: Date | null
+  note: string | null
 }
 
 export type DiseaseSymptomWeightCountAggregateOutputType = {
   id: number
   diseaseId: number
   symptomId: number
-  mb: number
-  md: number
   cfExpert: number
-  createdAt: number
-  updatedAt: number
+  note: number
   _all: number
 }
 
 
 export type DiseaseSymptomWeightAvgAggregateInputType = {
-  mb?: true
-  md?: true
   cfExpert?: true
 }
 
 export type DiseaseSymptomWeightSumAggregateInputType = {
-  mb?: true
-  md?: true
   cfExpert?: true
 }
 
@@ -89,33 +72,24 @@ export type DiseaseSymptomWeightMinAggregateInputType = {
   id?: true
   diseaseId?: true
   symptomId?: true
-  mb?: true
-  md?: true
   cfExpert?: true
-  createdAt?: true
-  updatedAt?: true
+  note?: true
 }
 
 export type DiseaseSymptomWeightMaxAggregateInputType = {
   id?: true
   diseaseId?: true
   symptomId?: true
-  mb?: true
-  md?: true
   cfExpert?: true
-  createdAt?: true
-  updatedAt?: true
+  note?: true
 }
 
 export type DiseaseSymptomWeightCountAggregateInputType = {
   id?: true
   diseaseId?: true
   symptomId?: true
-  mb?: true
-  md?: true
   cfExpert?: true
-  createdAt?: true
-  updatedAt?: true
+  note?: true
   _all?: true
 }
 
@@ -209,11 +183,8 @@ export type DiseaseSymptomWeightGroupByOutputType = {
   id: string
   diseaseId: string
   symptomId: string
-  mb: number | null
-  md: number | null
   cfExpert: number
-  createdAt: Date
-  updatedAt: Date
+  note: string | null
   _count: DiseaseSymptomWeightCountAggregateOutputType | null
   _avg: DiseaseSymptomWeightAvgAggregateOutputType | null
   _sum: DiseaseSymptomWeightSumAggregateOutputType | null
@@ -243,11 +214,8 @@ export type DiseaseSymptomWeightWhereInput = {
   id?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
-  mb?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
-  md?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
-  createdAt?: Prisma.DateTimeFilter<"DiseaseSymptomWeight"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"DiseaseSymptomWeight"> | Date | string
+  note?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
   symptom?: Prisma.XOR<Prisma.SymptomScalarRelationFilter, Prisma.SymptomWhereInput>
 }
@@ -256,11 +224,8 @@ export type DiseaseSymptomWeightOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  mb?: Prisma.SortOrderInput | Prisma.SortOrder
-  md?: Prisma.SortOrderInput | Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  note?: Prisma.SortOrderInput | Prisma.SortOrder
   disease?: Prisma.DiseaseOrderByWithRelationInput
   symptom?: Prisma.SymptomOrderByWithRelationInput
 }
@@ -273,11 +238,8 @@ export type DiseaseSymptomWeightWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DiseaseSymptomWeightWhereInput | Prisma.DiseaseSymptomWeightWhereInput[]
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
-  mb?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
-  md?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
-  createdAt?: Prisma.DateTimeFilter<"DiseaseSymptomWeight"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"DiseaseSymptomWeight"> | Date | string
+  note?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
   symptom?: Prisma.XOR<Prisma.SymptomScalarRelationFilter, Prisma.SymptomWhereInput>
 }, "id" | "diseaseId_symptomId">
@@ -286,11 +248,8 @@ export type DiseaseSymptomWeightOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  mb?: Prisma.SortOrderInput | Prisma.SortOrder
-  md?: Prisma.SortOrderInput | Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  note?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DiseaseSymptomWeightCountOrderByAggregateInput
   _avg?: Prisma.DiseaseSymptomWeightAvgOrderByAggregateInput
   _max?: Prisma.DiseaseSymptomWeightMaxOrderByAggregateInput
@@ -305,86 +264,62 @@ export type DiseaseSymptomWeightScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
   diseaseId?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
-  mb?: Prisma.FloatNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | number | null
-  md?: Prisma.FloatNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | number | null
   cfExpert?: Prisma.FloatWithAggregatesFilter<"DiseaseSymptomWeight"> | number
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"DiseaseSymptomWeight"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DiseaseSymptomWeight"> | Date | string
+  note?: Prisma.StringNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | string | null
 }
 
 export type DiseaseSymptomWeightCreateInput = {
   id?: string
-  mb?: number | null
-  md?: number | null
   cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  note?: string | null
   disease: Prisma.DiseaseCreateNestedOneWithoutWeightsInput
-  symptom: Prisma.SymptomCreateNestedOneWithoutDiseaseWeightsInput
+  symptom: Prisma.SymptomCreateNestedOneWithoutWeightsInput
 }
 
 export type DiseaseSymptomWeightUncheckedCreateInput = {
   id?: string
   diseaseId: string
   symptomId: string
-  mb?: number | null
-  md?: number | null
   cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutWeightsNestedInput
-  symptom?: Prisma.SymptomUpdateOneRequiredWithoutDiseaseWeightsNestedInput
+  symptom?: Prisma.SymptomUpdateOneRequiredWithoutWeightsNestedInput
 }
 
 export type DiseaseSymptomWeightUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DiseaseSymptomWeightCreateManyInput = {
   id?: string
   diseaseId: string
   symptomId: string
-  mb?: number | null
-  md?: number | null
   cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DiseaseSymptomWeightUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DiseaseSymptomWeightListRelationFilter = {
@@ -406,16 +341,11 @@ export type DiseaseSymptomWeightCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  mb?: Prisma.SortOrder
-  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  note?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightAvgOrderByAggregateInput = {
-  mb?: Prisma.SortOrder
-  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
 }
 
@@ -423,70 +353,20 @@ export type DiseaseSymptomWeightMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  mb?: Prisma.SortOrder
-  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  note?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  mb?: Prisma.SortOrder
-  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  note?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightSumOrderByAggregateInput = {
-  mb?: Prisma.SortOrder
-  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
-}
-
-export type DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput = {
-  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
-  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
-  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
-  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-}
-
-export type DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput = {
-  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
-  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
-  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
-  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-}
-
-export type DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput = {
-  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
-  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
-  upsert?: Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput[]
-  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
-  set?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  disconnect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  delete?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  update?: Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput[]
-  updateMany?: Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput[]
-  deleteMany?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
-}
-
-export type DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput = {
-  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
-  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
-  upsert?: Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput[]
-  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
-  set?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  disconnect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  delete?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
-  update?: Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput[]
-  updateMany?: Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput[]
-  deleteMany?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
 }
 
 export type DiseaseSymptomWeightCreateNestedManyWithoutDiseaseInput = {
@@ -531,6 +411,48 @@ export type DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseNestedInput = {
   deleteMany?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
 }
 
+export type DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput = {
+  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
+  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
+  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
+  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+}
+
+export type DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput = {
+  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
+  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
+  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
+  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+}
+
+export type DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput = {
+  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
+  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
+  upsert?: Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput[]
+  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
+  set?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  disconnect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  delete?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  update?: Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput[]
+  updateMany?: Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput[]
+  deleteMany?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
+}
+
+export type DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput = {
+  create?: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput> | Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput[] | Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput[]
+  connectOrCreate?: Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput | Prisma.DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput[]
+  upsert?: Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput[]
+  createMany?: Prisma.DiseaseSymptomWeightCreateManySymptomInputEnvelope
+  set?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  disconnect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  delete?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  connect?: Prisma.DiseaseSymptomWeightWhereUniqueInput | Prisma.DiseaseSymptomWeightWhereUniqueInput[]
+  update?: Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput[]
+  updateMany?: Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput | Prisma.DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput[]
+  deleteMany?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
+}
+
 export type FloatFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -539,84 +461,18 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type DiseaseSymptomWeightCreateWithoutSymptomInput = {
-  id?: string
-  mb?: number | null
-  md?: number | null
-  cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  disease: Prisma.DiseaseCreateNestedOneWithoutWeightsInput
-}
-
-export type DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput = {
-  id?: string
-  diseaseId: string
-  mb?: number | null
-  md?: number | null
-  cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput = {
-  where: Prisma.DiseaseSymptomWeightWhereUniqueInput
-  create: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput>
-}
-
-export type DiseaseSymptomWeightCreateManySymptomInputEnvelope = {
-  data: Prisma.DiseaseSymptomWeightCreateManySymptomInput | Prisma.DiseaseSymptomWeightCreateManySymptomInput[]
-  skipDuplicates?: boolean
-}
-
-export type DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput = {
-  where: Prisma.DiseaseSymptomWeightWhereUniqueInput
-  update: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput>
-  create: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput>
-}
-
-export type DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput = {
-  where: Prisma.DiseaseSymptomWeightWhereUniqueInput
-  data: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput>
-}
-
-export type DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput = {
-  where: Prisma.DiseaseSymptomWeightScalarWhereInput
-  data: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateManyMutationInput, Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomInput>
-}
-
-export type DiseaseSymptomWeightScalarWhereInput = {
-  AND?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
-  OR?: Prisma.DiseaseSymptomWeightScalarWhereInput[]
-  NOT?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
-  id?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
-  diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
-  symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
-  mb?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
-  md?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
-  cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
-  createdAt?: Prisma.DateTimeFilter<"DiseaseSymptomWeight"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"DiseaseSymptomWeight"> | Date | string
-}
-
 export type DiseaseSymptomWeightCreateWithoutDiseaseInput = {
   id?: string
-  mb?: number | null
-  md?: number | null
   cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  symptom: Prisma.SymptomCreateNestedOneWithoutDiseaseWeightsInput
+  note?: string | null
+  symptom: Prisma.SymptomCreateNestedOneWithoutWeightsInput
 }
 
 export type DiseaseSymptomWeightUncheckedCreateWithoutDiseaseInput = {
   id?: string
   symptomId: string
-  mb?: number | null
-  md?: number | null
   cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  note?: string | null
 }
 
 export type DiseaseSymptomWeightCreateOrConnectWithoutDiseaseInput = {
@@ -645,84 +501,111 @@ export type DiseaseSymptomWeightUpdateManyWithWhereWithoutDiseaseInput = {
   data: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateManyMutationInput, Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseInput>
 }
 
+export type DiseaseSymptomWeightScalarWhereInput = {
+  AND?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
+  OR?: Prisma.DiseaseSymptomWeightScalarWhereInput[]
+  NOT?: Prisma.DiseaseSymptomWeightScalarWhereInput | Prisma.DiseaseSymptomWeightScalarWhereInput[]
+  id?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
+  diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
+  symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
+  cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  note?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
+}
+
+export type DiseaseSymptomWeightCreateWithoutSymptomInput = {
+  id?: string
+  cfExpert: number
+  note?: string | null
+  disease: Prisma.DiseaseCreateNestedOneWithoutWeightsInput
+}
+
+export type DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput = {
+  id?: string
+  diseaseId: string
+  cfExpert: number
+  note?: string | null
+}
+
+export type DiseaseSymptomWeightCreateOrConnectWithoutSymptomInput = {
+  where: Prisma.DiseaseSymptomWeightWhereUniqueInput
+  create: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput>
+}
+
+export type DiseaseSymptomWeightCreateManySymptomInputEnvelope = {
+  data: Prisma.DiseaseSymptomWeightCreateManySymptomInput | Prisma.DiseaseSymptomWeightCreateManySymptomInput[]
+  skipDuplicates?: boolean
+}
+
+export type DiseaseSymptomWeightUpsertWithWhereUniqueWithoutSymptomInput = {
+  where: Prisma.DiseaseSymptomWeightWhereUniqueInput
+  update: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput>
+  create: Prisma.XOR<Prisma.DiseaseSymptomWeightCreateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput>
+}
+
+export type DiseaseSymptomWeightUpdateWithWhereUniqueWithoutSymptomInput = {
+  where: Prisma.DiseaseSymptomWeightWhereUniqueInput
+  data: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateWithoutSymptomInput, Prisma.DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput>
+}
+
+export type DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput = {
+  where: Prisma.DiseaseSymptomWeightScalarWhereInput
+  data: Prisma.XOR<Prisma.DiseaseSymptomWeightUpdateManyMutationInput, Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomInput>
+}
+
+export type DiseaseSymptomWeightCreateManyDiseaseInput = {
+  id?: string
+  symptomId: string
+  cfExpert: number
+  note?: string | null
+}
+
+export type DiseaseSymptomWeightUpdateWithoutDiseaseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  symptom?: Prisma.SymptomUpdateOneRequiredWithoutWeightsNestedInput
+}
+
+export type DiseaseSymptomWeightUncheckedUpdateWithoutDiseaseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  symptomId?: Prisma.StringFieldUpdateOperationsInput | string
+  cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  symptomId?: Prisma.StringFieldUpdateOperationsInput | string
+  cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type DiseaseSymptomWeightCreateManySymptomInput = {
   id?: string
   diseaseId: string
-  mb?: number | null
-  md?: number | null
   cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutWeightsNestedInput
 }
 
 export type DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DiseaseSymptomWeightCreateManyDiseaseInput = {
-  id?: string
-  symptomId: string
-  mb?: number | null
-  md?: number | null
-  cfExpert: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DiseaseSymptomWeightUpdateWithoutDiseaseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  symptom?: Prisma.SymptomUpdateOneRequiredWithoutDiseaseWeightsNestedInput
-}
-
-export type DiseaseSymptomWeightUncheckedUpdateWithoutDiseaseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  mb?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  md?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -731,11 +614,8 @@ export type DiseaseSymptomWeightSelect<ExtArgs extends runtime.Types.Extensions.
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
-  mb?: boolean
-  md?: boolean
   cfExpert?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
+  note?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["diseaseSymptomWeight"]>
@@ -744,11 +624,8 @@ export type DiseaseSymptomWeightSelectCreateManyAndReturn<ExtArgs extends runtim
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
-  mb?: boolean
-  md?: boolean
   cfExpert?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
+  note?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["diseaseSymptomWeight"]>
@@ -757,11 +634,8 @@ export type DiseaseSymptomWeightSelectUpdateManyAndReturn<ExtArgs extends runtim
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
-  mb?: boolean
-  md?: boolean
   cfExpert?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
+  note?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["diseaseSymptomWeight"]>
@@ -770,14 +644,11 @@ export type DiseaseSymptomWeightSelectScalar = {
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
-  mb?: boolean
-  md?: boolean
   cfExpert?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
+  note?: boolean
 }
 
-export type DiseaseSymptomWeightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "diseaseId" | "symptomId" | "mb" | "md" | "cfExpert" | "createdAt" | "updatedAt", ExtArgs["result"]["diseaseSymptomWeight"]>
+export type DiseaseSymptomWeightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "diseaseId" | "symptomId" | "cfExpert" | "note", ExtArgs["result"]["diseaseSymptomWeight"]>
 export type DiseaseSymptomWeightInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -801,11 +672,8 @@ export type $DiseaseSymptomWeightPayload<ExtArgs extends runtime.Types.Extension
     id: string
     diseaseId: string
     symptomId: string
-    mb: number | null
-    md: number | null
     cfExpert: number
-    createdAt: Date
-    updatedAt: Date
+    note: string | null
   }, ExtArgs["result"]["diseaseSymptomWeight"]>
   composites: {}
 }
@@ -1234,11 +1102,8 @@ export interface DiseaseSymptomWeightFieldRefs {
   readonly id: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly diseaseId: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly symptomId: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
-  readonly mb: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
-  readonly md: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
   readonly cfExpert: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
-  readonly createdAt: Prisma.FieldRef<"DiseaseSymptomWeight", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"DiseaseSymptomWeight", 'DateTime'>
+  readonly note: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
 }
     
 

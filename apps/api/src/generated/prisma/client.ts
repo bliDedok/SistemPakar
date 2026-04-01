@@ -31,8 +31,8 @@ export * from "./enums.ts"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Symptoms
- * const symptoms = await prisma.symptom.findMany()
+ * // Fetch zero or more Diseases
+ * const diseases = await prisma.disease.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,25 +42,25 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Symptom
- * 
- */
-export type Symptom = Prisma.SymptomModel
-/**
  * Model Disease
  * 
  */
 export type Disease = Prisma.DiseaseModel
+/**
+ * Model Symptom
+ * 
+ */
+export type Symptom = Prisma.SymptomModel
 /**
  * Model Rule
  * 
  */
 export type Rule = Prisma.RuleModel
 /**
- * Model RuleCondition
+ * Model RuleDetail
  * 
  */
-export type RuleCondition = Prisma.RuleConditionModel
+export type RuleDetail = Prisma.RuleDetailModel
 /**
  * Model DiseaseSymptomWeight
  * 
@@ -72,17 +72,12 @@ export type DiseaseSymptomWeight = Prisma.DiseaseSymptomWeightModel
  */
 export type Consultation = Prisma.ConsultationModel
 /**
- * Model ConsultationMessage
- * 
- */
-export type ConsultationMessage = Prisma.ConsultationMessageModel
-/**
  * Model ConsultationAnswer
  * 
  */
 export type ConsultationAnswer = Prisma.ConsultationAnswerModel
 /**
- * Model DiagnosisResult
+ * Model ConsultationResult
  * 
  */
-export type DiagnosisResult = Prisma.DiagnosisResultModel
+export type ConsultationResult = Prisma.ConsultationResultModel

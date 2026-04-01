@@ -9,7 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const RuleOperator = {
+  AND: 'AND',
+  OR: 'OR'
+} as const
+
+export type RuleOperator = (typeof RuleOperator)[keyof typeof RuleOperator]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]

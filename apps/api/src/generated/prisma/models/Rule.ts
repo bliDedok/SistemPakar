@@ -27,11 +27,13 @@ export type AggregateRule = {
 }
 
 export type RuleAvgAggregateOutputType = {
-  minMatchCount: number | null
+  minMatch: number | null
+  priority: number | null
 }
 
 export type RuleSumAggregateOutputType = {
-  minMatchCount: number | null
+  minMatch: number | null
+  priority: number | null
 }
 
 export type RuleMinAggregateOutputType = {
@@ -39,8 +41,10 @@ export type RuleMinAggregateOutputType = {
   code: string | null
   name: string | null
   diseaseId: string | null
-  operatorDefault: string | null
-  minMatchCount: number | null
+  operator: $Enums.RuleOperator | null
+  minMatch: number | null
+  priority: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,8 +54,10 @@ export type RuleMaxAggregateOutputType = {
   code: string | null
   name: string | null
   diseaseId: string | null
-  operatorDefault: string | null
-  minMatchCount: number | null
+  operator: $Enums.RuleOperator | null
+  minMatch: number | null
+  priority: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,8 +67,10 @@ export type RuleCountAggregateOutputType = {
   code: number
   name: number
   diseaseId: number
-  operatorDefault: number
-  minMatchCount: number
+  operator: number
+  minMatch: number
+  priority: number
+  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,11 +78,13 @@ export type RuleCountAggregateOutputType = {
 
 
 export type RuleAvgAggregateInputType = {
-  minMatchCount?: true
+  minMatch?: true
+  priority?: true
 }
 
 export type RuleSumAggregateInputType = {
-  minMatchCount?: true
+  minMatch?: true
+  priority?: true
 }
 
 export type RuleMinAggregateInputType = {
@@ -82,8 +92,10 @@ export type RuleMinAggregateInputType = {
   code?: true
   name?: true
   diseaseId?: true
-  operatorDefault?: true
-  minMatchCount?: true
+  operator?: true
+  minMatch?: true
+  priority?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -93,8 +105,10 @@ export type RuleMaxAggregateInputType = {
   code?: true
   name?: true
   diseaseId?: true
-  operatorDefault?: true
-  minMatchCount?: true
+  operator?: true
+  minMatch?: true
+  priority?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,8 +118,10 @@ export type RuleCountAggregateInputType = {
   code?: true
   name?: true
   diseaseId?: true
-  operatorDefault?: true
-  minMatchCount?: true
+  operator?: true
+  minMatch?: true
+  priority?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -202,8 +218,10 @@ export type RuleGroupByOutputType = {
   code: string
   name: string
   diseaseId: string
-  operatorDefault: string
-  minMatchCount: number | null
+  operator: $Enums.RuleOperator
+  minMatch: number
+  priority: number
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: RuleCountAggregateOutputType | null
@@ -236,12 +254,14 @@ export type RuleWhereInput = {
   code?: Prisma.StringFilter<"Rule"> | string
   name?: Prisma.StringFilter<"Rule"> | string
   diseaseId?: Prisma.StringFilter<"Rule"> | string
-  operatorDefault?: Prisma.StringFilter<"Rule"> | string
-  minMatchCount?: Prisma.IntNullableFilter<"Rule"> | number | null
+  operator?: Prisma.EnumRuleOperatorFilter<"Rule"> | $Enums.RuleOperator
+  minMatch?: Prisma.IntFilter<"Rule"> | number
+  priority?: Prisma.IntFilter<"Rule"> | number
+  isActive?: Prisma.BoolFilter<"Rule"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
-  conditions?: Prisma.RuleConditionListRelationFilter
+  details?: Prisma.RuleDetailListRelationFilter
 }
 
 export type RuleOrderByWithRelationInput = {
@@ -249,12 +269,14 @@ export type RuleOrderByWithRelationInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
-  operatorDefault?: Prisma.SortOrder
-  minMatchCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  operator?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   disease?: Prisma.DiseaseOrderByWithRelationInput
-  conditions?: Prisma.RuleConditionOrderByRelationAggregateInput
+  details?: Prisma.RuleDetailOrderByRelationAggregateInput
 }
 
 export type RuleWhereUniqueInput = Prisma.AtLeast<{
@@ -265,12 +287,14 @@ export type RuleWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.RuleWhereInput | Prisma.RuleWhereInput[]
   name?: Prisma.StringFilter<"Rule"> | string
   diseaseId?: Prisma.StringFilter<"Rule"> | string
-  operatorDefault?: Prisma.StringFilter<"Rule"> | string
-  minMatchCount?: Prisma.IntNullableFilter<"Rule"> | number | null
+  operator?: Prisma.EnumRuleOperatorFilter<"Rule"> | $Enums.RuleOperator
+  minMatch?: Prisma.IntFilter<"Rule"> | number
+  priority?: Prisma.IntFilter<"Rule"> | number
+  isActive?: Prisma.BoolFilter<"Rule"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
-  conditions?: Prisma.RuleConditionListRelationFilter
+  details?: Prisma.RuleDetailListRelationFilter
 }, "id" | "code">
 
 export type RuleOrderByWithAggregationInput = {
@@ -278,8 +302,10 @@ export type RuleOrderByWithAggregationInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
-  operatorDefault?: Prisma.SortOrder
-  minMatchCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  operator?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RuleCountOrderByAggregateInput
@@ -297,8 +323,10 @@ export type RuleScalarWhereWithAggregatesInput = {
   code?: Prisma.StringWithAggregatesFilter<"Rule"> | string
   name?: Prisma.StringWithAggregatesFilter<"Rule"> | string
   diseaseId?: Prisma.StringWithAggregatesFilter<"Rule"> | string
-  operatorDefault?: Prisma.StringWithAggregatesFilter<"Rule"> | string
-  minMatchCount?: Prisma.IntNullableWithAggregatesFilter<"Rule"> | number | null
+  operator?: Prisma.EnumRuleOperatorWithAggregatesFilter<"Rule"> | $Enums.RuleOperator
+  minMatch?: Prisma.IntWithAggregatesFilter<"Rule"> | number
+  priority?: Prisma.IntWithAggregatesFilter<"Rule"> | number
+  isActive?: Prisma.BoolWithAggregatesFilter<"Rule"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Rule"> | Date | string
 }
@@ -307,12 +335,14 @@ export type RuleCreateInput = {
   id?: string
   code: string
   name: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   disease: Prisma.DiseaseCreateNestedOneWithoutRulesInput
-  conditions?: Prisma.RuleConditionCreateNestedManyWithoutRuleInput
+  details?: Prisma.RuleDetailCreateNestedManyWithoutRuleInput
 }
 
 export type RuleUncheckedCreateInput = {
@@ -320,23 +350,27 @@ export type RuleUncheckedCreateInput = {
   code: string
   name: string
   diseaseId: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  conditions?: Prisma.RuleConditionUncheckedCreateNestedManyWithoutRuleInput
+  details?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutRuleInput
 }
 
 export type RuleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutRulesNestedInput
-  conditions?: Prisma.RuleConditionUpdateManyWithoutRuleNestedInput
+  details?: Prisma.RuleDetailUpdateManyWithoutRuleNestedInput
 }
 
 export type RuleUncheckedUpdateInput = {
@@ -344,11 +378,13 @@ export type RuleUncheckedUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  conditions?: Prisma.RuleConditionUncheckedUpdateManyWithoutRuleNestedInput
+  details?: Prisma.RuleDetailUncheckedUpdateManyWithoutRuleNestedInput
 }
 
 export type RuleCreateManyInput = {
@@ -356,8 +392,10 @@ export type RuleCreateManyInput = {
   code: string
   name: string
   diseaseId: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -366,8 +404,10 @@ export type RuleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -377,8 +417,10 @@ export type RuleUncheckedUpdateManyInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -398,14 +440,17 @@ export type RuleCountOrderByAggregateInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
-  operatorDefault?: Prisma.SortOrder
-  minMatchCount?: Prisma.SortOrder
+  operator?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RuleAvgOrderByAggregateInput = {
-  minMatchCount?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
 }
 
 export type RuleMaxOrderByAggregateInput = {
@@ -413,8 +458,10 @@ export type RuleMaxOrderByAggregateInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
-  operatorDefault?: Prisma.SortOrder
-  minMatchCount?: Prisma.SortOrder
+  operator?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -424,14 +471,17 @@ export type RuleMinOrderByAggregateInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
-  operatorDefault?: Prisma.SortOrder
-  minMatchCount?: Prisma.SortOrder
+  operator?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RuleSumOrderByAggregateInput = {
-  minMatchCount?: Prisma.SortOrder
+  minMatch?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
 }
 
 export type RuleScalarRelationFilter = {
@@ -481,48 +531,56 @@ export type RuleUncheckedUpdateManyWithoutDiseaseNestedInput = {
   deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
+export type EnumRuleOperatorFieldUpdateOperationsInput = {
+  set?: $Enums.RuleOperator
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
 }
 
-export type RuleCreateNestedOneWithoutConditionsInput = {
-  create?: Prisma.XOR<Prisma.RuleCreateWithoutConditionsInput, Prisma.RuleUncheckedCreateWithoutConditionsInput>
-  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutConditionsInput
+export type RuleCreateNestedOneWithoutDetailsInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutDetailsInput, Prisma.RuleUncheckedCreateWithoutDetailsInput>
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutDetailsInput
   connect?: Prisma.RuleWhereUniqueInput
 }
 
-export type RuleUpdateOneRequiredWithoutConditionsNestedInput = {
-  create?: Prisma.XOR<Prisma.RuleCreateWithoutConditionsInput, Prisma.RuleUncheckedCreateWithoutConditionsInput>
-  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutConditionsInput
-  upsert?: Prisma.RuleUpsertWithoutConditionsInput
+export type RuleUpdateOneRequiredWithoutDetailsNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutDetailsInput, Prisma.RuleUncheckedCreateWithoutDetailsInput>
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutDetailsInput
+  upsert?: Prisma.RuleUpsertWithoutDetailsInput
   connect?: Prisma.RuleWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.RuleUpdateToOneWithWhereWithoutConditionsInput, Prisma.RuleUpdateWithoutConditionsInput>, Prisma.RuleUncheckedUpdateWithoutConditionsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RuleUpdateToOneWithWhereWithoutDetailsInput, Prisma.RuleUpdateWithoutDetailsInput>, Prisma.RuleUncheckedUpdateWithoutDetailsInput>
 }
 
 export type RuleCreateWithoutDiseaseInput = {
   id?: string
   code: string
   name: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  conditions?: Prisma.RuleConditionCreateNestedManyWithoutRuleInput
+  details?: Prisma.RuleDetailCreateNestedManyWithoutRuleInput
 }
 
 export type RuleUncheckedCreateWithoutDiseaseInput = {
   id?: string
   code: string
   name: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  conditions?: Prisma.RuleConditionUncheckedCreateNestedManyWithoutRuleInput
+  details?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutRuleInput
 }
 
 export type RuleCreateOrConnectWithoutDiseaseInput = {
@@ -559,68 +617,78 @@ export type RuleScalarWhereInput = {
   code?: Prisma.StringFilter<"Rule"> | string
   name?: Prisma.StringFilter<"Rule"> | string
   diseaseId?: Prisma.StringFilter<"Rule"> | string
-  operatorDefault?: Prisma.StringFilter<"Rule"> | string
-  minMatchCount?: Prisma.IntNullableFilter<"Rule"> | number | null
+  operator?: Prisma.EnumRuleOperatorFilter<"Rule"> | $Enums.RuleOperator
+  minMatch?: Prisma.IntFilter<"Rule"> | number
+  priority?: Prisma.IntFilter<"Rule"> | number
+  isActive?: Prisma.BoolFilter<"Rule"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
 }
 
-export type RuleCreateWithoutConditionsInput = {
+export type RuleCreateWithoutDetailsInput = {
   id?: string
   code: string
   name: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   disease: Prisma.DiseaseCreateNestedOneWithoutRulesInput
 }
 
-export type RuleUncheckedCreateWithoutConditionsInput = {
+export type RuleUncheckedCreateWithoutDetailsInput = {
   id?: string
   code: string
   name: string
   diseaseId: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type RuleCreateOrConnectWithoutConditionsInput = {
+export type RuleCreateOrConnectWithoutDetailsInput = {
   where: Prisma.RuleWhereUniqueInput
-  create: Prisma.XOR<Prisma.RuleCreateWithoutConditionsInput, Prisma.RuleUncheckedCreateWithoutConditionsInput>
+  create: Prisma.XOR<Prisma.RuleCreateWithoutDetailsInput, Prisma.RuleUncheckedCreateWithoutDetailsInput>
 }
 
-export type RuleUpsertWithoutConditionsInput = {
-  update: Prisma.XOR<Prisma.RuleUpdateWithoutConditionsInput, Prisma.RuleUncheckedUpdateWithoutConditionsInput>
-  create: Prisma.XOR<Prisma.RuleCreateWithoutConditionsInput, Prisma.RuleUncheckedCreateWithoutConditionsInput>
+export type RuleUpsertWithoutDetailsInput = {
+  update: Prisma.XOR<Prisma.RuleUpdateWithoutDetailsInput, Prisma.RuleUncheckedUpdateWithoutDetailsInput>
+  create: Prisma.XOR<Prisma.RuleCreateWithoutDetailsInput, Prisma.RuleUncheckedCreateWithoutDetailsInput>
   where?: Prisma.RuleWhereInput
 }
 
-export type RuleUpdateToOneWithWhereWithoutConditionsInput = {
+export type RuleUpdateToOneWithWhereWithoutDetailsInput = {
   where?: Prisma.RuleWhereInput
-  data: Prisma.XOR<Prisma.RuleUpdateWithoutConditionsInput, Prisma.RuleUncheckedUpdateWithoutConditionsInput>
+  data: Prisma.XOR<Prisma.RuleUpdateWithoutDetailsInput, Prisma.RuleUncheckedUpdateWithoutDetailsInput>
 }
 
-export type RuleUpdateWithoutConditionsInput = {
+export type RuleUpdateWithoutDetailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutRulesNestedInput
 }
 
-export type RuleUncheckedUpdateWithoutConditionsInput = {
+export type RuleUncheckedUpdateWithoutDetailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -629,8 +697,10 @@ export type RuleCreateManyDiseaseInput = {
   id?: string
   code: string
   name: string
-  operatorDefault?: string
-  minMatchCount?: number | null
+  operator?: $Enums.RuleOperator
+  minMatch?: number
+  priority?: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -639,30 +709,36 @@ export type RuleUpdateWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  conditions?: Prisma.RuleConditionUpdateManyWithoutRuleNestedInput
+  details?: Prisma.RuleDetailUpdateManyWithoutRuleNestedInput
 }
 
 export type RuleUncheckedUpdateWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  conditions?: Prisma.RuleConditionUncheckedUpdateManyWithoutRuleNestedInput
+  details?: Prisma.RuleDetailUncheckedUpdateManyWithoutRuleNestedInput
 }
 
 export type RuleUncheckedUpdateManyWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  operatorDefault?: Prisma.StringFieldUpdateOperationsInput | string
-  minMatchCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  operator?: Prisma.EnumRuleOperatorFieldUpdateOperationsInput | $Enums.RuleOperator
+  minMatch?: Prisma.IntFieldUpdateOperationsInput | number
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -673,11 +749,11 @@ export type RuleUncheckedUpdateManyWithoutDiseaseInput = {
  */
 
 export type RuleCountOutputType = {
-  conditions: number
+  details: number
 }
 
 export type RuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  conditions?: boolean | RuleCountOutputTypeCountConditionsArgs
+  details?: boolean | RuleCountOutputTypeCountDetailsArgs
 }
 
 /**
@@ -693,8 +769,8 @@ export type RuleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * RuleCountOutputType without action
  */
-export type RuleCountOutputTypeCountConditionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.RuleConditionWhereInput
+export type RuleCountOutputTypeCountDetailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RuleDetailWhereInput
 }
 
 
@@ -703,12 +779,14 @@ export type RuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   code?: boolean
   name?: boolean
   diseaseId?: boolean
-  operatorDefault?: boolean
-  minMatchCount?: boolean
+  operator?: boolean
+  minMatch?: boolean
+  priority?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
-  conditions?: boolean | Prisma.Rule$conditionsArgs<ExtArgs>
+  details?: boolean | Prisma.Rule$detailsArgs<ExtArgs>
   _count?: boolean | Prisma.RuleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["rule"]>
 
@@ -717,8 +795,10 @@ export type RuleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   code?: boolean
   name?: boolean
   diseaseId?: boolean
-  operatorDefault?: boolean
-  minMatchCount?: boolean
+  operator?: boolean
+  minMatch?: boolean
+  priority?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
@@ -729,8 +809,10 @@ export type RuleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   code?: boolean
   name?: boolean
   diseaseId?: boolean
-  operatorDefault?: boolean
-  minMatchCount?: boolean
+  operator?: boolean
+  minMatch?: boolean
+  priority?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
@@ -741,16 +823,18 @@ export type RuleSelectScalar = {
   code?: boolean
   name?: boolean
   diseaseId?: boolean
-  operatorDefault?: boolean
-  minMatchCount?: boolean
+  operator?: boolean
+  minMatch?: boolean
+  priority?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "diseaseId" | "operatorDefault" | "minMatchCount" | "createdAt" | "updatedAt", ExtArgs["result"]["rule"]>
+export type RuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "diseaseId" | "operator" | "minMatch" | "priority" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["rule"]>
 export type RuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
-  conditions?: boolean | Prisma.Rule$conditionsArgs<ExtArgs>
+  details?: boolean | Prisma.Rule$detailsArgs<ExtArgs>
   _count?: boolean | Prisma.RuleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RuleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -764,15 +848,17 @@ export type $RulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Rule"
   objects: {
     disease: Prisma.$DiseasePayload<ExtArgs>
-    conditions: Prisma.$RuleConditionPayload<ExtArgs>[]
+    details: Prisma.$RuleDetailPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     code: string
     name: string
     diseaseId: string
-    operatorDefault: string
-    minMatchCount: number | null
+    operator: $Enums.RuleOperator
+    minMatch: number
+    priority: number
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["rule"]>
@@ -1170,7 +1256,7 @@ readonly fields: RuleFieldRefs;
 export interface Prisma__RuleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   disease<T extends Prisma.DiseaseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DiseaseDefaultArgs<ExtArgs>>): Prisma.Prisma__DiseaseClient<runtime.Types.Result.GetResult<Prisma.$DiseasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  conditions<T extends Prisma.Rule$conditionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$conditionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleConditionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  details<T extends Prisma.Rule$detailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$detailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1204,8 +1290,10 @@ export interface RuleFieldRefs {
   readonly code: Prisma.FieldRef<"Rule", 'String'>
   readonly name: Prisma.FieldRef<"Rule", 'String'>
   readonly diseaseId: Prisma.FieldRef<"Rule", 'String'>
-  readonly operatorDefault: Prisma.FieldRef<"Rule", 'String'>
-  readonly minMatchCount: Prisma.FieldRef<"Rule", 'Int'>
+  readonly operator: Prisma.FieldRef<"Rule", 'RuleOperator'>
+  readonly minMatch: Prisma.FieldRef<"Rule", 'Int'>
+  readonly priority: Prisma.FieldRef<"Rule", 'Int'>
+  readonly isActive: Prisma.FieldRef<"Rule", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Rule", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Rule", 'DateTime'>
 }
@@ -1609,27 +1697,27 @@ export type RuleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Rule.conditions
+ * Rule.details
  */
-export type Rule$conditionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Rule$detailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the RuleCondition
+   * Select specific fields to fetch from the RuleDetail
    */
-  select?: Prisma.RuleConditionSelect<ExtArgs> | null
+  select?: Prisma.RuleDetailSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the RuleCondition
+   * Omit specific fields from the RuleDetail
    */
-  omit?: Prisma.RuleConditionOmit<ExtArgs> | null
+  omit?: Prisma.RuleDetailOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.RuleConditionInclude<ExtArgs> | null
-  where?: Prisma.RuleConditionWhereInput
-  orderBy?: Prisma.RuleConditionOrderByWithRelationInput | Prisma.RuleConditionOrderByWithRelationInput[]
-  cursor?: Prisma.RuleConditionWhereUniqueInput
+  include?: Prisma.RuleDetailInclude<ExtArgs> | null
+  where?: Prisma.RuleDetailWhereInput
+  orderBy?: Prisma.RuleDetailOrderByWithRelationInput | Prisma.RuleDetailOrderByWithRelationInput[]
+  cursor?: Prisma.RuleDetailWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.RuleConditionScalarFieldEnum | Prisma.RuleConditionScalarFieldEnum[]
+  distinct?: Prisma.RuleDetailScalarFieldEnum | Prisma.RuleDetailScalarFieldEnum[]
 }
 
 /**

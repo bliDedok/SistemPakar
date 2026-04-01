@@ -8,13 +8,12 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Symptom.ts'
 export type * from './models/Disease.ts'
+export type * from './models/Symptom.ts'
 export type * from './models/Rule.ts'
-export type * from './models/RuleCondition.ts'
+export type * from './models/RuleDetail.ts'
 export type * from './models/DiseaseSymptomWeight.ts'
 export type * from './models/Consultation.ts'
-export type * from './models/ConsultationMessage.ts'
 export type * from './models/ConsultationAnswer.ts'
-export type * from './models/DiagnosisResult.ts'
+export type * from './models/ConsultationResult.ts'
 export type * from './commonInputTypes.ts'

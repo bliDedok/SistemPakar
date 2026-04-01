@@ -27,85 +27,63 @@ export type AggregateConsultationAnswer = {
 }
 
 export type ConsultationAnswerAvgAggregateOutputType = {
-  confidenceUser: number | null
-  durationDays: number | null
+  userCf: number | null
 }
 
 export type ConsultationAnswerSumAggregateOutputType = {
-  confidenceUser: number | null
-  durationDays: number | null
+  userCf: number | null
 }
 
 export type ConsultationAnswerMinAggregateOutputType = {
   id: string | null
   consultationId: string | null
   symptomId: string | null
-  confidenceUser: number | null
-  durationDays: number | null
-  notes: string | null
-  createdAt: Date | null
+  userCf: number | null
 }
 
 export type ConsultationAnswerMaxAggregateOutputType = {
   id: string | null
   consultationId: string | null
   symptomId: string | null
-  confidenceUser: number | null
-  durationDays: number | null
-  notes: string | null
-  createdAt: Date | null
+  userCf: number | null
 }
 
 export type ConsultationAnswerCountAggregateOutputType = {
   id: number
   consultationId: number
   symptomId: number
-  confidenceUser: number
-  durationDays: number
-  notes: number
-  createdAt: number
+  userCf: number
   _all: number
 }
 
 
 export type ConsultationAnswerAvgAggregateInputType = {
-  confidenceUser?: true
-  durationDays?: true
+  userCf?: true
 }
 
 export type ConsultationAnswerSumAggregateInputType = {
-  confidenceUser?: true
-  durationDays?: true
+  userCf?: true
 }
 
 export type ConsultationAnswerMinAggregateInputType = {
   id?: true
   consultationId?: true
   symptomId?: true
-  confidenceUser?: true
-  durationDays?: true
-  notes?: true
-  createdAt?: true
+  userCf?: true
 }
 
 export type ConsultationAnswerMaxAggregateInputType = {
   id?: true
   consultationId?: true
   symptomId?: true
-  confidenceUser?: true
-  durationDays?: true
-  notes?: true
-  createdAt?: true
+  userCf?: true
 }
 
 export type ConsultationAnswerCountAggregateInputType = {
   id?: true
   consultationId?: true
   symptomId?: true
-  confidenceUser?: true
-  durationDays?: true
-  notes?: true
-  createdAt?: true
+  userCf?: true
   _all?: true
 }
 
@@ -199,10 +177,7 @@ export type ConsultationAnswerGroupByOutputType = {
   id: string
   consultationId: string
   symptomId: string
-  confidenceUser: number
-  durationDays: number | null
-  notes: string | null
-  createdAt: Date
+  userCf: number
   _count: ConsultationAnswerCountAggregateOutputType | null
   _avg: ConsultationAnswerAvgAggregateOutputType | null
   _sum: ConsultationAnswerSumAggregateOutputType | null
@@ -232,10 +207,7 @@ export type ConsultationAnswerWhereInput = {
   id?: Prisma.StringFilter<"ConsultationAnswer"> | string
   consultationId?: Prisma.StringFilter<"ConsultationAnswer"> | string
   symptomId?: Prisma.StringFilter<"ConsultationAnswer"> | string
-  confidenceUser?: Prisma.FloatFilter<"ConsultationAnswer"> | number
-  durationDays?: Prisma.IntNullableFilter<"ConsultationAnswer"> | number | null
-  notes?: Prisma.StringNullableFilter<"ConsultationAnswer"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ConsultationAnswer"> | Date | string
+  userCf?: Prisma.FloatFilter<"ConsultationAnswer"> | number
   consultation?: Prisma.XOR<Prisma.ConsultationScalarRelationFilter, Prisma.ConsultationWhereInput>
   symptom?: Prisma.XOR<Prisma.SymptomScalarRelationFilter, Prisma.SymptomWhereInput>
 }
@@ -244,37 +216,29 @@ export type ConsultationAnswerOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   consultationId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  notes?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
   consultation?: Prisma.ConsultationOrderByWithRelationInput
   symptom?: Prisma.SymptomOrderByWithRelationInput
 }
 
 export type ConsultationAnswerWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  consultationId_symptomId?: Prisma.ConsultationAnswerConsultationIdSymptomIdCompoundUniqueInput
   AND?: Prisma.ConsultationAnswerWhereInput | Prisma.ConsultationAnswerWhereInput[]
   OR?: Prisma.ConsultationAnswerWhereInput[]
   NOT?: Prisma.ConsultationAnswerWhereInput | Prisma.ConsultationAnswerWhereInput[]
   consultationId?: Prisma.StringFilter<"ConsultationAnswer"> | string
   symptomId?: Prisma.StringFilter<"ConsultationAnswer"> | string
-  confidenceUser?: Prisma.FloatFilter<"ConsultationAnswer"> | number
-  durationDays?: Prisma.IntNullableFilter<"ConsultationAnswer"> | number | null
-  notes?: Prisma.StringNullableFilter<"ConsultationAnswer"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ConsultationAnswer"> | Date | string
+  userCf?: Prisma.FloatFilter<"ConsultationAnswer"> | number
   consultation?: Prisma.XOR<Prisma.ConsultationScalarRelationFilter, Prisma.ConsultationWhereInput>
   symptom?: Prisma.XOR<Prisma.SymptomScalarRelationFilter, Prisma.SymptomWhereInput>
-}, "id">
+}, "id" | "consultationId_symptomId">
 
 export type ConsultationAnswerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   consultationId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  notes?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
   _count?: Prisma.ConsultationAnswerCountOrderByAggregateInput
   _avg?: Prisma.ConsultationAnswerAvgOrderByAggregateInput
   _max?: Prisma.ConsultationAnswerMaxOrderByAggregateInput
@@ -289,18 +253,12 @@ export type ConsultationAnswerScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ConsultationAnswer"> | string
   consultationId?: Prisma.StringWithAggregatesFilter<"ConsultationAnswer"> | string
   symptomId?: Prisma.StringWithAggregatesFilter<"ConsultationAnswer"> | string
-  confidenceUser?: Prisma.FloatWithAggregatesFilter<"ConsultationAnswer"> | number
-  durationDays?: Prisma.IntNullableWithAggregatesFilter<"ConsultationAnswer"> | number | null
-  notes?: Prisma.StringNullableWithAggregatesFilter<"ConsultationAnswer"> | string | null
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"ConsultationAnswer"> | Date | string
+  userCf?: Prisma.FloatWithAggregatesFilter<"ConsultationAnswer"> | number
 }
 
 export type ConsultationAnswerCreateInput = {
   id?: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
   consultation: Prisma.ConsultationCreateNestedOneWithoutAnswersInput
   symptom: Prisma.SymptomCreateNestedOneWithoutAnswersInput
 }
@@ -309,18 +267,12 @@ export type ConsultationAnswerUncheckedCreateInput = {
   id?: string
   consultationId: string
   symptomId: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
 }
 
 export type ConsultationAnswerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
   consultation?: Prisma.ConsultationUpdateOneRequiredWithoutAnswersNestedInput
   symptom?: Prisma.SymptomUpdateOneRequiredWithoutAnswersNestedInput
 }
@@ -329,38 +281,26 @@ export type ConsultationAnswerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   consultationId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type ConsultationAnswerCreateManyInput = {
   id?: string
   consultationId: string
   symptomId: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
 }
 
 export type ConsultationAnswerUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type ConsultationAnswerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   consultationId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type ConsultationAnswerListRelationFilter = {
@@ -373,44 +313,38 @@ export type ConsultationAnswerOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ConsultationAnswerConsultationIdSymptomIdCompoundUniqueInput = {
+  consultationId: string
+  symptomId: string
+}
+
 export type ConsultationAnswerCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   consultationId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrder
-  notes?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
 }
 
 export type ConsultationAnswerAvgOrderByAggregateInput = {
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
 }
 
 export type ConsultationAnswerMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   consultationId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrder
-  notes?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
 }
 
 export type ConsultationAnswerMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   consultationId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrder
-  notes?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
 }
 
 export type ConsultationAnswerSumOrderByAggregateInput = {
-  confidenceUser?: Prisma.SortOrder
-  durationDays?: Prisma.SortOrder
+  userCf?: Prisma.SortOrder
 }
 
 export type ConsultationAnswerCreateNestedManyWithoutSymptomInput = {
@@ -499,20 +433,14 @@ export type ConsultationAnswerUncheckedUpdateManyWithoutConsultationNestedInput 
 
 export type ConsultationAnswerCreateWithoutSymptomInput = {
   id?: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
   consultation: Prisma.ConsultationCreateNestedOneWithoutAnswersInput
 }
 
 export type ConsultationAnswerUncheckedCreateWithoutSymptomInput = {
   id?: string
   consultationId: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
 }
 
 export type ConsultationAnswerCreateOrConnectWithoutSymptomInput = {
@@ -548,28 +476,19 @@ export type ConsultationAnswerScalarWhereInput = {
   id?: Prisma.StringFilter<"ConsultationAnswer"> | string
   consultationId?: Prisma.StringFilter<"ConsultationAnswer"> | string
   symptomId?: Prisma.StringFilter<"ConsultationAnswer"> | string
-  confidenceUser?: Prisma.FloatFilter<"ConsultationAnswer"> | number
-  durationDays?: Prisma.IntNullableFilter<"ConsultationAnswer"> | number | null
-  notes?: Prisma.StringNullableFilter<"ConsultationAnswer"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ConsultationAnswer"> | Date | string
+  userCf?: Prisma.FloatFilter<"ConsultationAnswer"> | number
 }
 
 export type ConsultationAnswerCreateWithoutConsultationInput = {
   id?: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
   symptom: Prisma.SymptomCreateNestedOneWithoutAnswersInput
 }
 
 export type ConsultationAnswerUncheckedCreateWithoutConsultationInput = {
   id?: string
   symptomId: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
 }
 
 export type ConsultationAnswerCreateOrConnectWithoutConsultationInput = {
@@ -601,73 +520,49 @@ export type ConsultationAnswerUpdateManyWithWhereWithoutConsultationInput = {
 export type ConsultationAnswerCreateManySymptomInput = {
   id?: string
   consultationId: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
 }
 
 export type ConsultationAnswerUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
   consultation?: Prisma.ConsultationUpdateOneRequiredWithoutAnswersNestedInput
 }
 
 export type ConsultationAnswerUncheckedUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   consultationId?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type ConsultationAnswerUncheckedUpdateManyWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   consultationId?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type ConsultationAnswerCreateManyConsultationInput = {
   id?: string
   symptomId: string
-  confidenceUser: number
-  durationDays?: number | null
-  notes?: string | null
-  createdAt?: Date | string
+  userCf: number
 }
 
 export type ConsultationAnswerUpdateWithoutConsultationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
   symptom?: Prisma.SymptomUpdateOneRequiredWithoutAnswersNestedInput
 }
 
 export type ConsultationAnswerUncheckedUpdateWithoutConsultationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type ConsultationAnswerUncheckedUpdateManyWithoutConsultationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
-  confidenceUser?: Prisma.FloatFieldUpdateOperationsInput | number
-  durationDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCf?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 
@@ -676,10 +571,7 @@ export type ConsultationAnswerSelect<ExtArgs extends runtime.Types.Extensions.In
   id?: boolean
   consultationId?: boolean
   symptomId?: boolean
-  confidenceUser?: boolean
-  durationDays?: boolean
-  notes?: boolean
-  createdAt?: boolean
+  userCf?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationAnswer"]>
@@ -688,10 +580,7 @@ export type ConsultationAnswerSelectCreateManyAndReturn<ExtArgs extends runtime.
   id?: boolean
   consultationId?: boolean
   symptomId?: boolean
-  confidenceUser?: boolean
-  durationDays?: boolean
-  notes?: boolean
-  createdAt?: boolean
+  userCf?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationAnswer"]>
@@ -700,10 +589,7 @@ export type ConsultationAnswerSelectUpdateManyAndReturn<ExtArgs extends runtime.
   id?: boolean
   consultationId?: boolean
   symptomId?: boolean
-  confidenceUser?: boolean
-  durationDays?: boolean
-  notes?: boolean
-  createdAt?: boolean
+  userCf?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationAnswer"]>
@@ -712,13 +598,10 @@ export type ConsultationAnswerSelectScalar = {
   id?: boolean
   consultationId?: boolean
   symptomId?: boolean
-  confidenceUser?: boolean
-  durationDays?: boolean
-  notes?: boolean
-  createdAt?: boolean
+  userCf?: boolean
 }
 
-export type ConsultationAnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "consultationId" | "symptomId" | "confidenceUser" | "durationDays" | "notes" | "createdAt", ExtArgs["result"]["consultationAnswer"]>
+export type ConsultationAnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "consultationId" | "symptomId" | "userCf", ExtArgs["result"]["consultationAnswer"]>
 export type ConsultationAnswerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -742,10 +625,7 @@ export type $ConsultationAnswerPayload<ExtArgs extends runtime.Types.Extensions.
     id: string
     consultationId: string
     symptomId: string
-    confidenceUser: number
-    durationDays: number | null
-    notes: string | null
-    createdAt: Date
+    userCf: number
   }, ExtArgs["result"]["consultationAnswer"]>
   composites: {}
 }
@@ -1174,10 +1054,7 @@ export interface ConsultationAnswerFieldRefs {
   readonly id: Prisma.FieldRef<"ConsultationAnswer", 'String'>
   readonly consultationId: Prisma.FieldRef<"ConsultationAnswer", 'String'>
   readonly symptomId: Prisma.FieldRef<"ConsultationAnswer", 'String'>
-  readonly confidenceUser: Prisma.FieldRef<"ConsultationAnswer", 'Float'>
-  readonly durationDays: Prisma.FieldRef<"ConsultationAnswer", 'Int'>
-  readonly notes: Prisma.FieldRef<"ConsultationAnswer", 'String'>
-  readonly createdAt: Prisma.FieldRef<"ConsultationAnswer", 'DateTime'>
+  readonly userCf: Prisma.FieldRef<"ConsultationAnswer", 'Float'>
 }
     
 

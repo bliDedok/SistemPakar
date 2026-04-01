@@ -1,7 +1,8 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { symptomRoutes } from "../modules/symptom/interface-http/symptom.routes.js";
-import { diagnosisRoutes } from "../modules/diagnosis/interface-http/diagnosis.routes.js";
+import { symptomRoutes } from "../modules/symptom/interface-http/symptom.routes";
+import { diagnosisRoutes } from "../modules/diagnosis/interface-http/diagnosis.routes";
+
 
 const app = Fastify({ logger: true });
 
