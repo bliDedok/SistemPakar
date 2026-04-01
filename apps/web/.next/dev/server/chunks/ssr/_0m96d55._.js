@@ -3,10 +3,35 @@ module.exports = [
 "use strict";
 
 __turbopack_context__.s([
-    "API_BASE_URL",
-    ()=>API_BASE_URL
+    "fetchSymptoms",
+    ()=>fetchSymptoms,
+    "submitDiagnosis",
+    ()=>submitDiagnosis
 ]);
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+const API_BASE_URL = ("TURBOPACK compile-time value", "http://localhost:3001") || "http://localhost:3001";
+async function fetchSymptoms() {
+    const res = await fetch(`${API_BASE_URL}/api/symptoms`, {
+        cache: "no-store"
+    });
+    if (!res.ok) {
+        throw new Error("Gagal memuat data gejala");
+    }
+    return res.json();
+}
+async function submitDiagnosis(payload) {
+    const res = await fetch(`${API_BASE_URL}/api/consultations/diagnose`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+        throw new Error(data?.message || "Gagal memproses diagnosis");
+    }
+    return data;
+}
 }),
 "[project]/apps/web/app/consultation/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";

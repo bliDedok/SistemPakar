@@ -1,36 +1,24 @@
-import { FastifyInstance } from "fastify";
-import { z } from "zod";
-import { PrismaDiagnosisRepository } from "../infrastructure/repositories/prisma-diagnosis.repository.js";
-import { RunDiagnosisUseCase } from "../application/use-cases/run-diagnosis.use-case.js";
-
-const bodySchema = z.object({
-  answers: z.array(
-    z.object({
-      symptomId: z.string(),
-      confidenceUser: z.number().min(0).max(1),
-    })
-  ),
-});
+import type { FastifyInstance } from "fastify";
+import { diagnoseChild } from "../../inference/inference.service";
 
 export async function diagnosisRoutes(app: FastifyInstance) {
-  app.post("/api/diagnosis/run", async (request, reply) => {
-    const parsed = bodySchema.safeParse(request.body);
+  app.post("/api/consultations/diagnose", async (request, reply) => {
+    try {
+      const result = await diagnoseChild(request.body as any);
 
-    if (!parsed.success) {
-      return reply.code(400).send({
-        ok: false,
-        error: parsed.error.flatten(),
+      return reply.status(200).send({
+        success: true,
+        message: "Diagnosis awal berhasil diproses",
+        disclaimer: "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        data: result,
+      });
+    } catch (error) {
+      request.log.error(error);
+
+      return reply.status(500).send({
+        success: false,
+        message: "Terjadi kesalahan saat memproses diagnosis",
       });
     }
-
-    const repository = new PrismaDiagnosisRepository();
-    const useCase = new RunDiagnosisUseCase(repository);
-
-    const data = await useCase.execute(parsed.data.answers);
-
-    return {
-      ok: true,
-      data,
-    };
   });
 }

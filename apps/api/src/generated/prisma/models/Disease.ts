@@ -29,8 +29,10 @@ export type DiseaseMinAggregateOutputType = {
   code: string | null
   name: string | null
   description: string | null
-  recommendation: string | null
+  advice: string | null
   severityLevel: string | null
+  sourceUrl: string | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,8 +42,10 @@ export type DiseaseMaxAggregateOutputType = {
   code: string | null
   name: string | null
   description: string | null
-  recommendation: string | null
+  advice: string | null
   severityLevel: string | null
+  sourceUrl: string | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,8 +55,10 @@ export type DiseaseCountAggregateOutputType = {
   code: number
   name: number
   description: number
-  recommendation: number
+  advice: number
   severityLevel: number
+  sourceUrl: number
+  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -64,8 +70,10 @@ export type DiseaseMinAggregateInputType = {
   code?: true
   name?: true
   description?: true
-  recommendation?: true
+  advice?: true
   severityLevel?: true
+  sourceUrl?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -75,8 +83,10 @@ export type DiseaseMaxAggregateInputType = {
   code?: true
   name?: true
   description?: true
-  recommendation?: true
+  advice?: true
   severityLevel?: true
+  sourceUrl?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -86,8 +96,10 @@ export type DiseaseCountAggregateInputType = {
   code?: true
   name?: true
   description?: true
-  recommendation?: true
+  advice?: true
   severityLevel?: true
+  sourceUrl?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -170,8 +182,10 @@ export type DiseaseGroupByOutputType = {
   code: string
   name: string
   description: string | null
-  recommendation: string | null
+  advice: string | null
   severityLevel: string | null
+  sourceUrl: string | null
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: DiseaseCountAggregateOutputType | null
@@ -202,13 +216,15 @@ export type DiseaseWhereInput = {
   code?: Prisma.StringFilter<"Disease"> | string
   name?: Prisma.StringFilter<"Disease"> | string
   description?: Prisma.StringNullableFilter<"Disease"> | string | null
-  recommendation?: Prisma.StringNullableFilter<"Disease"> | string | null
+  advice?: Prisma.StringNullableFilter<"Disease"> | string | null
   severityLevel?: Prisma.StringNullableFilter<"Disease"> | string | null
+  sourceUrl?: Prisma.StringNullableFilter<"Disease"> | string | null
+  isActive?: Prisma.BoolFilter<"Disease"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Disease"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Disease"> | Date | string
   rules?: Prisma.RuleListRelationFilter
   weights?: Prisma.DiseaseSymptomWeightListRelationFilter
-  results?: Prisma.DiagnosisResultListRelationFilter
+  results?: Prisma.ConsultationResultListRelationFilter
 }
 
 export type DiseaseOrderByWithRelationInput = {
@@ -216,13 +232,15 @@ export type DiseaseOrderByWithRelationInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  recommendation?: Prisma.SortOrderInput | Prisma.SortOrder
+  advice?: Prisma.SortOrderInput | Prisma.SortOrder
   severityLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   rules?: Prisma.RuleOrderByRelationAggregateInput
   weights?: Prisma.DiseaseSymptomWeightOrderByRelationAggregateInput
-  results?: Prisma.DiagnosisResultOrderByRelationAggregateInput
+  results?: Prisma.ConsultationResultOrderByRelationAggregateInput
 }
 
 export type DiseaseWhereUniqueInput = Prisma.AtLeast<{
@@ -233,13 +251,15 @@ export type DiseaseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DiseaseWhereInput | Prisma.DiseaseWhereInput[]
   name?: Prisma.StringFilter<"Disease"> | string
   description?: Prisma.StringNullableFilter<"Disease"> | string | null
-  recommendation?: Prisma.StringNullableFilter<"Disease"> | string | null
+  advice?: Prisma.StringNullableFilter<"Disease"> | string | null
   severityLevel?: Prisma.StringNullableFilter<"Disease"> | string | null
+  sourceUrl?: Prisma.StringNullableFilter<"Disease"> | string | null
+  isActive?: Prisma.BoolFilter<"Disease"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Disease"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Disease"> | Date | string
   rules?: Prisma.RuleListRelationFilter
   weights?: Prisma.DiseaseSymptomWeightListRelationFilter
-  results?: Prisma.DiagnosisResultListRelationFilter
+  results?: Prisma.ConsultationResultListRelationFilter
 }, "id" | "code">
 
 export type DiseaseOrderByWithAggregationInput = {
@@ -247,8 +267,10 @@ export type DiseaseOrderByWithAggregationInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  recommendation?: Prisma.SortOrderInput | Prisma.SortOrder
+  advice?: Prisma.SortOrderInput | Prisma.SortOrder
   severityLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DiseaseCountOrderByAggregateInput
@@ -264,8 +286,10 @@ export type DiseaseScalarWhereWithAggregatesInput = {
   code?: Prisma.StringWithAggregatesFilter<"Disease"> | string
   name?: Prisma.StringWithAggregatesFilter<"Disease"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Disease"> | string | null
-  recommendation?: Prisma.StringNullableWithAggregatesFilter<"Disease"> | string | null
+  advice?: Prisma.StringNullableWithAggregatesFilter<"Disease"> | string | null
   severityLevel?: Prisma.StringNullableWithAggregatesFilter<"Disease"> | string | null
+  sourceUrl?: Prisma.StringNullableWithAggregatesFilter<"Disease"> | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"Disease"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Disease"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Disease"> | Date | string
 }
@@ -275,13 +299,15 @@ export type DiseaseCreateInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   rules?: Prisma.RuleCreateNestedManyWithoutDiseaseInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutDiseaseInput
-  results?: Prisma.DiagnosisResultCreateNestedManyWithoutDiseaseInput
+  results?: Prisma.ConsultationResultCreateNestedManyWithoutDiseaseInput
 }
 
 export type DiseaseUncheckedCreateInput = {
@@ -289,13 +315,15 @@ export type DiseaseUncheckedCreateInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   rules?: Prisma.RuleUncheckedCreateNestedManyWithoutDiseaseInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutDiseaseInput
-  results?: Prisma.DiagnosisResultUncheckedCreateNestedManyWithoutDiseaseInput
+  results?: Prisma.ConsultationResultUncheckedCreateNestedManyWithoutDiseaseInput
 }
 
 export type DiseaseUpdateInput = {
@@ -303,13 +331,15 @@ export type DiseaseUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rules?: Prisma.RuleUpdateManyWithoutDiseaseNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutDiseaseNestedInput
-  results?: Prisma.DiagnosisResultUpdateManyWithoutDiseaseNestedInput
+  results?: Prisma.ConsultationResultUpdateManyWithoutDiseaseNestedInput
 }
 
 export type DiseaseUncheckedUpdateInput = {
@@ -317,13 +347,15 @@ export type DiseaseUncheckedUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rules?: Prisma.RuleUncheckedUpdateManyWithoutDiseaseNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseNestedInput
-  results?: Prisma.DiagnosisResultUncheckedUpdateManyWithoutDiseaseNestedInput
+  results?: Prisma.ConsultationResultUncheckedUpdateManyWithoutDiseaseNestedInput
 }
 
 export type DiseaseCreateManyInput = {
@@ -331,8 +363,10 @@ export type DiseaseCreateManyInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -342,8 +376,10 @@ export type DiseaseUpdateManyMutationInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -353,8 +389,10 @@ export type DiseaseUncheckedUpdateManyInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -364,8 +402,10 @@ export type DiseaseCountOrderByAggregateInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  recommendation?: Prisma.SortOrder
+  advice?: Prisma.SortOrder
   severityLevel?: Prisma.SortOrder
+  sourceUrl?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -375,8 +415,10 @@ export type DiseaseMaxOrderByAggregateInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  recommendation?: Prisma.SortOrder
+  advice?: Prisma.SortOrder
   severityLevel?: Prisma.SortOrder
+  sourceUrl?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -386,8 +428,10 @@ export type DiseaseMinOrderByAggregateInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  recommendation?: Prisma.SortOrder
+  advice?: Prisma.SortOrder
   severityLevel?: Prisma.SortOrder
+  sourceUrl?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -395,6 +439,22 @@ export type DiseaseMinOrderByAggregateInput = {
 export type DiseaseScalarRelationFilter = {
   is?: Prisma.DiseaseWhereInput
   isNot?: Prisma.DiseaseWhereInput
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
 export type DiseaseCreateNestedOneWithoutRulesInput = {
@@ -444,12 +504,14 @@ export type DiseaseCreateWithoutRulesInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutDiseaseInput
-  results?: Prisma.DiagnosisResultCreateNestedManyWithoutDiseaseInput
+  results?: Prisma.ConsultationResultCreateNestedManyWithoutDiseaseInput
 }
 
 export type DiseaseUncheckedCreateWithoutRulesInput = {
@@ -457,12 +519,14 @@ export type DiseaseUncheckedCreateWithoutRulesInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutDiseaseInput
-  results?: Prisma.DiagnosisResultUncheckedCreateNestedManyWithoutDiseaseInput
+  results?: Prisma.ConsultationResultUncheckedCreateNestedManyWithoutDiseaseInput
 }
 
 export type DiseaseCreateOrConnectWithoutRulesInput = {
@@ -486,12 +550,14 @@ export type DiseaseUpdateWithoutRulesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutDiseaseNestedInput
-  results?: Prisma.DiagnosisResultUpdateManyWithoutDiseaseNestedInput
+  results?: Prisma.ConsultationResultUpdateManyWithoutDiseaseNestedInput
 }
 
 export type DiseaseUncheckedUpdateWithoutRulesInput = {
@@ -499,12 +565,14 @@ export type DiseaseUncheckedUpdateWithoutRulesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseNestedInput
-  results?: Prisma.DiagnosisResultUncheckedUpdateManyWithoutDiseaseNestedInput
+  results?: Prisma.ConsultationResultUncheckedUpdateManyWithoutDiseaseNestedInput
 }
 
 export type DiseaseCreateWithoutWeightsInput = {
@@ -512,12 +580,14 @@ export type DiseaseCreateWithoutWeightsInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   rules?: Prisma.RuleCreateNestedManyWithoutDiseaseInput
-  results?: Prisma.DiagnosisResultCreateNestedManyWithoutDiseaseInput
+  results?: Prisma.ConsultationResultCreateNestedManyWithoutDiseaseInput
 }
 
 export type DiseaseUncheckedCreateWithoutWeightsInput = {
@@ -525,12 +595,14 @@ export type DiseaseUncheckedCreateWithoutWeightsInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   rules?: Prisma.RuleUncheckedCreateNestedManyWithoutDiseaseInput
-  results?: Prisma.DiagnosisResultUncheckedCreateNestedManyWithoutDiseaseInput
+  results?: Prisma.ConsultationResultUncheckedCreateNestedManyWithoutDiseaseInput
 }
 
 export type DiseaseCreateOrConnectWithoutWeightsInput = {
@@ -554,12 +626,14 @@ export type DiseaseUpdateWithoutWeightsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rules?: Prisma.RuleUpdateManyWithoutDiseaseNestedInput
-  results?: Prisma.DiagnosisResultUpdateManyWithoutDiseaseNestedInput
+  results?: Prisma.ConsultationResultUpdateManyWithoutDiseaseNestedInput
 }
 
 export type DiseaseUncheckedUpdateWithoutWeightsInput = {
@@ -567,12 +641,14 @@ export type DiseaseUncheckedUpdateWithoutWeightsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rules?: Prisma.RuleUncheckedUpdateManyWithoutDiseaseNestedInput
-  results?: Prisma.DiagnosisResultUncheckedUpdateManyWithoutDiseaseNestedInput
+  results?: Prisma.ConsultationResultUncheckedUpdateManyWithoutDiseaseNestedInput
 }
 
 export type DiseaseCreateWithoutResultsInput = {
@@ -580,8 +656,10 @@ export type DiseaseCreateWithoutResultsInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   rules?: Prisma.RuleCreateNestedManyWithoutDiseaseInput
@@ -593,8 +671,10 @@ export type DiseaseUncheckedCreateWithoutResultsInput = {
   code: string
   name: string
   description?: string | null
-  recommendation?: string | null
+  advice?: string | null
   severityLevel?: string | null
+  sourceUrl?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   rules?: Prisma.RuleUncheckedCreateNestedManyWithoutDiseaseInput
@@ -622,8 +702,10 @@ export type DiseaseUpdateWithoutResultsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rules?: Prisma.RuleUpdateManyWithoutDiseaseNestedInput
@@ -635,8 +717,10 @@ export type DiseaseUncheckedUpdateWithoutResultsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  advice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   severityLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rules?: Prisma.RuleUncheckedUpdateManyWithoutDiseaseNestedInput
@@ -688,7 +772,7 @@ export type DiseaseCountOutputTypeCountWeightsArgs<ExtArgs extends runtime.Types
  * DiseaseCountOutputType without action
  */
 export type DiseaseCountOutputTypeCountResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DiagnosisResultWhereInput
+  where?: Prisma.ConsultationResultWhereInput
 }
 
 
@@ -697,8 +781,10 @@ export type DiseaseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   code?: boolean
   name?: boolean
   description?: boolean
-  recommendation?: boolean
+  advice?: boolean
   severityLevel?: boolean
+  sourceUrl?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   rules?: boolean | Prisma.Disease$rulesArgs<ExtArgs>
@@ -712,8 +798,10 @@ export type DiseaseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   code?: boolean
   name?: boolean
   description?: boolean
-  recommendation?: boolean
+  advice?: boolean
   severityLevel?: boolean
+  sourceUrl?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["disease"]>
@@ -723,8 +811,10 @@ export type DiseaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   code?: boolean
   name?: boolean
   description?: boolean
-  recommendation?: boolean
+  advice?: boolean
   severityLevel?: boolean
+  sourceUrl?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["disease"]>
@@ -734,13 +824,15 @@ export type DiseaseSelectScalar = {
   code?: boolean
   name?: boolean
   description?: boolean
-  recommendation?: boolean
+  advice?: boolean
   severityLevel?: boolean
+  sourceUrl?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DiseaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "description" | "recommendation" | "severityLevel" | "createdAt" | "updatedAt", ExtArgs["result"]["disease"]>
+export type DiseaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "description" | "advice" | "severityLevel" | "sourceUrl" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["disease"]>
 export type DiseaseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   rules?: boolean | Prisma.Disease$rulesArgs<ExtArgs>
   weights?: boolean | Prisma.Disease$weightsArgs<ExtArgs>
@@ -755,15 +847,17 @@ export type $DiseasePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     rules: Prisma.$RulePayload<ExtArgs>[]
     weights: Prisma.$DiseaseSymptomWeightPayload<ExtArgs>[]
-    results: Prisma.$DiagnosisResultPayload<ExtArgs>[]
+    results: Prisma.$ConsultationResultPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     code: string
     name: string
     description: string | null
-    recommendation: string | null
+    advice: string | null
     severityLevel: string | null
+    sourceUrl: string | null
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["disease"]>
@@ -1162,7 +1256,7 @@ export interface Prisma__DiseaseClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   rules<T extends Prisma.Disease$rulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Disease$rulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   weights<T extends Prisma.Disease$weightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Disease$weightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiseaseSymptomWeightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  results<T extends Prisma.Disease$resultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Disease$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiagnosisResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  results<T extends Prisma.Disease$resultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Disease$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1196,8 +1290,10 @@ export interface DiseaseFieldRefs {
   readonly code: Prisma.FieldRef<"Disease", 'String'>
   readonly name: Prisma.FieldRef<"Disease", 'String'>
   readonly description: Prisma.FieldRef<"Disease", 'String'>
-  readonly recommendation: Prisma.FieldRef<"Disease", 'String'>
+  readonly advice: Prisma.FieldRef<"Disease", 'String'>
   readonly severityLevel: Prisma.FieldRef<"Disease", 'String'>
+  readonly sourceUrl: Prisma.FieldRef<"Disease", 'String'>
+  readonly isActive: Prisma.FieldRef<"Disease", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Disease", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Disease", 'DateTime'>
 }
@@ -1645,23 +1741,23 @@ export type Disease$weightsArgs<ExtArgs extends runtime.Types.Extensions.Interna
  */
 export type Disease$resultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the DiagnosisResult
+   * Select specific fields to fetch from the ConsultationResult
    */
-  select?: Prisma.DiagnosisResultSelect<ExtArgs> | null
+  select?: Prisma.ConsultationResultSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the DiagnosisResult
+   * Omit specific fields from the ConsultationResult
    */
-  omit?: Prisma.DiagnosisResultOmit<ExtArgs> | null
+  omit?: Prisma.ConsultationResultOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.DiagnosisResultInclude<ExtArgs> | null
-  where?: Prisma.DiagnosisResultWhereInput
-  orderBy?: Prisma.DiagnosisResultOrderByWithRelationInput | Prisma.DiagnosisResultOrderByWithRelationInput[]
-  cursor?: Prisma.DiagnosisResultWhereUniqueInput
+  include?: Prisma.ConsultationResultInclude<ExtArgs> | null
+  where?: Prisma.ConsultationResultWhereInput
+  orderBy?: Prisma.ConsultationResultOrderByWithRelationInput | Prisma.ConsultationResultOrderByWithRelationInput[]
+  cursor?: Prisma.ConsultationResultWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.DiagnosisResultScalarFieldEnum | Prisma.DiagnosisResultScalarFieldEnum[]
+  distinct?: Prisma.ConsultationResultScalarFieldEnum | Prisma.ConsultationResultScalarFieldEnum[]
 }
 
 /**

@@ -18,25 +18,25 @@ export { Prisma }
 export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
- * Model Symptom
- * 
- */
-export type Symptom = Prisma.SymptomModel
-/**
  * Model Disease
  * 
  */
 export type Disease = Prisma.DiseaseModel
+/**
+ * Model Symptom
+ * 
+ */
+export type Symptom = Prisma.SymptomModel
 /**
  * Model Rule
  * 
  */
 export type Rule = Prisma.RuleModel
 /**
- * Model RuleCondition
+ * Model RuleDetail
  * 
  */
-export type RuleCondition = Prisma.RuleConditionModel
+export type RuleDetail = Prisma.RuleDetailModel
 /**
  * Model DiseaseSymptomWeight
  * 
@@ -48,17 +48,12 @@ export type DiseaseSymptomWeight = Prisma.DiseaseSymptomWeightModel
  */
 export type Consultation = Prisma.ConsultationModel
 /**
- * Model ConsultationMessage
- * 
- */
-export type ConsultationMessage = Prisma.ConsultationMessageModel
-/**
  * Model ConsultationAnswer
  * 
  */
 export type ConsultationAnswer = Prisma.ConsultationAnswerModel
 /**
- * Model DiagnosisResult
+ * Model ConsultationResult
  * 
  */
-export type DiagnosisResult = Prisma.DiagnosisResultModel
+export type ConsultationResult = Prisma.ConsultationResultModel

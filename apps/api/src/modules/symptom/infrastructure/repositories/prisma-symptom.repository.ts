@@ -1,18 +1,11 @@
-import { prisma } from "../../../../shared/db/prisma.js";
+import { prisma } from "../../../../shared/db/prisma";
+import type { SymptomRepository } from "../../domain/repositories/symptom.repository";
 
-export class PrismaSymptomRepository {
+export class PrismaSymptomRepository implements SymptomRepository {
   async findAll() {
     return prisma.symptom.findMany({
-      select: {
-        id: true,
-        code: true,
-        name: true,
-        questionText: true,
-        description: true,
-      },
-      orderBy: {
-        code: "asc",
-      },
+      where: { isActive: true },
+      orderBy: { code: "asc" },
     });
   }
 }

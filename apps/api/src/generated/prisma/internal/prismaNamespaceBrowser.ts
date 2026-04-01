@@ -51,15 +51,14 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Symptom: 'Symptom',
   Disease: 'Disease',
+  Symptom: 'Symptom',
   Rule: 'Rule',
-  RuleCondition: 'RuleCondition',
+  RuleDetail: 'RuleDetail',
   DiseaseSymptomWeight: 'DiseaseSymptomWeight',
   Consultation: 'Consultation',
-  ConsultationMessage: 'ConsultationMessage',
   ConsultationAnswer: 'ConsultationAnswer',
-  DiagnosisResult: 'DiagnosisResult'
+  ConsultationResult: 'ConsultationResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,27 +77,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const SymptomScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  name: 'name',
-  description: 'description',
-  questionText: 'questionText',
-  isRedFlag: 'isRedFlag',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type SymptomScalarFieldEnum = (typeof SymptomScalarFieldEnum)[keyof typeof SymptomScalarFieldEnum]
-
-
 export const DiseaseScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
   description: 'description',
-  recommendation: 'recommendation',
+  advice: 'advice',
   severityLevel: 'severityLevel',
+  sourceUrl: 'sourceUrl',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -106,13 +93,30 @@ export const DiseaseScalarFieldEnum = {
 export type DiseaseScalarFieldEnum = (typeof DiseaseScalarFieldEnum)[keyof typeof DiseaseScalarFieldEnum]
 
 
+export const SymptomScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  questionText: 'questionText',
+  category: 'category',
+  isRedFlag: 'isRedFlag',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SymptomScalarFieldEnum = (typeof SymptomScalarFieldEnum)[keyof typeof SymptomScalarFieldEnum]
+
+
 export const RuleScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
   diseaseId: 'diseaseId',
-  operatorDefault: 'operatorDefault',
-  minMatchCount: 'minMatchCount',
+  operator: 'operator',
+  minMatch: 'minMatch',
+  priority: 'priority',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -120,28 +124,22 @@ export const RuleScalarFieldEnum = {
 export type RuleScalarFieldEnum = (typeof RuleScalarFieldEnum)[keyof typeof RuleScalarFieldEnum]
 
 
-export const RuleConditionScalarFieldEnum = {
+export const RuleDetailScalarFieldEnum = {
   id: 'id',
   ruleId: 'ruleId',
   symptomId: 'symptomId',
-  operator: 'operator',
-  weight: 'weight',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  isMandatory: 'isMandatory'
 } as const
 
-export type RuleConditionScalarFieldEnum = (typeof RuleConditionScalarFieldEnum)[keyof typeof RuleConditionScalarFieldEnum]
+export type RuleDetailScalarFieldEnum = (typeof RuleDetailScalarFieldEnum)[keyof typeof RuleDetailScalarFieldEnum]
 
 
 export const DiseaseSymptomWeightScalarFieldEnum = {
   id: 'id',
   diseaseId: 'diseaseId',
   symptomId: 'symptomId',
-  mb: 'mb',
-  md: 'md',
   cfExpert: 'cfExpert',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  note: 'note'
 } as const
 
 export type DiseaseSymptomWeightScalarFieldEnum = (typeof DiseaseSymptomWeightScalarFieldEnum)[keyof typeof DiseaseSymptomWeightScalarFieldEnum]
@@ -149,52 +147,35 @@ export type DiseaseSymptomWeightScalarFieldEnum = (typeof DiseaseSymptomWeightSc
 
 export const ConsultationScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  sessionTitle: 'sessionTitle',
-  status: 'status',
-  source: 'source',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ConsultationScalarFieldEnum = (typeof ConsultationScalarFieldEnum)[keyof typeof ConsultationScalarFieldEnum]
-
-
-export const ConsultationMessageScalarFieldEnum = {
-  id: 'id',
-  consultationId: 'consultationId',
-  role: 'role',
-  content: 'content',
+  childName: 'childName',
+  childAgeMonths: 'childAgeMonths',
+  gender: 'gender',
   createdAt: 'createdAt'
 } as const
 
-export type ConsultationMessageScalarFieldEnum = (typeof ConsultationMessageScalarFieldEnum)[keyof typeof ConsultationMessageScalarFieldEnum]
+export type ConsultationScalarFieldEnum = (typeof ConsultationScalarFieldEnum)[keyof typeof ConsultationScalarFieldEnum]
 
 
 export const ConsultationAnswerScalarFieldEnum = {
   id: 'id',
   consultationId: 'consultationId',
   symptomId: 'symptomId',
-  confidenceUser: 'confidenceUser',
-  durationDays: 'durationDays',
-  notes: 'notes',
-  createdAt: 'createdAt'
+  userCf: 'userCf'
 } as const
 
 export type ConsultationAnswerScalarFieldEnum = (typeof ConsultationAnswerScalarFieldEnum)[keyof typeof ConsultationAnswerScalarFieldEnum]
 
 
-export const DiagnosisResultScalarFieldEnum = {
+export const ConsultationResultScalarFieldEnum = {
   id: 'id',
   consultationId: 'consultationId',
   diseaseId: 'diseaseId',
-  scoreCf: 'scoreCf',
-  isPrimary: 'isPrimary',
-  explanationJson: 'explanationJson',
-  createdAt: 'createdAt'
+  matchCount: 'matchCount',
+  cfResult: 'cfResult',
+  rank: 'rank'
 } as const
 
-export type DiagnosisResultScalarFieldEnum = (typeof DiagnosisResultScalarFieldEnum)[keyof typeof DiagnosisResultScalarFieldEnum]
+export type ConsultationResultScalarFieldEnum = (typeof ConsultationResultScalarFieldEnum)[keyof typeof ConsultationResultScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -203,14 +184,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -227,13 +200,4 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
