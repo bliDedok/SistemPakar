@@ -378,3 +378,168 @@ export async function deleteAdminWeight(id: string) {
 
   return data;
 }
+
+// API Rules Admin
+export async function fetchAdminRules() {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat data rule");
+  }
+
+  return data;
+}
+
+export async function fetchAdminRuleById(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat detail rule");
+  }
+
+  return data;
+}
+
+export async function createAdminRule(payload: {
+  code: string;
+  name: string;
+  diseaseId: string;
+  operator: "AND" | "OR";
+  minMatch: number;
+  priority: number;
+  isActive: boolean;
+}) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menambah rule");
+  }
+
+  return data;
+}
+
+export async function updateAdminRule(
+  id: string,
+  payload: {
+    code: string;
+    name: string;
+    diseaseId: string;
+    operator: "AND" | "OR";
+    minMatch: number;
+    priority: number;
+    isActive: boolean;
+  }
+) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal mengubah rule");
+  }
+
+  return data;
+}
+
+export async function deleteAdminRule(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menonaktifkan rule");
+  }
+
+  return data;
+}
+
+export async function addAdminRuleDetail(
+  ruleId: string,
+  payload: {
+    symptomId: string;
+    isMandatory: boolean;
+  }
+) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules/${ruleId}/details`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menambah detail rule");
+  }
+
+  return data;
+}
+
+export async function deleteAdminRuleDetail(ruleId: string, detailId: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/rules/${ruleId}/details/${detailId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menghapus detail rule");
+  }
+
+  return data;
+}
