@@ -142,3 +142,123 @@ export async function deleteAdminSymptom(id: string) {
 
   return data;
 }
+
+// API Disease Admin 
+
+export async function fetchAdminDiseases() {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/diseases`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat data penyakit");
+  }
+
+  return data;
+}
+
+export async function fetchAdminDiseaseById(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/diseases/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat detail penyakit");
+  }
+
+  return data;
+}
+
+export async function createAdminDisease(payload: {
+  code: string;
+  name: string;
+  description?: string;
+  advice?: string;
+  severityLevel?: string;
+  sourceUrl?: string;
+  isActive: boolean;
+}) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/diseases`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menambah penyakit");
+  }
+
+  return data;
+}
+
+export async function updateAdminDisease(
+  id: string,
+  payload: {
+    code: string;
+    name: string;
+    description?: string;
+    advice?: string;
+    severityLevel?: string;
+    sourceUrl?: string;
+    isActive: boolean;
+  }
+) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/diseases/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal mengubah penyakit");
+  }
+
+  return data;
+}
+
+export async function deleteAdminDisease(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/diseases/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal menonaktifkan penyakit");
+  }
+
+  return data;
+}
