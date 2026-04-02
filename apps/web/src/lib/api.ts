@@ -27,6 +27,12 @@ export async function adminLogin(payload: {
   return data;
 }
 
+export function logoutAdmin() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("admin_token");
+  }
+}
+
 export async function fetchAdminSymptoms() {
   const token = getAdminToken();
 
@@ -539,6 +545,45 @@ export async function deleteAdminRuleDetail(ruleId: string, detailId: string) {
 
   if (!res.ok) {
     throw new Error(data?.message || "Gagal menghapus detail rule");
+  }
+
+  return data;
+}
+
+// API Consultation History Admin
+export async function fetchAdminConsultations() {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/consultations`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat riwayat konsultasi");
+  }
+
+  return data;
+}
+
+export async function fetchAdminConsultationById(id: string) {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/consultations/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat detail konsultasi");
   }
 
   return data;
