@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminLogin } from "@/src/lib/api";
 
@@ -10,6 +10,18 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
+
+    if (token) {
+      router.replace("/admin");
+      return;
+    }
+
+    setChecking(false);
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -19,7 +31,7 @@ export default function AdminLoginPage() {
       setLoading(true);
       const response = await adminLogin({ username, password });
       localStorage.setItem("admin_token", response.data.token);
-      router.push("/admin/symptoms");
+      router.replace("/admin");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login gagal");
     } finally {
@@ -27,9 +39,19 @@ export default function AdminLoginPage() {
     }
   }
 
+  if (checking) {
+    return (
+      <main className="mx-auto flex min-h-screen max-w-md items-center justify-center p-6">
+        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+          Memeriksa sesi admin...
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="mx-auto max-w-md p-6">
-      <div className="rounded-2xl border bg-white p-6 shadow-sm">
+    <main className="mx-auto flex min-h-screen max-w-md items-center p-6">
+      <div className="w-full rounded-2xl border bg-white p-6 shadow-sm">
         <h1 className="mb-6 text-2xl font-bold">Login Admin</h1>
 
         {error && (
