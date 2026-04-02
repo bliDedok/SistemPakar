@@ -588,3 +588,24 @@ export async function fetchAdminConsultationById(id: string) {
 
   return data;
 }
+
+
+// API Dashboard Admin
+export async function fetchAdminDashboardStats() {
+  const token = getAdminToken();
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/dashboard/stats`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat statistik dashboard");
+  }
+
+  return data;
+}
