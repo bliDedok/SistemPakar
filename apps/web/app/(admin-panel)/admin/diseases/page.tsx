@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { deleteAdminDisease, fetchAdminDiseases } from "@/src/lib/api";
 
 type Disease = {
@@ -15,10 +15,17 @@ type Disease = {
   isActive: boolean;
 };
 
+type StatusFilter = "all" | "active" | "inactive";
+type SeverityFilter = "all" | "low" | "medium" | "high" | "critical";
+
 export default function AdminDiseasesPage() {
   const [items, setItems] = useState<Disease[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
 
   async function loadData() {
     try {
@@ -48,6 +55,29 @@ export default function AdminDiseasesPage() {
     loadData();
   }, []);
 
+  const filteredItems = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+
+    return items.filter((item) => {
+      const matchesSearch =
+        keyword === "" ||
+        item.code.toLowerCase().includes(keyword) ||
+        item.name.toLowerCase().includes(keyword) ||
+        (item.description || "").toLowerCase().includes(keyword) ||
+        (item.advice || "").toLowerCase().includes(keyword);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active" && item.isActive) ||
+        (statusFilter === "inactive" && !item.isActive);
+
+      const matchesSeverity =
+        severityFilter === "all" || item.severityLevel === severityFilter;
+
+      return matchesSearch && matchesStatus && matchesSeverity;
+    });
+  }, [items, search, statusFilter, severityFilter]);
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
@@ -62,6 +92,42 @@ export default function AdminDiseasesPage() {
         >
           Tambah Penyakit
         </Link>
+      </div>
+
+      <div className="mb-4 grid gap-3 rounded-2xl border bg-white p-4 shadow-sm md:grid-cols-3">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Cari code, nama, deskripsi, saran..."
+          className="rounded-lg border px-3 py-2"
+        />
+
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+          className="rounded-lg border px-3 py-2"
+        >
+          <option value="all">Semua Status</option>
+          <option value="active">Aktif</option>
+          <option value="inactive">Nonaktif</option>
+        </select>
+
+        <select
+          value={severityFilter}
+          onChange={(e) => setSeverityFilter(e.target.value as SeverityFilter)}
+          className="rounded-lg border px-3 py-2"
+        >
+          <option value="all">Semua Severity</option>
+          <option value="low">low</option>
+          <option value="medium">medium</option>
+          <option value="high">high</option>
+          <option value="critical">critical</option>
+        </select>
+      </div>
+
+      <div className="mb-4 text-sm text-gray-600">
+        Menampilkan <strong>{filteredItems.length}</strong> dari{" "}
+        <strong>{items.length}</strong> penyakit
       </div>
 
       {error && (
@@ -83,7 +149,7 @@ export default function AdminDiseasesPage() {
           </thead>
           <tbody>
             {!loading &&
-              items.map((item) => (
+              filteredItems.map((item) => (
                 <tr key={item.id} className="border-t">
                   <td className="px-4 py-3">{item.code}</td>
                   <td className="px-4 py-3">{item.name}</td>
@@ -107,6 +173,14 @@ export default function AdminDiseasesPage() {
                   </td>
                 </tr>
               ))}
+
+            {!loading && filteredItems.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                  Tidak ada data penyakit yang cocok.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
 

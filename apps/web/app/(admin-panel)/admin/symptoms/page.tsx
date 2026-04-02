@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { deleteAdminSymptom, fetchAdminSymptoms } from "@/src/lib/api";
 
 type Symptom = {
@@ -14,10 +14,17 @@ type Symptom = {
   isActive: boolean;
 };
 
+type StatusFilter = "all" | "active" | "inactive";
+type RedFlagFilter = "all" | "yes" | "no";
+
 export default function AdminSymptomsPage() {
   const [items, setItems] = useState<Symptom[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [redFlagFilter, setRedFlagFilter] = useState<RedFlagFilter>("all");
 
   async function loadData() {
     try {
@@ -47,6 +54,31 @@ export default function AdminSymptomsPage() {
     loadData();
   }, []);
 
+  const filteredItems = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+
+    return items.filter((item) => {
+      const matchesSearch =
+        keyword === "" ||
+        item.code.toLowerCase().includes(keyword) ||
+        item.name.toLowerCase().includes(keyword) ||
+        item.questionText.toLowerCase().includes(keyword) ||
+        (item.category || "").toLowerCase().includes(keyword);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active" && item.isActive) ||
+        (statusFilter === "inactive" && !item.isActive);
+
+      const matchesRedFlag =
+        redFlagFilter === "all" ||
+        (redFlagFilter === "yes" && item.isRedFlag) ||
+        (redFlagFilter === "no" && !item.isRedFlag);
+
+      return matchesSearch && matchesStatus && matchesRedFlag;
+    });
+  }, [items, search, statusFilter, redFlagFilter]);
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
@@ -61,6 +93,40 @@ export default function AdminSymptomsPage() {
         >
           Tambah Gejala
         </Link>
+      </div>
+
+      <div className="mb-4 grid gap-3 rounded-2xl border bg-white p-4 shadow-sm md:grid-cols-3">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Cari code, nama, pertanyaan, kategori..."
+          className="rounded-lg border px-3 py-2"
+        />
+
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+          className="rounded-lg border px-3 py-2"
+        >
+          <option value="all">Semua Status</option>
+          <option value="active">Aktif</option>
+          <option value="inactive">Nonaktif</option>
+        </select>
+
+        <select
+          value={redFlagFilter}
+          onChange={(e) => setRedFlagFilter(e.target.value as RedFlagFilter)}
+          className="rounded-lg border px-3 py-2"
+        >
+          <option value="all">Semua Red Flag</option>
+          <option value="yes">Red Flag</option>
+          <option value="no">Bukan Red Flag</option>
+        </select>
+      </div>
+
+      <div className="mb-4 text-sm text-gray-600">
+        Menampilkan <strong>{filteredItems.length}</strong> dari{" "}
+        <strong>{items.length}</strong> gejala
       </div>
 
       {error && (
@@ -83,7 +149,7 @@ export default function AdminSymptomsPage() {
           </thead>
           <tbody>
             {!loading &&
-              items.map((item) => (
+              filteredItems.map((item) => (
                 <tr key={item.id} className="border-t">
                   <td className="px-4 py-3">{item.code}</td>
                   <td className="px-4 py-3">{item.name}</td>
@@ -108,6 +174,14 @@ export default function AdminSymptomsPage() {
                   </td>
                 </tr>
               ))}
+
+            {!loading && filteredItems.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                  Tidak ada data gejala yang cocok.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
 
