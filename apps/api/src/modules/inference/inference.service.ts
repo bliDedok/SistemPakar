@@ -15,6 +15,17 @@ type DiagnosisResult = {
 };
 
 type DiagnoseResponse = {
+  consultationId: string;
+  redFlags: string[];
+  results: DiagnosisResult[];
+};
+
+export type ConsultationDetailResponse = {
+  consultationId: string;
+  childName: string | null;
+  childAgeMonths: number;
+  gender: "MALE" | "FEMALE" | null;
+  createdAt: string;
   redFlags: string[];
   results: DiagnosisResult[];
 };
@@ -27,7 +38,9 @@ function round(value: number, digits = 4): number {
   return Number(value.toFixed(digits));
 }
 
-export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<DiagnoseResponse> {
+export async function diagnoseChild(
+  payload: DiagnoseRequestDto
+): Promise<DiagnoseResponse> {
   const normalizedAnswers = payload.answers.filter(
     (a) =>
       typeof a.symptomCode === "string" &&
@@ -38,8 +51,8 @@ export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<Diagno
   );
 
   const selectedAnswers = normalizedAnswers.filter((a) => a.userCf > 0);
-
   const answerMap = new Map<string, number>();
+
   for (const answer of selectedAnswers) {
     answerMap.set(answer.symptomCode, answer.userCf);
   }
@@ -84,16 +97,22 @@ export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<Diagno
       },
     },
   });
+  
 
   const results: DiagnosisResult[] = [];
 
   for (const disease of diseases) {
     const matchedRules = disease.rules.filter((rule) => {
       const detailSymptomIds = rule.details.map((d) => d.symptomId);
-      const matchedCount = detailSymptomIds.filter((id) => selectedSymptomIds.has(id)).length;
-      const mandatory = rule.details.filter((d) => d.isMandatory);
+      const matchedCount = detailSymptomIds.filter((id) =>
+        selectedSymptomIds.has(id)
+      ).length;
 
-      const mandatoryOk = mandatory.every((item) => selectedSymptomIds.has(item.symptomId));
+      const mandatory = rule.details.filter((d) => d.isMandatory);
+      const mandatoryOk = mandatory.every((item) =>
+        selectedSymptomIds.has(item.symptomId)
+      );
+
       if (!mandatoryOk) return false;
 
       if (rule.operator === RuleOperator.AND) {
@@ -111,8 +130,7 @@ export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<Diagno
 
     const matchedWeights = disease.weights.filter(
       (w) =>
-        answerMap.has(w.symptom.code) &&
-        matchedRuleSymptomIds.has(w.symptomId)
+        answerMap.has(w.symptom.code) && matchedRuleSymptomIds.has(w.symptomId)
     );
 
     if (matchedWeights.length === 0) continue;
@@ -123,7 +141,6 @@ export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<Diagno
     for (const weight of matchedWeights) {
       const userCf = answerMap.get(weight.symptom.code) ?? 0;
       const evidenceCf = userCf * weight.cfExpert;
-
       totalCf = totalCf === 0 ? evidenceCf : combineCf(totalCf, evidenceCf);
       supportingSymptoms.add(weight.symptom.name);
     }
@@ -146,7 +163,7 @@ export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<Diagno
 
   const topResults = results.slice(0, 3);
 
-  await prisma.$transaction(async (tx) => {
+  const consultationId = await prisma.$transaction(async (tx) => {
     const consultation = await tx.consultation.create({
       data: {
         childName: payload.childName,
@@ -182,10 +199,78 @@ export async function diagnoseChild(payload: DiagnoseRequestDto): Promise<Diagno
         },
       });
     }
+
+    return consultation.id;
   });
 
   return {
+    consultationId,
     redFlags,
     results: topResults,
+  };
+}
+
+export async function getConsultationResultById(
+  id: string
+): Promise<ConsultationDetailResponse> {
+  const consultation = await prisma.consultation.findUnique({
+    where: { id },
+    include: {
+      answers: {
+        include: {
+          symptom: true,
+        },
+      },
+      results: {
+        orderBy: { rank: "asc" },
+        include: {
+          disease: {
+            include: {
+              weights: {
+                include: {
+                  symptom: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!consultation) {
+    throw new Error("CONSULTATION_NOT_FOUND");
+  }
+
+  const selectedSymptomIds = new Set(consultation.answers.map((a) => a.symptomId));
+
+  const redFlags = [
+    ...new Set(
+      consultation.answers
+        .filter((a) => a.symptom.isRedFlag)
+        .map((a) => a.symptom.name)
+    ),
+  ];
+
+  const results: DiagnosisResult[] = consultation.results.map((item) => ({
+    diseaseCode: item.disease.code,
+    diseaseName: item.disease.name,
+    cfResult: round(item.cfResult),
+    percentage: round(item.cfResult * 100, 2),
+    matchCount: item.matchCount,
+    supportingSymptoms: item.disease.weights
+      .filter((w) => selectedSymptomIds.has(w.symptomId))
+      .map((w) => w.symptom.name),
+    advice: item.disease.advice,
+  }));
+
+  return {
+    consultationId: consultation.id,
+    childName: consultation.childName ?? null,
+    childAgeMonths: consultation.childAgeMonths,
+    gender: consultation.gender ?? null,
+    createdAt: consultation.createdAt.toISOString(),
+    redFlags,
+    results,
   };
 }
