@@ -38,6 +38,20 @@ export async function submitDiagnosis(payload: {
   return data;
 }
 
+export async function fetchConsultationById(id: string) {
+  const res = await fetch(`${API_BASE_URL}/api/consultations/${id}`, {
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memuat hasil konsultasi");
+  }
+
+  return data;
+}
+
 export function getAdminToken() {
   if (typeof window === "undefined") return "";
   return localStorage.getItem("admin_token") || "";

@@ -8,8 +8,12 @@
     "dev:api": "pnpm --filter api dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
-    "db:generate": "pnpm --filter api prisma generate",
-    "db:migrate": "pnpm --filter api prisma migrate dev",
-    "db:studio": "pnpm --filter api exec prisma studio"
+    "db:studio": "pnpm --filter api exec prisma studio",
+    "db:generate": "pnpm --dir apps/api run db:generate",
+    "db:migrate": "pnpm --dir apps/api run db:migrate",
+    "db:reset": "pnpm --dir apps/api run db:reset",
+    "db:seed": "pnpm --dir apps/api run db:seed",
+    "db:setup": "pnpm --dir apps/api run db:setup",
+    "db:fresh": "pnpm --dir apps/api run db:fresh"
   }
 }

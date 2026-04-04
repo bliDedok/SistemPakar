@@ -9,7 +9,13 @@
     "lint": "eslint .",
     "prisma:generate": "prisma generate --schema ./prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema ./prisma/schema.prisma",
-    "prisma:studio": "prisma studio --schema ./prisma/schema.prisma"
+    "prisma:studio": "prisma studio --schema ./prisma/schema.prisma",
+    "db:generate": "prisma generate --schema ./prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema ./prisma/schema.prisma",
+    "db:reset": "prisma migrate reset --schema ./prisma/schema.prisma --force",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:setup": "pnpm run db:migrate && pnpm run db:seed",
+    "db:fresh": "pnpm run db:reset && pnpm run db:seed"
   },
   "dependencies": {
     "@fastify/cors": "^11.0.0",
