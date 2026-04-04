@@ -8,6 +8,7 @@ import { weightRoutes } from "../modules/weight/interface-http/weight.routes";
 import { ruleRoutes } from "../modules/rule/interface-http/rule.routes";
 import { consultationHistoryRoutes } from "../modules/consultation-history/interface-http/consultation-history.routes";
 import { dashboardRoutes } from "../modules/dashboard/interface-http/dashboard.routes";
+import { chatbotRoutes } from "../modules/chatbot/interface-http/chatbot.routes";
 
 export async function buildServer() {
   const app = Fastify({ logger: true });
@@ -39,6 +40,7 @@ export async function buildServer() {
   await app.register(diseaseRoutes);
   await app.register(weightRoutes);
   await app.register(ruleRoutes);
+  await app.register(chatbotRoutes);
   await app.register(consultationHistoryRoutes);
   await app.register(dashboardRoutes);
   await app.register(diagnosisRoutes);

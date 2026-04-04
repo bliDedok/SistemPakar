@@ -660,3 +660,30 @@ export async function fetchAdminDashboardStats() {
 
   return data;
 }
+
+// LLM Chatbot API
+export async function sendChatbotMessage(payload: {
+  message: string;
+  history?: { role: "user" | "assistant"; content: string }[];
+  profile?: {
+    childName?: string | null;
+    childAgeMonths?: number | null;
+    gender?: "MALE" | "FEMALE" | null;
+  };
+}) {
+  const res = await fetch(`${API_BASE_URL}/api/chatbot/message`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Gagal memproses pesan chatbot");
+  }
+
+  return data;
+}
