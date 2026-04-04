@@ -10,6 +10,7 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 const symptoms = [
+  // --- GEJALA LAMA ---
   { code: "G001", name: "Batuk", questionText: "Apakah anak mengalami batuk?", category: "respiratory", isRedFlag: false },
   { code: "G002", name: "Napas cepat", questionText: "Apakah napas anak terlihat cepat?", category: "respiratory", isRedFlag: false },
   { code: "G003", name: "Tarikan dinding dada", questionText: "Apakah ada tarikan dinding dada ke dalam saat bernapas?", category: "respiratory", isRedFlag: true },
@@ -25,200 +26,84 @@ const symptoms = [
   { code: "G013", name: "Mengi", questionText: "Apakah anak mengalami mengi atau bunyi ngik-ngik?", category: "respiratory", isRedFlag: false },
   { code: "G014", name: "Ruam kemerahan", questionText: "Apakah muncul ruam kemerahan pada kulit?", category: "skin", isRedFlag: false },
   { code: "G015", name: "Mata merah", questionText: "Apakah mata anak tampak merah?", category: "eye", isRedFlag: false },
+  
+  // --- GEJALA BARU (Tambahan dari Excel) ---
+  { code: "G016", name: "Sakit tenggorokan", questionText: "Apakah anak mengeluh sakit tenggorokan?", category: "respiratory", isRedFlag: false },
+  { code: "G017", name: "Suara serak", questionText: "Apakah suara anak terdengar serak?", category: "respiratory", isRedFlag: false },
+  { code: "G018", name: "Batuk berdahak > 2 minggu", questionText: "Apakah anak batuk berdahak tidak kunjung sembuh > 2 minggu?", category: "respiratory", isRedFlag: true },
+  { code: "G019", name: "Keringat malam hari", questionText: "Apakah anak sering berkeringat di malam hari tanpa aktivitas?", category: "general", isRedFlag: true },
+  { code: "G020", name: "Penurunan berat badan", questionText: "Apakah berat badan anak menurun drastis atau tidak naik?", category: "general", isRedFlag: true },
+  { code: "G021", name: "Perut kembung / nyeri", questionText: "Apakah perut anak terasa kembung atau nyeri?", category: "digestive", isRedFlag: false },
+  { code: "G022", name: "Lemas / rewel", questionText: "Apakah anak tampak sangat lemas atau terus-menerus rewel?", category: "general", isRedFlag: false },
+  { code: "G023", name: "Demam tinggi sore/malam", questionText: "Apakah demam anak semakin tinggi saat sore atau malam hari?", category: "general", isRedFlag: false },
+  { code: "G024", name: "Rasa dada tertekan", questionText: "Apakah anak mengeluh dadanya terasa tertekan?", category: "respiratory", isRedFlag: true },
+  { code: "G025", name: "Ruam berair", questionText: "Apakah muncul ruam gatal berisi cairan bening di kulit?", category: "skin", isRedFlag: false },
 ];
 
 const diseases = [
-  {
-    code: "P001",
-    name: "Pneumonia",
-    severityLevel: "high",
-    description: "Infeksi saluran napas bawah pada anak.",
-    advice: "Segera periksa ke fasilitas kesehatan, terutama bila napas cepat atau ada tarikan dinding dada.",
-    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
-  },
-  {
-    code: "P002",
-    name: "ISPA / Common Cold",
-    severityLevel: "low",
-    description: "Infeksi saluran napas atas ringan.",
-    advice: "Cukupi cairan, istirahat, pantau gejala. Periksa bila memburuk.",
-    sourceUrl: "https://www.who.int",
-  },
-  {
-    code: "P003",
-    name: "Diare tanpa dehidrasi",
-    severityLevel: "medium",
-    description: "Diare tanpa tanda dehidrasi.",
-    advice: "Berikan cairan dan pantau tanda dehidrasi.",
-    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
-  },
-  {
-    code: "P004",
-    name: "Diare dehidrasi ringan/sedang",
-    severityLevel: "high",
-    description: "Diare dengan tanda dehidrasi ringan atau sedang.",
-    advice: "Perbanyak cairan/ORS dan bawa berobat bila anak tampak lemah.",
-    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
-  },
-  {
-    code: "P005",
-    name: "Diare dehidrasi berat",
-    severityLevel: "critical",
-    description: "Diare dengan tanda bahaya dehidrasi berat.",
-    advice: "Segera ke IGD atau fasilitas kesehatan terdekat.",
-    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
-  },
-  {
-    code: "P006",
-    name: "Otitis media",
-    severityLevel: "medium",
-    description: "Infeksi telinga tengah.",
-    advice: "Periksakan ke dokter untuk evaluasi lebih lanjut.",
-    sourceUrl: "https://medlineplus.gov/earinfections.html",
-  },
-  {
-    code: "P007",
-    name: "Bronkiolitis",
-    severityLevel: "high",
-    description: "Infeksi saluran napas kecil, sering ditandai mengi.",
-    advice: "Pantau napas anak. Segera ke dokter bila napas cepat atau sulit minum.",
-    sourceUrl: "https://www.nhs.uk/conditions/bronchiolitis/",
-  },
-  {
-    code: "P008",
-    name: "Campak",
-    severityLevel: "high",
-    description: "Infeksi virus dengan demam dan ruam.",
-    advice: "Segera konsultasi ke tenaga medis, terutama bila anak lemah atau sulit makan/minum.",
-    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/measles",
-  },
+  // --- PENYAKIT LAMA ---
+  { code: "P001", name: "Pneumonia", severityLevel: "high", description: "Infeksi saluran napas bawah pada anak.", advice: "Segera periksa ke fasilitas kesehatan, terutama bila napas cepat atau ada tarikan dinding dada.", sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/pneumonia" },
+  { code: "P002", name: "ISPA / Common Cold", severityLevel: "low", description: "Infeksi saluran napas atas ringan.", advice: "Cukupi cairan, istirahat, pantau gejala. Periksa bila memburuk.", sourceUrl: "https://www.who.int" },
+  { code: "P003", name: "Diare tanpa dehidrasi", severityLevel: "medium", description: "Diare tanpa tanda dehidrasi.", advice: "Berikan cairan dan pantau tanda dehidrasi.", sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease" },
+  { code: "P004", name: "Diare dehidrasi ringan/sedang", severityLevel: "high", description: "Diare dengan tanda dehidrasi ringan atau sedang.", advice: "Perbanyak cairan/ORS dan bawa berobat bila anak tampak lemah.", sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease" },
+  { code: "P005", name: "Diare dehidrasi berat", severityLevel: "critical", description: "Diare dengan tanda bahaya dehidrasi berat.", advice: "Segera ke IGD atau fasilitas kesehatan terdekat.", sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease" },
+  { code: "P006", name: "Otitis media", severityLevel: "medium", description: "Infeksi telinga tengah.", advice: "Periksakan ke dokter untuk evaluasi lebih lanjut.", sourceUrl: "https://medlineplus.gov/earinfections.html" },
+  { code: "P007", name: "Bronkiolitis", severityLevel: "high", description: "Infeksi saluran napas kecil, sering ditandai mengi.", advice: "Pantau napas anak. Segera ke dokter bila napas cepat atau sulit minum.", sourceUrl: "https://www.nhs.uk/conditions/bronchiolitis/" },
+  { code: "P008", name: "Campak", severityLevel: "high", description: "Infeksi virus dengan demam dan ruam.", advice: "Segera konsultasi ke tenaga medis, terutama bila anak lemah atau sulit makan/minum.", sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/measles" },
+
+  // --- PENYAKIT BARU (Tambahan dari Excel) ---
+  { code: "P009", name: "Infeksi Saluran Pernapasan Akut (ISPA Umum)", severityLevel: "low", description: "Infeksi yang mengganggu proses pernapasan ringan.", advice: "Cukupi cairan, istirahat, dan pantau suhu.", sourceUrl: "" },
+  { code: "P010", name: "Tuberkulosis (TBC) Anak", severityLevel: "high", description: "Infeksi bakteri Mycobacterium tuberculosis pada paru anak.", advice: "Konsultasi ke dokter spesialis untuk terapi OAT.", sourceUrl: "" },
+  { code: "P011", name: "Diare Akut (Excel)", severityLevel: "medium", description: "Kondisi buang air besar cair lebih dari 3 kali sehari.", advice: "Cegah dehidrasi dengan oralit.", sourceUrl: "" },
+  { code: "P012", name: "Tifus (Demam Tifoid)", severityLevel: "medium", description: "Infeksi bakteri Salmonella typhi.", advice: "Istirahat total dan pengobatan antibiotik.", sourceUrl: "" },
+  { code: "P013", name: "Pneumonia Akut (Excel)", severityLevel: "critical", description: "Infeksi jaringan paru dengan gejala sesak kuat.", advice: "Bawa ke IGD jika ada tarikan dinding dada.", sourceUrl: "" },
+  { code: "P014", name: "Asma", severityLevel: "high", description: "Peradangan kronis saluran napas memicu sesak/mengi.", advice: "Hindari pemicu alergi dan gunakan inhaler.", sourceUrl: "" },
+  { code: "P015", name: "Bronkiolitis Akut (Excel)", severityLevel: "high", description: "Penumpukan lendir di saluran udara kecil.", advice: "Bawa ke faskes untuk terapi inhalasi/uap.", sourceUrl: "" },
+  { code: "P016", name: "Cacar Air (Varisela)", severityLevel: "low", description: "Infeksi virus penyebab ruam gatal berisi air.", advice: "Jangan digaruk, gunakan losion pereda gatal.", sourceUrl: "" },
 ];
 
 const rules = [
-  {
-    code: "R001",
-    name: "Pneumonia dasar",
-    diseaseCode: "P001",
-    operator: RuleOperator.AND,
-    minMatch: 2,
-    symptoms: [
-      { code: "G001", isMandatory: true },
-      { code: "G002", isMandatory: true },
-      { code: "G003", isMandatory: false },
-    ],
-  },
-  {
-    code: "R002",
-    name: "ISPA umum",
-    diseaseCode: "P002",
-    operator: RuleOperator.AND,
-    minMatch: 2,
-    symptoms: [
-      { code: "G001", isMandatory: false },
-      { code: "G005", isMandatory: true },
-      { code: "G004", isMandatory: false },
-    ],
-  },
-  {
-    code: "R003",
-    name: "Diare tanpa dehidrasi",
-    diseaseCode: "P003",
-    operator: RuleOperator.AND,
-    minMatch: 1,
-    symptoms: [{ code: "G006", isMandatory: true }],
-  },
-  {
-    code: "R004",
-    name: "Diare dehidrasi ringan sedang",
-    diseaseCode: "P004",
-    operator: RuleOperator.AND,
-    minMatch: 3,
-    symptoms: [
-      { code: "G006", isMandatory: true },
-      { code: "G008", isMandatory: true },
-      { code: "G009", isMandatory: true },
-    ],
-  },
-  {
-    code: "R005",
-    name: "Diare dehidrasi berat",
-    diseaseCode: "P005",
-    operator: RuleOperator.AND,
-    minMatch: 2,
-    symptoms: [
-      { code: "G006", isMandatory: true },
-      { code: "G010", isMandatory: true },
-      { code: "G008", isMandatory: false },
-    ],
-  },
-  {
-    code: "R006",
-    name: "Otitis media",
-    diseaseCode: "P006",
-    operator: RuleOperator.OR,
-    minMatch: 1,
-    symptoms: [
-      { code: "G011", isMandatory: false },
-      { code: "G012", isMandatory: false },
-      { code: "G004", isMandatory: false },
-    ],
-  },
-  {
-    code: "R007",
-    name: "Bronkiolitis",
-    diseaseCode: "P007",
-    operator: RuleOperator.AND,
-    minMatch: 2,
-    symptoms: [
-      { code: "G001", isMandatory: false },
-      { code: "G002", isMandatory: false },
-      { code: "G013", isMandatory: true },
-    ],
-  },
-  {
-    code: "R008",
-    name: "Campak",
-    diseaseCode: "P008",
-    operator: RuleOperator.AND,
-    minMatch: 2,
-    symptoms: [
-      { code: "G004", isMandatory: true },
-      { code: "G014", isMandatory: true },
-      { code: "G015", isMandatory: false },
-    ],
-  },
+  // --- RULE LAMA ---
+  { code: "R001", name: "Pneumonia dasar", diseaseCode: "P001", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G001", isMandatory: true }, { code: "G002", isMandatory: true }, { code: "G003", isMandatory: false }] },
+  { code: "R002", name: "ISPA umum", diseaseCode: "P002", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G001", isMandatory: false }, { code: "G005", isMandatory: true }, { code: "G004", isMandatory: false }] },
+  { code: "R003", name: "Diare tanpa dehidrasi", diseaseCode: "P003", operator: RuleOperator.AND, minMatch: 1, symptoms: [{ code: "G006", isMandatory: true }] },
+  { code: "R004", name: "Diare dehidrasi ringan sedang", diseaseCode: "P004", operator: RuleOperator.AND, minMatch: 3, symptoms: [{ code: "G006", isMandatory: true }, { code: "G008", isMandatory: true }, { code: "G009", isMandatory: true }] },
+  { code: "R005", name: "Diare dehidrasi berat", diseaseCode: "P005", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G006", isMandatory: true }, { code: "G010", isMandatory: true }, { code: "G008", isMandatory: false }] },
+  { code: "R006", name: "Otitis media", diseaseCode: "P006", operator: RuleOperator.OR, minMatch: 1, symptoms: [{ code: "G011", isMandatory: false }, { code: "G012", isMandatory: false }, { code: "G004", isMandatory: false }] },
+  { code: "R007", name: "Bronkiolitis", diseaseCode: "P007", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G001", isMandatory: false }, { code: "G002", isMandatory: false }, { code: "G013", isMandatory: true }] },
+  { code: "R008", name: "Campak", diseaseCode: "P008", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G004", isMandatory: true }, { code: "G014", isMandatory: true }, { code: "G015", isMandatory: false }] },
+
+  // --- RULE BARU (Tambahan dari Excel) ---
+  { code: "R009", name: "ISPA Excel", diseaseCode: "P009", operator: RuleOperator.OR, minMatch: 2, symptoms: [{ code: "G001", isMandatory: false }, { code: "G005", isMandatory: true }, { code: "G004", isMandatory: false }, { code: "G016", isMandatory: false }, { code: "G017", isMandatory: false }] },
+  { code: "R010", name: "TBC Anak", diseaseCode: "P010", operator: RuleOperator.AND, minMatch: 3, symptoms: [{ code: "G001", isMandatory: false }, { code: "G018", isMandatory: true }, { code: "G004", isMandatory: false }, { code: "G019", isMandatory: true }, { code: "G020", isMandatory: true }] },
+  { code: "R011", name: "Diare Excel", diseaseCode: "P011", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G006", isMandatory: true }, { code: "G007", isMandatory: false }, { code: "G004", isMandatory: false }, { code: "G021", isMandatory: false }, { code: "G022", isMandatory: false }] },
+  { code: "R012", name: "Tifus", diseaseCode: "P012", operator: RuleOperator.AND, minMatch: 3, symptoms: [{ code: "G004", isMandatory: true }, { code: "G023", isMandatory: true }, { code: "G021", isMandatory: false }, { code: "G007", isMandatory: false }, { code: "G022", isMandatory: false }] },
+  { code: "R013", name: "Pneumonia Excel", diseaseCode: "P013", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G001", isMandatory: false }, { code: "G004", isMandatory: false }, { code: "G002", isMandatory: true }, { code: "G003", isMandatory: true }] },
+  { code: "R014", name: "Asma", diseaseCode: "P014", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G001", isMandatory: false }, { code: "G002", isMandatory: true }, { code: "G013", isMandatory: true }, { code: "G024", isMandatory: false }] },
+  { code: "R015", name: "Bronkiolitis Excel", diseaseCode: "P015", operator: RuleOperator.AND, minMatch: 3, symptoms: [{ code: "G001", isMandatory: true }, { code: "G005", isMandatory: false }, { code: "G004", isMandatory: false }, { code: "G002", isMandatory: true }, { code: "G013", isMandatory: false }] },
+  { code: "R016", name: "Cacar Air", diseaseCode: "P016", operator: RuleOperator.AND, minMatch: 2, symptoms: [{ code: "G004", isMandatory: false }, { code: "G022", isMandatory: false }, { code: "G025", isMandatory: true }] },
 ];
 
 const weights = [
-  { diseaseCode: "P001", symptomCode: "G001", cfExpert: 0.6 },
-  { diseaseCode: "P001", symptomCode: "G002", cfExpert: 0.8 },
-  { diseaseCode: "P001", symptomCode: "G003", cfExpert: 1.0 },
-
-  { diseaseCode: "P002", symptomCode: "G005", cfExpert: 0.8 },
-  { diseaseCode: "P002", symptomCode: "G001", cfExpert: 0.5 },
-  { diseaseCode: "P002", symptomCode: "G004", cfExpert: 0.3 },
-
+  // --- BOBOT LAMA ---
+  { diseaseCode: "P001", symptomCode: "G001", cfExpert: 0.6 }, { diseaseCode: "P001", symptomCode: "G002", cfExpert: 0.8 }, { diseaseCode: "P001", symptomCode: "G003", cfExpert: 1.0 },
+  { diseaseCode: "P002", symptomCode: "G005", cfExpert: 0.8 }, { diseaseCode: "P002", symptomCode: "G001", cfExpert: 0.5 }, { diseaseCode: "P002", symptomCode: "G004", cfExpert: 0.3 },
   { diseaseCode: "P003", symptomCode: "G006", cfExpert: 0.8 },
+  { diseaseCode: "P004", symptomCode: "G006", cfExpert: 0.8 }, { diseaseCode: "P004", symptomCode: "G008", cfExpert: 0.7 }, { diseaseCode: "P004", symptomCode: "G009", cfExpert: 0.8 },
+  { diseaseCode: "P005", symptomCode: "G006", cfExpert: 0.8 }, { diseaseCode: "P005", symptomCode: "G010", cfExpert: 1.0 }, { diseaseCode: "P005", symptomCode: "G008", cfExpert: 0.7 },
+  { diseaseCode: "P006", symptomCode: "G011", cfExpert: 0.8 }, { diseaseCode: "P006", symptomCode: "G012", cfExpert: 1.0 }, { diseaseCode: "P006", symptomCode: "G004", cfExpert: 0.4 },
+  { diseaseCode: "P007", symptomCode: "G013", cfExpert: 0.9 }, { diseaseCode: "P007", symptomCode: "G002", cfExpert: 0.7 }, { diseaseCode: "P007", symptomCode: "G001", cfExpert: 0.5 },
+  { diseaseCode: "P008", symptomCode: "G004", cfExpert: 0.7 }, { diseaseCode: "P008", symptomCode: "G014", cfExpert: 1.0 }, { diseaseCode: "P008", symptomCode: "G015", cfExpert: 0.6 },
 
-  { diseaseCode: "P004", symptomCode: "G006", cfExpert: 0.8 },
-  { diseaseCode: "P004", symptomCode: "G008", cfExpert: 0.7 },
-  { diseaseCode: "P004", symptomCode: "G009", cfExpert: 0.8 },
-
-  { diseaseCode: "P005", symptomCode: "G006", cfExpert: 0.8 },
-  { diseaseCode: "P005", symptomCode: "G010", cfExpert: 1.0 },
-  { diseaseCode: "P005", symptomCode: "G008", cfExpert: 0.7 },
-
-  { diseaseCode: "P006", symptomCode: "G011", cfExpert: 0.8 },
-  { diseaseCode: "P006", symptomCode: "G012", cfExpert: 1.0 },
-  { diseaseCode: "P006", symptomCode: "G004", cfExpert: 0.4 },
-
-  { diseaseCode: "P007", symptomCode: "G013", cfExpert: 0.9 },
-  { diseaseCode: "P007", symptomCode: "G002", cfExpert: 0.7 },
-  { diseaseCode: "P007", symptomCode: "G001", cfExpert: 0.5 },
-
-  { diseaseCode: "P008", symptomCode: "G004", cfExpert: 0.7 },
-  { diseaseCode: "P008", symptomCode: "G014", cfExpert: 1.0 },
-  { diseaseCode: "P008", symptomCode: "G015", cfExpert: 0.6 },
+  // --- BOBOT BARU (Tambahan dari Excel) ---
+  { diseaseCode: "P009", symptomCode: "G001", cfExpert: 0.6 }, { diseaseCode: "P009", symptomCode: "G005", cfExpert: 0.8 }, { diseaseCode: "P009", symptomCode: "G004", cfExpert: 0.5 }, { diseaseCode: "P009", symptomCode: "G016", cfExpert: 0.6 }, { diseaseCode: "P009", symptomCode: "G017", cfExpert: 0.4 },
+  { diseaseCode: "P010", symptomCode: "G001", cfExpert: 0.8 }, { diseaseCode: "P010", symptomCode: "G018", cfExpert: 0.9 }, { diseaseCode: "P010", symptomCode: "G004", cfExpert: 0.5 }, { diseaseCode: "P010", symptomCode: "G019", cfExpert: 0.7 }, { diseaseCode: "P010", symptomCode: "G020", cfExpert: 0.8 },
+  { diseaseCode: "P011", symptomCode: "G006", cfExpert: 1.0 }, { diseaseCode: "P011", symptomCode: "G007", cfExpert: 0.6 }, { diseaseCode: "P011", symptomCode: "G004", cfExpert: 0.4 }, { diseaseCode: "P011", symptomCode: "G021", cfExpert: 0.5 }, { diseaseCode: "P011", symptomCode: "G022", cfExpert: 0.6 },
+  { diseaseCode: "P012", symptomCode: "G004", cfExpert: 0.8 }, { diseaseCode: "P012", symptomCode: "G023", cfExpert: 0.9 }, { diseaseCode: "P012", symptomCode: "G021", cfExpert: 0.6 }, { diseaseCode: "P012", symptomCode: "G007", cfExpert: 0.5 }, { diseaseCode: "P012", symptomCode: "G022", cfExpert: 0.7 },
+  { diseaseCode: "P013", symptomCode: "G001", cfExpert: 0.7 }, { diseaseCode: "P013", symptomCode: "G004", cfExpert: 0.6 }, { diseaseCode: "P013", symptomCode: "G002", cfExpert: 0.9 }, { diseaseCode: "P013", symptomCode: "G003", cfExpert: 1.0 },
+  { diseaseCode: "P014", symptomCode: "G001", cfExpert: 0.6 }, { diseaseCode: "P014", symptomCode: "G002", cfExpert: 0.8 }, { diseaseCode: "P014", symptomCode: "G013", cfExpert: 1.0 }, { diseaseCode: "P014", symptomCode: "G024", cfExpert: 0.7 },
+  { diseaseCode: "P015", symptomCode: "G001", cfExpert: 0.6 }, { diseaseCode: "P015", symptomCode: "G005", cfExpert: 0.5 }, { diseaseCode: "P015", symptomCode: "G004", cfExpert: 0.4 }, { diseaseCode: "P015", symptomCode: "G002", cfExpert: 0.8 }, { diseaseCode: "P015", symptomCode: "G013", cfExpert: 0.9 },
+  { diseaseCode: "P016", symptomCode: "G004", cfExpert: 0.5 }, { diseaseCode: "P016", symptomCode: "G022", cfExpert: 0.4 }, { diseaseCode: "P016", symptomCode: "G025", cfExpert: 1.0 },
 ];
 
 async function main() {
@@ -239,12 +124,8 @@ async function main() {
     await prisma.disease.create({ data: disease });
   }
 
-  const symptomMap = new Map(
-    (await prisma.symptom.findMany()).map((s) => [s.code, s.id]),
-  );
-  const diseaseMap = new Map(
-    (await prisma.disease.findMany()).map((d) => [d.code, d.id]),
-  );
+  const symptomMap = new Map((await prisma.symptom.findMany()).map((s) => [s.code, s.id]));
+  const diseaseMap = new Map((await prisma.disease.findMany()).map((d) => [d.code, d.id]));
 
   for (const rule of rules) {
     const createdRule = await prisma.rule.create({
@@ -278,7 +159,7 @@ async function main() {
     });
   }
 
-  console.log("Seed selesai.");
+  console.log("Seed selesai: Data gabungan (lama + baru) berhasil ditambahkan.");
 }
 
 main()

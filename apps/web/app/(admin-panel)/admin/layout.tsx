@@ -1,5 +1,5 @@
 import { AdminSidebar } from "@/src/components/admin/AdminSidebar";
-import { AdminAuthGuard } from "@/src/components/admin/AdminAuthGuard";
+import  AdminAuthGuard  from "@/src/components/admin/AdminAuthGuard";
 
 export default function AdminLayout({
   children,
