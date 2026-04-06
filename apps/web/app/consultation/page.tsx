@@ -190,18 +190,25 @@ export default function ConsultationPage() {
         content: childName,
       });
 
-      messages.push({
+    messages.push({
         id: "age-bot",
         sender: "bot",
-        content: "Berapa usia anak dalam bulan?",
+        content: "Berapa usia anak? (Isi dalam hitungan bulan)",
       });
     }
 
-    if (childAgeMonths !== null && step !== "childAgeMonths" && childName.trim()) {
+if (childAgeMonths !== null && step !== "childAgeMonths" && childName.trim()) {
+      // LOGIC UI: Mengubah angka bulan menjadi format "X tahun Y bulan"
+      const years = Math.floor(childAgeMonths / 12);
+      const months = childAgeMonths % 12;
+      const ageString = years > 0 
+        ? (months > 0 ? `${years} tahun ${months} bulan` : `${years} tahun`)
+        : `${months} bulan`;
+        
       messages.push({
         id: "age-user",
         sender: "user",
-        content: `${childAgeMonths} bulan`,
+        content: ageString,
       });
 
       messages.push({
@@ -219,36 +226,28 @@ export default function ConsultationPage() {
       });
     }
 
-    symptoms
-      .filter((symptom) => answers[symptom.code] !== undefined)
-      .forEach((symptom, index) => {
-        messages.push({
-          id: `symptom-bot-${symptom.code}`,
-          sender: "bot",
-          content: `${index + 1}. ${symptom.questionText}`,
-        });
-
-        messages.push({
-          id: `symptom-user-${symptom.code}`,
-          sender: "user",
-          content: getConfidenceLabel(answers[symptom.code]),
-        });
-      });
-
-    if (step === "symptoms" && currentSymptom && answers[currentSymptom.code] === undefined) {
+    if (step === "symptoms") {
       messages.push({
-        id: `current-symptom-${currentSymptom.code}`,
+        id: "symptoms-prompt",
         sender: "bot",
-        content: `${currentSymptomIndex + 1}. ${currentSymptom.questionText}`,
+        content: "Data diri sudah lengkap. Silakan ceritakan detail keluhan atau gejala yang dialami anak Anda di kolom chat bawah secara bebas.",
       });
     }
+
+    // if (step === "symptoms" && currentSymptom && answers[currentSymptom.code] === undefined) {
+    //   messages.push({
+    //     id: `current-symptom-${currentSymptom.code}`,
+    //     sender: "bot",
+    //     content: `${currentSymptomIndex + 1}. ${currentSymptom.questionText}`,
+    //   });
+    // }
 
     if (step === "summary") {
       messages.push({
         id: "summary-bot",
         sender: "bot",
         content:
-          "Terima kasih. Saya sudah mencatat jawaban Anda. Silakan periksa ringkasan di bawah sebelum memproses diagnosis.",
+          "Terima kasih. Saya sudah mencatat jawaban Anda. Silakan periksa ringkasan di samping sebelum memproses diagnosis.",
       });
     }
 
@@ -549,495 +548,257 @@ export default function ConsultationPage() {
     }
   }
 
-  return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 lg:flex-row">
-        <section className="flex-1 rounded-3xl bg-white p-6 shadow-sm">
-          <div className="mb-6">
-            <p className="text-sm font-medium uppercase tracking-wide text-gray-500">
-              Konsultasi
-            </p>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900">
-              Konsultasi Awal Berbasis Chat
-            </h1>
-            <p className="mt-2 text-sm text-gray-600">
-              Jawab pertanyaan secara bertahap. Sistem akan menggunakan jawaban Anda
-              sebagai fakta awal untuk proses diagnosis awal.
-            </p>
+return (
+    <main className="min-h-screen bg-[#F9FAFB] p-2 md:p-4 font-sans">
+      {/* Container utama dilepas dari paksaan h-full di HP, agar bisa di-scroll ke bawah untuk melihat Status Pasien */}
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:h-[90vh] lg:flex-row">
+        
+        {/* ==========================================
+            KOLOM KIRI: CHAT WINDOW
+            ========================================== */}
+        {/* Di HP, tinggi chat window dipatok 80vh agar luas. Di Laptop, menyesuaikan layar */}
+        <section className="relative flex h-[80vh] flex-col overflow-hidden rounded-2xl border border-[#C7BBB5]/30 bg-white shadow-sm lg:h-full lg:flex-1 lg:rounded-3xl">
+          
+          {/* ZONA 1: HEADER (Shrink-0 agar tidak ikut memipih) */}
+          <div className="z-10 flex shrink-0 flex-col justify-between gap-3 border-b border-[#E2E8E5] bg-white p-4 md:flex-row md:items-center md:p-5">
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">Konsultasi AI</h1>
+              <p className="text-sm text-gray-500">Jawab pertanyaan untuk diagnosis awal.</p>
+            </div>
+            <div className="w-full md:w-1/3">
+              <div className="mb-1 flex justify-between text-xs text-gray-500">
+                <span>Progres</span>
+                <span>{progress}%</span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                <div
+                  className="h-full rounded-full bg-[#8BA49A] transition-all duration-500"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
           </div>
 
-          {loading ? (
-            <div className="rounded-2xl border border-dashed border-gray-300 p-6 text-sm text-gray-600">
-              Memuat data gejala...
-            </div>
-          ) : error && !symptoms.length ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-              {error}
-            </div>
-          ) : (
-            <>
-              <div className="mb-6 rounded-3xl border border-blue-200 bg-blue-50 p-5">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900">
-                      Konsultasi dengan AI
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      Tulis keluhan dengan bahasa bebas. AI akan membantu membaca
-                      profil anak dan gejala yang disebutkan.
-                    </p>
-                  </div>
-
-                  {aiResult && (
-                    <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                      Sumber: {aiResult.meta.source}
-                    </span>
-                  )}
-                </div>
-
-                <textarea
-                  value={freeText}
-                  onChange={(e) => setFreeText(e.target.value)}
-                  placeholder="Contoh: Anak saya Raka umur 2 tahun laki-laki, demam dan batuk dari tadi malam."
-                  className="min-h-[120px] w-full rounded-2xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
-                />
-
-                <div className="mt-3 flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={handleAnalyzeWithAI}
-                    disabled={aiLoading || !freeText.trim()}
-                    className="rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {aiLoading ? "Menganalisis..." : "Kirim ke AI"}
-                  </button>
-
-                  {canProcessDiagnosis && (
-                    <button
-                      type="button"
-                      onClick={handleProcessDiagnosis}
-                      disabled={submitting}
-                      className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {submitting ? "Memproses..." : "Proses diagnosis sekarang"}
-                    </button>
-                  )}
-
-                  {!canProcessDiagnosis && (
-                    <button
-                      type="button"
-                      onClick={() => moveToNextMissingStep()}
-                      className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black"
-                    >
-                      Lengkapi data manual
-                    </button>
-                  )}
-                </div>
-
-                {aiHistory.length > 0 && (
-                  <div className="mt-4 space-y-3">
-                    {aiHistory.map((item, index) => (
-                      <div
-                        key={`${item.role}-${index}`}
-                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                          item.role === "assistant"
-                            ? "border border-gray-200 bg-white text-gray-800"
-                            : "ml-auto bg-black text-white"
-                        }`}
-                      >
-                        {item.content}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {aiResult && (
-                  <div className="mt-4 rounded-2xl bg-white p-4">
-                    <p className="text-sm font-medium text-gray-900">Balasan AI</p>
-                    <p className="mt-1 text-sm text-gray-700">{aiResult.reply}</p>
-
-                    <div className="mt-4 grid gap-3 md:grid-cols-3">
-                      <div className="rounded-2xl border border-gray-200 p-3">
-                        <p className="text-xs uppercase tracking-wide text-gray-500">
-                          Nama Anak
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {aiResult.profile.childName || "-"}
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl border border-gray-200 p-3">
-                        <p className="text-xs uppercase tracking-wide text-gray-500">
-                          Usia
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {aiResult.profile.childAgeMonths ?? "-"} bulan
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl border border-gray-200 p-3">
-                        <p className="text-xs uppercase tracking-wide text-gray-500">
-                          Gender
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {aiResult.profile.gender === "MALE"
-                            ? "Laki-laki"
-                            : aiResult.profile.gender === "FEMALE"
-                            ? "Perempuan"
-                            : "-"}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-900">
-                        Gejala terdeteksi
-                      </p>
-                      {aiResult.structured.symptoms.length === 0 ? (
-                        <p className="mt-1 text-sm text-gray-600">
-                          Belum ada gejala yang cocok terdeteksi.
-                        </p>
-                      ) : (
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {aiResult.structured.symptoms.map((item) => (
-                            <span
-                              key={item.code}
-                              className="rounded-full border border-gray-300 bg-gray-50 px-3 py-1 text-xs text-gray-700"
-                            >
-                              {item.symptomName} · CF {toNearestBucket(item.confidence)}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {aiResult.structured.negativeSymptoms.length > 0 && (
-                      <div className="mt-4">
-                        <p className="text-sm font-medium text-gray-900">Gejala yang disangkal</p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {aiResult.structured.negativeSymptoms.map((item) => (
-                            <span
-                              key={item.code}
-                              className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs text-red-700"
-                            >
-                              {item.symptomName} · CF 0
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {aiResult.structured.missingFields.length > 0 && (
-                      <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                        Data yang masih perlu dilengkapi:{" "}
-                        {aiResult.structured.missingFields.join(", ")}
-                      </div>
-                    )}
-                  </div>
-                )}
+          {/* ZONA 2: AREA OBROLAN (Bisa di-scroll) */}
+          {/* pb-36 dihapus karena kita tidak pakai absolute positioning lagi di bawah */}
+          <div className="flex-1 overflow-y-auto p-4 md:p-5">
+            
+            {loading && (
+              <div className="rounded-2xl border border-dashed border-[#B3B3AC] p-4 text-center text-sm text-gray-500">
+                Memuat data sistem pakar...
               </div>
-
-              <div className="mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Percakapan Konsultasi
-                </h2>
-                <p className="mt-1 text-sm text-gray-600">
-                  Data gejala tetap berasal dari basis pengetahuan sistem pakar.
-                </p>
-                <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-200">
-                  <div
-                    className="h-full rounded-full bg-black transition-all"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-                <p className="mt-2 text-xs text-gray-500">Progres gejala {progress}%</p>
+            )}
+            {error && !symptoms.length && (
+              <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {error}
               </div>
+            )}
 
-              <div className="space-y-3">
+            {!loading && (
+              <div className="space-y-4">
                 {chatMessages.map((message) => (
                   <div
                     key={message.id}
-                    className={`max-w-[85%] rounded-3xl px-4 py-3 text-sm leading-relaxed ${
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 md:px-5 text-[14px] md:text-[15px] leading-relaxed shadow-sm ${
                       message.sender === "bot"
-                        ? "rounded-bl-md bg-gray-100 text-gray-800"
-                        : "ml-auto rounded-br-md bg-black text-white"
+                        ? "rounded-bl-sm border border-[#DBC3BE]/40 bg-[#DBC3BE]/20 text-gray-900 font-medium border border-[#dbc3be]/30"
+                        : "ml-auto rounded-br-sm bg-[#8BA49A] text-white"
                     }`}
                   >
                     {message.content}
                   </div>
                 ))}
-              </div>
 
-              <div className="mt-6">
-                {step === "childName" && (
-                  <div className="space-y-3 rounded-3xl border border-gray-200 bg-white p-5">
-                    <label className="block text-sm font-medium text-gray-900">
-                      Nama anak
-                    </label>
-                    <input
-                      value={nameInput}
-                      onChange={(e) => setNameInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSubmitName();
-                      }}
-                      className="w-full rounded-2xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
-                      placeholder="Contoh: Alya"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleSubmitName}
-                      className="rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white"
-                    >
+                {aiHistory.map((item, index) => (
+                  <div
+                    key={`ai-${index}`}
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 md:px-5 text-[14px] md:text-[15px] leading-relaxed shadow-sm ${
+                      item.role === "assistant"
+                        ? "rounded-bl-sm border border-[#DBC3BE]/40 bg-[#DBC3BE]/20 text-gray-900 font-medium border border-[#dbc3be]/30"
+                        : "ml-auto rounded-br-sm bg-[#8BA49A] text-white"
+                    }`}
+                  >
+                    {item.content}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Form Manual */}
+            <div className="mt-6">
+              {step === "childName" && (
+                <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
+                  <label className="block text-sm font-semibold text-gray-800">Nama anak</label>
+                  <input
+                    value={nameInput}
+                    onChange={(e) => setNameInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleSubmitName(); }}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#8BA49A]"
+                    placeholder="Contoh: Alya"
+                  />
+                  <button onClick={handleSubmitName} className="rounded-xl bg-[#8BA49A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#9FABA3]">
+                    Lanjut
+                  </button>
+                </div>
+              )}
+
+              {step === "childAgeMonths" && (
+                <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
+                  <label className="block text-sm font-semibold text-gray-800">Usia anak (bulan)</label>
+                  <input
+                    value={ageInput}
+                    onChange={(e) => setAgeInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleSubmitAge(); }}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#8BA49A]"
+                    placeholder="Contoh: 24 (untuk 2 tahun)"
+                  />
+                  <div className="flex gap-3">
+                    <button onClick={handleBack} className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                      Kembali
+                    </button>
+                    <button onClick={handleSubmitAge} className="rounded-xl bg-[#8BA49A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#9FABA3]">
                       Lanjut
                     </button>
                   </div>
-                )}
+                </div>
+              )}
 
-                {step === "childAgeMonths" && (
-                  <div className="space-y-3 rounded-3xl border border-gray-200 bg-white p-5">
-                    <label className="block text-sm font-medium text-gray-900">
-                      Usia anak (bulan)
-                    </label>
-                    <input
-                      value={ageInput}
-                      onChange={(e) => setAgeInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSubmitAge();
-                      }}
-                      className="w-full rounded-2xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
-                      placeholder="Contoh: 24"
-                    />
-                    <div className="flex gap-3">
-                      <button
-                        type="button"
-                        onClick={handleBack}
-                        className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black"
-                      >
-                        Kembali
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleSubmitAge}
-                        className="rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white"
-                      >
-                        Lanjut
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {step === "gender" && (
-                  <div className="space-y-3 rounded-3xl border border-gray-200 bg-white p-5">
-                    <p className="text-sm font-medium text-gray-900">
-                      Pilih jenis kelamin anak
-                    </p>
-                    <div className="grid gap-3 md:grid-cols-2">
-                      <button
-                        type="button"
-                        onClick={() => handleSelectGender("MALE")}
-                        className="rounded-2xl border border-gray-300 px-4 py-3 text-left hover:border-black"
-                      >
-                        Laki-laki
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleSelectGender("FEMALE")}
-                        className="rounded-2xl border border-gray-300 px-4 py-3 text-left hover:border-black"
-                      >
-                        Perempuan
-                      </button>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black"
-                    >
-                      Kembali
+              {step === "gender" && (
+                <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
+                  <p className="text-sm font-semibold text-gray-800">Pilih jenis kelamin anak</p>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <button onClick={() => handleSelectGender("MALE")} className="rounded-xl border border-gray-300 px-4 py-3 text-left hover:bg-[#8BA49A]/5 hover:border-[#8BA49A]">
+                      Laki-laki
+                    </button>
+                    <button onClick={() => handleSelectGender("FEMALE")} className="rounded-xl border border-gray-300 px-4 py-3 text-left hover:bg-[#8BA49A]/5 hover:border-[#8BA49A]">
+                      Perempuan
                     </button>
                   </div>
+                  <button onClick={handleBack} className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                    Kembali
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ZONA 3: INPUT CHAT AREA (Shrink-0 agar diam di bawah, tapi BUKAN absolute) */}
+          <div className="z-20 flex shrink-0 flex-col items-center border-t border-[#E2E8E5] bg-white p-3 md:p-4">
+            
+            {/* Tombol Diagnosis */}
+            {canProcessDiagnosis && (
+              <button
+                type="button"
+                onClick={handleProcessDiagnosis}
+                disabled={submitting}
+                className="mb-3 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8ba49a] to-[#9faba3] text-white shadow-[#8ba49a]/30 shadow-lg hover:from-[#9faba3] hover:to-[#8ba49a] px-6 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {submitting ? (
+                  "Memproses..."
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                      <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+                    </svg>
+                    Proses Diagnosis Sekarang
+                  </>
                 )}
+              </button>
+            )}
 
-                {step === "symptoms" && currentSymptom && (
-                  <div className="space-y-4 rounded-3xl border border-gray-200 bg-white p-5">
-                    <div>
-                      <p className="text-xs uppercase tracking-wide text-gray-500">
-                        Gejala {currentSymptomIndex + 1} dari {symptoms.length}
-                      </p>
-                      <h3 className="mt-2 text-xl font-semibold text-gray-900">
-                        {currentSymptom.name}
-                      </h3>
-                      <p className="mt-2 text-sm text-gray-700">
-                        {currentSymptom.questionText}
-                      </p>
-                    </div>
+            <div className="mx-auto flex w-full max-w-4xl items-end gap-2 relative">
+              
+              {!canProcessDiagnosis && (
+                <button
+                  type="button"
+                  onClick={() => moveToNextMissingStep()}
+                  className="mb-1 shrink-0 rounded-full p-2 text-[#9FABA3] transition hover:bg-gray-100 hover:text-gray-800 md:p-3"
+                  title="Isi form manual"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5 md:h-6 md:w-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </button>
+              )}
 
-                    {currentSymptom.isRedFlag && (
-                      <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                        Tanda bahaya / red flag
-                      </div>
-                    )}
-
-                    <div className="grid gap-3">
-                      {confidenceOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() =>
-                            handleSelectAnswer(currentSymptom.code, option.value)
-                          }
-                          className="rounded-2xl border border-gray-300 bg-white px-4 py-3 text-left transition hover:border-black hover:bg-gray-50"
-                        >
-                          <div className="font-medium text-gray-900">{option.label}</div>
-                          <div className="mt-1 text-sm text-gray-600">{option.hint}</div>
-                        </button>
-                      ))}
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black"
-                    >
-                      Kembali
-                    </button>
-                  </div>
+              {/* Textarea padding diperkecil dan min-h dihapus agar tidak muncul scrollbar jelek */}
+              <textarea
+                value={freeText}
+                onChange={(e) => setFreeText(e.target.value)}
+                placeholder="Ceritakan keluhan anak..."
+                rows={1}
+                className="flex-1 w-full max-h-[120px] resize-none overflow-y-auto rounded-2xl border border-[#C7BBB5] bg-white px-4 py-3 text-[14px] outline-none focus:border-[#8BA49A] focus:ring-1 focus:ring-[#8BA49A] shadow-sm md:text-[15px]"
+              />
+              
+              <button
+                type="button"
+                onClick={handleAnalyzeWithAI}
+                disabled={aiLoading || !freeText.trim()}
+                className="mb-1 flex shrink-0 items-center justify-center rounded-full bg-[#8BA49A] p-2.5 text-white transition hover:bg-[#9FABA3] disabled:cursor-not-allowed disabled:opacity-50 md:p-3"
+              >
+                {aiLoading ? (
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></span>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 md:h-6 md:w-6">
+                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                  </svg>
                 )}
-
-                {step === "summary" && (
-                  <div className="space-y-4 rounded-3xl border border-gray-200 bg-white p-5">
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-900">
-                        Ringkasan Konsultasi
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-600">
-                        Periksa kembali jawaban sebelum memproses diagnosis.
-                      </p>
-                    </div>
-
-                    <div className="grid gap-4 md:grid-cols-3">
-                      <div className="rounded-2xl bg-gray-50 p-4">
-                        <p className="text-xs uppercase tracking-wide text-gray-500">
-                          Nama Anak
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {childName || "-"}
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl bg-gray-50 p-4">
-                        <p className="text-xs uppercase tracking-wide text-gray-500">
-                          Usia
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {childAgeMonths ?? "-"} bulan
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl bg-gray-50 p-4">
-                        <p className="text-xs uppercase tracking-wide text-gray-500">
-                          Jenis Kelamin
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {gender === "MALE"
-                            ? "Laki-laki"
-                            : gender === "FEMALE"
-                            ? "Perempuan"
-                            : "-"}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      {symptoms.map((symptom) => (
-                        <div
-                          key={symptom.id}
-                          className="rounded-2xl border border-gray-200 p-4"
-                        >
-                          <p className="text-sm text-gray-800">{symptom.questionText}</p>
-                          <p className="mt-1 text-sm font-medium text-gray-900">
-                            Jawaban: {getConfidenceLabel(answers[symptom.code])}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-wrap gap-3">
-                      <button
-                        type="button"
-                        onClick={handleBack}
-                        className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black"
-                      >
-                        Ubah jawaban terakhir
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleProcessDiagnosis}
-                        disabled={submitting}
-                        className="rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {submitting ? "Memproses..." : "Proses Diagnosis"}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {error && symptoms.length > 0 && (
-                  <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-                    {error}
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+              </button>
+            </div>
+            
+            {error && symptoms.length > 0 && (
+               <p className="mt-2 text-center text-xs font-medium text-red-500">{error}</p>
+            )}
+          </div>
         </section>
 
-        <aside className="h-fit w-full rounded-3xl bg-white p-6 shadow-sm lg:w-[340px]">
-          <h2 className="text-xl font-semibold text-gray-900">Status Konsultasi</h2>
-
-          <div className="mt-4 space-y-4">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-500">Nama anak</p>
-              <p className="mt-1 text-sm font-medium text-gray-900">
-                {childName || "-"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-500">Usia</p>
-              <p className="mt-1 text-sm font-medium text-gray-900">
-                {childAgeMonths === null ? "-" : `${childAgeMonths} bulan`}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-500">
-                Jenis kelamin
-              </p>
-              <p className="mt-1 text-sm font-medium text-gray-900">
-                {gender ? (gender === "MALE" ? "Laki-laki" : "Perempuan") : "-"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-500">
-                Gejala dijawab
-              </p>
-              <p className="mt-1 text-sm font-medium text-gray-900">
-                {answeredCount}/{symptoms.length}
-              </p>
-            </div>
+        {/* ==========================================
+            KOLOM KANAN: STATUS KONSULTASI
+            ========================================== */}
+        {/* Di HP dia akan jatuh ke bawah chat, user tinggal scroll halamannya ke bawah */}
+        <aside className="flex w-full shrink-0 flex-col overflow-y-auto rounded-2xl border border-[#C7BBB5]/30 border-t-[6px] border-t-[#dbc3be] bg-white shadow-lg shadow-[#dbc3be]/20 lg:h-full lg:w-[320px] lg:rounded-3xl">
+          <div className="sticky top-0 z-10 border-b border-gray-100 bg-white p-5">
+            <h2 className="text-lg font-bold text-gray-900">Status Pasien</h2>
           </div>
+          
+          <div className="space-y-5 p-5">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Nama anak</p>
+              <p className="mt-1 text-[15px] font-semibold text-gray-800">{childName || "-"}</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Usia</p>
+              <p className="mt-1 text-[15px] font-semibold text-gray-800">
+                {childAgeMonths === null 
+                  ? "-" 
+                  : (() => {
+                      const y = Math.floor(childAgeMonths / 12);
+                      const m = childAgeMonths % 12;
+                      return y > 0 ? (m > 0 ? `${y} tahun ${m} bulan` : `${y} tahun`) : `${m} bulan`;
+                    })()
+                }
+              </p>
+            </div>
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Jenis kelamin</p>
+              <p className="mt-1 text-[15px] font-semibold text-gray-800">{gender ? (gender === "MALE" ? "Laki-laki" : "Perempuan") : "-"}</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Gejala Dijawab</p>
+              <p className="mt-1 text-[15px] font-semibold text-[#8BA49A]">{answeredCount} dari {symptoms.length}</p>
+            </div>
 
-          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-            <h3 className="text-sm font-semibold text-amber-900">Catatan</h3>
-            <ul className="mt-2 space-y-2 text-sm text-amber-800">
-              <li>Jawaban ini dipakai sebagai fakta awal untuk diagnosis awal.</li>
-              <li>Hasil sistem bukan pengganti pemeriksaan dokter.</li>
-              <li>Jika terdapat tanda bahaya, segera ke fasilitas kesehatan.</li>
-            </ul>
+            <div className="mt-6 rounded-2xl border border-[#DBC3BE]/30 bg-[#DBC3BE]/10 p-4">
+              <h3 className="text-sm font-bold text-gray-800">Catatan Medis</h3>
+              <ul className="ml-4 mt-2 list-disc space-y-2 text-xs text-gray-600">
+                <li>Sistem ini hanya mendiagnosis awal.</li>
+                <li>Bukan pengganti saran dokter asli.</li>
+                <li>Jika ada tanda bahaya, segera ke IGD.</li>
+              </ul>
+            </div>
           </div>
         </aside>
+
       </div>
     </main>
   );
