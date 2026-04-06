@@ -1,9 +1,11 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { fetchConsultationById } from "@/src/lib/api";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
-
-type DiagnosisItem = {
+type ConsultationResultItem = {
   diseaseCode: string;
   diseaseName: string;
   cfResult: number;
@@ -13,281 +15,415 @@ type DiagnosisItem = {
   advice: string | null;
 };
 
-type ConsultationResultResponse = {
-  success: boolean;
-  message: string;
-  disclaimer: string;
-  data: {
-    consultationId: string;
+type ConsultationPayload = {
+  consultation: {
+    id: string;
     childName: string | null;
-    childAgeMonths: number;
+    childAgeMonths: number | null;
     gender: "MALE" | "FEMALE" | null;
-    createdAt: string;
-    redFlags: string[];
-    results: DiagnosisItem[];
+    createdAt?: string;
   };
+  redFlags: string[];
+  results: ConsultationResultItem[];
 };
 
-type PageProps = {
-  searchParams: Promise<{ id?: string }>;
+type ConsultationDetailResponse = {
+  success?: boolean;
+  message?: string;
+  disclaimer?: string;
+  data?: ConsultationPayload;
 };
+
+type ConsultationResultState = ConsultationDetailResponse | ConsultationPayload;
 
 function getRiskTone(percentage: number) {
   if (percentage >= 80) {
     return {
       label: "Kemungkinan tinggi",
-      badgeClass: "bg-red-50 text-red-700 border-red-200",
-      barClass: "bg-red-500",
+      className: "bg-red-50 border-red-200 text-red-700",
     };
   }
 
-  if (percentage >= 60) {
+  if (percentage >= 50) {
     return {
       label: "Perlu perhatian",
-      badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
-      barClass: "bg-amber-500",
+      className: "bg-amber-50 border-amber-200 text-amber-700",
     };
   }
 
   return {
-    label: "Kemungkinan rendah-menengah",
-    badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
-    barClass: "bg-blue-500",
+    label: "Kemungkinan rendah",
+    className: "bg-green-50 border-green-200 text-green-700",
   };
 }
 
-async function fetchConsultationResultById(
-  id: string
-): Promise<ConsultationResultResponse> {
-  const res = await fetch(`${API_BASE_URL}/api/consultations/${id}`, {
-    cache: "no-store",
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data?.message || "Gagal memuat hasil konsultasi");
-  }
-
-  return data;
+function formatGender(value: "MALE" | "FEMALE" | null | undefined) {
+  if (value === "MALE") return "Laki-laki";
+  if (value === "FEMALE") return "Perempuan";
+  return "-";
 }
 
-export default async function ConsultationResultPage({
-  searchParams,
-}: PageProps) {
-  const { id } = await searchParams;
+function isWrappedResponse(
+  value: ConsultationResultState | null
+): value is ConsultationDetailResponse {
+  return !!value && "data" in value;
+}
 
-  if (!id) {
-    return (
-      <main className="mx-auto min-h-screen max-w-4xl p-6">
-        <div className="rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-          <p className="text-sm text-gray-500">Hasil konsultasi</p>
-          <h1 className="mt-2 text-3xl font-bold">Data hasil diagnosis belum tersedia</h1>
-          <p className="mx-auto mt-3 max-w-xl text-gray-600">
-            Hasil tidak ditemukan. Silakan ulangi konsultasi dari awal agar sistem dapat
-            memproses diagnosis berdasarkan jawaban gejala terbaru.
-          </p>
+function isPayloadResponse(
+  value: ConsultationResultState | null
+): value is ConsultationPayload {
+  return !!value && "consultation" in value;
+}
 
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/consultation"
-              className="rounded-full bg-black px-5 py-3 text-sm font-medium text-white"
-            >
-              Mulai Konsultasi Lagi
-            </Link>
-            <Link
-              href="/"
-              className="rounded-full border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700"
-            >
-              Kembali ke Beranda
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+export default function ConsultationResultPage() {
+  const searchParams = useSearchParams();
+  const consultationId = searchParams.get("id");
 
-    const result = await fetchConsultationResultById(id);
-  const topResult = result.data.results[0] ?? null;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<ConsultationResultState | null>(null);
+
+  useEffect(() => {
+    async function loadResult() {
+      if (!consultationId) {
+        setError("ID konsultasi tidak ditemukan.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError("");
+        const response = await fetchConsultationById(consultationId);
+        console.log("RESULT API RAW", response);
+        setResult(response);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message || "Gagal memuat hasil konsultasi."
+            : "Gagal memuat hasil konsultasi."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadResult();
+  }, [consultationId]);
+
+  const normalizedPayload: ConsultationPayload | null = isWrappedResponse(result)
+  ? result.data ?? null
+  : isPayloadResponse(result)
+  ? result
+  : null;
+
+  const consultation = normalizedPayload?.consultation ?? null;
+  const diagnosisResults = normalizedPayload?.results ?? [];
+  const redFlags = normalizedPayload?.redFlags ?? [];
+
+  const disclaimer =
+  isWrappedResponse(result) && typeof result.disclaimer === "string"
+    ? result.disclaimer
+    : "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.";
+
+  const topResult = useMemo(() => {
+  return diagnosisResults[0] ?? null;
+  }, [diagnosisResults]);
 
   return (
-    <main className="mx-auto min-h-screen max-w-6xl p-6">
-      <div className="mb-8">
-        <p className="text-sm text-gray-500">Hasil Konsultasi</p>
-        <h1 className="text-4xl font-bold">Hasil Diagnosis Awal</h1>
-        <p className="mt-2 max-w-3xl text-gray-600">
-          Berikut hasil diagnosis awal berdasarkan gejala yang Anda pilih. Hasil ini
-          digunakan sebagai pendukung identifikasi awal dan bukan pengganti pemeriksaan dokter.
-        </p>
-      </div>
+    <main className="min-h-screen bg-gray-50 px-4 py-8">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <section className="rounded-3xl bg-white p-6 shadow-sm">
+          <p className="text-sm font-medium uppercase tracking-wide text-gray-500">
+            Hasil Konsultasi
+          </p>
+          <h1 className="mt-2 text-3xl font-bold text-gray-900">
+            Hasil Diagnosis Awal
+          </h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Halaman ini menampilkan hasil akhir dari sistem pakar setelah data
+            pengguna dipahami oleh AI dan diproses oleh mesin inferensi.
+          </p>
 
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
-        <section className="space-y-6">
-          <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-            <p className="text-sm font-medium text-gray-500">Disclaimer</p>
-            <p className="mt-2 text-sm leading-7 text-gray-700">{result.disclaimer}</p>
-          </div>
-
-          {result.data.redFlags.length > 0 && (
-            <div className="rounded-3xl border border-red-200 bg-red-50 p-6 shadow-sm">
-              <div className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 inline-flex">
-                Tanda Bahaya
-              </div>
-              <h2 className="mt-3 text-2xl font-semibold text-red-900">
-                Gejala serius terdeteksi
-              </h2>
-              <p className="mt-2 text-sm leading-7 text-red-800">
-                Segera pertimbangkan pemeriksaan langsung ke tenaga medis atau fasilitas
-                kesehatan terdekat.
-              </p>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {result.data.redFlags.map((flag) => (
-                  <span
-                    key={flag}
-                    className="rounded-full border border-red-200 bg-white px-3 py-2 text-sm text-red-700"
-                  >
-                    {flag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="space-y-4">
-            {result.data.results.map((item, index) => {
-              const tone = getRiskTone(item.percentage);
-
-              return (
-                <article
-                  key={`${item.diseaseCode}-${index}`}
-                  className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div>
-                      <p className="text-sm text-gray-500">Peringkat #{index + 1}</p>
-                      <h2 className="mt-1 text-2xl font-bold text-gray-900">
-                        {item.diseaseName}
-                      </h2>
-                      <div
-                        className={`mt-3 inline-flex rounded-full border px-3 py-1 text-xs font-medium ${tone.badgeClass}`}
-                      >
-                        {tone.label}
-                      </div>
-                    </div>
-
-                    <div className="min-w-36 text-right">
-                      <p className="text-sm text-gray-500">Tingkat keyakinan</p>
-                      <p className="text-3xl font-bold text-gray-900">{item.percentage}%</p>
-                      <p className="mt-1 text-xs text-gray-500">
-                        Match gejala: {item.matchCount}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-5">
-                    <div className="mb-2 flex items-center justify-between text-xs text-gray-500">
-                      <span>Keyakinan sistem</span>
-                      <span>{item.percentage}%</span>
-                    </div>
-                    <div className="h-3 rounded-full bg-gray-100">
-                      <div
-                        className={`h-3 rounded-full ${tone.barClass}`}
-                        style={{ width: `${Math.max(6, item.percentage)}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid gap-5 lg:grid-cols-2">
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">
-                        Gejala Pendukung
-                      </h3>
-                      {item.supportingSymptoms.length > 0 ? (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {item.supportingSymptoms.map((symptom) => (
-                            <span
-                              key={symptom}
-                              className="rounded-full border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700"
-                            >
-                              {symptom}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="mt-3 text-sm text-gray-500">
-                          Belum ada gejala pendukung yang tercatat.
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">Saran Awal</h3>
-                      <div className="mt-3 rounded-2xl bg-gray-50 p-4 text-sm leading-7 text-gray-700">
-                        {item.advice || "Belum ada saran awal yang tersedia."}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/consultation"
+              className="rounded-2xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-800 hover:border-black"
+            >
+              Kembali ke konsultasi
+            </Link>
           </div>
         </section>
 
-        <aside className="space-y-4">
-          <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="text-lg font-semibold">Ringkasan Hasil</h2>
-            <div className="mt-4 space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Jumlah hasil</span>
-                <span className="font-medium">{result.data.results.length}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Tanda bahaya</span>
-                <span className="font-medium">{result.data.redFlags.length}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Diagnosis teratas</span>
-                <span className="font-medium text-right">
-                  {topResult?.diseaseName || "-"}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Keyakinan tertinggi</span>
-                <span className="font-medium">
-                  {topResult ? `${topResult.percentage}%` : "-"}
-                </span>
-              </div>
+        {loading ? (
+          <section className="rounded-3xl bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-dashed border-gray-300 p-6 text-sm text-gray-600">
+              Memuat hasil konsultasi...
             </div>
-          </div>
-
-          <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="text-lg font-semibold">Tindakan Berikutnya</h2>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-gray-600">
-              <li>Baca hasil sebagai diagnosis awal, bukan keputusan medis final.</li>
-              <li>Jika kondisi anak memburuk, segera ke dokter atau fasilitas kesehatan.</li>
-              <li>Simpan hasil ini sebagai bahan konsultasi lanjutan bila diperlukan.</li>
-            </ul>
-          </div>
-
-          <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="text-lg font-semibold">Aksi Cepat</h2>
-            <div className="mt-4 flex flex-col gap-3">
-              <Link
-                href="/consultation"
-                className="rounded-full bg-black px-5 py-3 text-center text-sm font-medium text-white"
-              >
-                Konsultasi Lagi
-              </Link>
-              <Link
-                href="/"
-                className="rounded-full border border-gray-300 px-5 py-3 text-center text-sm font-medium text-gray-700"
-              >
-                Kembali ke Beranda
-              </Link>
+          </section>
+        ) : error ? (
+          <section className="rounded-3xl bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              {error}
             </div>
-          </div>
-        </aside>
+          </section>
+        ) : !result ? (
+          <section className="rounded-3xl bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+              Data hasil diagnosis belum tersedia.
+            </div>
+          </section>
+        ) : (
+          <>
+            <section className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
+              <div className="rounded-3xl bg-white p-6 shadow-sm">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Hasil utama</p>
+                    <h2 className="mt-1 text-2xl font-bold text-gray-900">
+                      {topResult?.diseaseName || "Belum ada hasil"}
+                    </h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                      {disclaimer}
+                    </p>
+                  </div>
+
+                  {topResult && (
+                    <div
+                      className={`rounded-2xl border px-4 py-3 text-right ${
+                        getRiskTone(topResult.percentage).className
+                      }`}
+                    >
+                      <p className="text-xs uppercase tracking-wide">
+                        {getRiskTone(topResult.percentage).label}
+                      </p>
+                      <p className="mt-1 text-3xl font-bold">
+                        {topResult.percentage}%
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {redFlags.length > 0 && (
+                  <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4">
+                    <h3 className="text-sm font-semibold text-red-900">
+                      Tanda bahaya terdeteksi
+                    </h3>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {redFlags.map((flag: string) => (
+                        <span
+                          key={flag}
+                          className="rounded-full bg-white px-3 py-1 text-xs font-medium text-red-700"
+                        >
+                          {flag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {topResult && (
+                  <>
+                    <div className="mt-6 grid gap-4 md:grid-cols-3">
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-gray-500">
+                          Kode Penyakit
+                        </p>
+                        <p className="mt-1 text-sm font-medium text-gray-900">
+                          {topResult.diseaseCode}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-gray-500">
+                          Nilai CF
+                        </p>
+                        <p className="mt-1 text-sm font-medium text-gray-900">
+                          {topResult.cfResult}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-gray-500">
+                          Gejala Cocok
+                        </p>
+                        <p className="mt-1 text-sm font-medium text-gray-900">
+                          {topResult.matchCount}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Gejala pendukung
+                      </h3>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {topResult.supportingSymptoms.length > 0 ? (
+                          topResult.supportingSymptoms.map((symptom) => (
+                            <span
+                              key={symptom}
+                              className="rounded-full border border-gray-300 bg-gray-50 px-3 py-1 text-sm text-gray-700"
+                            >
+                              {symptom}
+                            </span>
+                          ))
+                        ) : (
+                          <p className="text-sm text-gray-600">
+                            Belum ada gejala pendukung yang tercatat.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4">
+                      <h3 className="text-sm font-semibold text-blue-900">
+                        Saran awal
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-blue-800">
+                        {topResult.advice || "Belum ada saran awal yang tersedia."}
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <aside className="rounded-3xl bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Data Konsultasi
+                </h2>
+
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">
+                      Nama anak
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-gray-900">
+                      {consultation?.childName || "-"}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">
+                      Usia
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-gray-900">
+                      {consultation?.childAgeMonths ?? "-"} bulan
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">
+                      Jenis kelamin
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-gray-900">
+                      {formatGender(consultation?.gender)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">
+                      ID konsultasi
+                    </p>
+                    <p className="mt-1 break-all text-sm font-medium text-gray-900">
+                      {consultation?.id || "-"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                  <h3 className="text-sm font-semibold text-amber-900">
+                    Penting
+                  </h3>
+                  <ul className="mt-2 space-y-2 text-sm text-amber-800">
+                    <li>Hasil ini adalah diagnosis awal.</li>
+                    <li>Bukan pengganti pemeriksaan dokter.</li>
+                    <li>
+                      Jika gejala memburuk atau ada tanda bahaya, segera ke fasilitas
+                      kesehatan.
+                    </li>
+                  </ul>
+                </div>
+              </aside>
+            </section>
+
+            <section className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Peringkat Diagnosis
+                </h2>
+                <p className="mt-1 text-sm text-gray-600">
+                  Sistem menampilkan beberapa kemungkinan hasil berdasarkan nilai
+                  certainty factor tertinggi.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {diagnosisResults.length === 0 ? (
+                  <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+                    Belum ada hasil diagnosis yang dapat ditampilkan.
+                  </div>
+                ) : (
+                  diagnosisResults.map((item: ConsultationResultItem, index: number) => (
+                    <div
+                      key={`${item.diseaseCode}-${index}`}
+                      className="rounded-2xl border border-gray-200 p-5"
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-gray-500">
+                            Peringkat #{index + 1}
+                          </p>
+                          <h3 className="mt-1 text-lg font-semibold text-gray-900">
+                            {item.diseaseName}
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600">
+                            Kode: {item.diseaseCode}
+                          </p>
+                        </div>
+
+                        <div className="rounded-2xl bg-gray-100 px-4 py-3 text-right">
+                          <p className="text-xs uppercase tracking-wide text-gray-500">
+                            Persentase
+                          </p>
+                          <p className="mt-1 text-2xl font-bold text-gray-900">
+                            {item.percentage}%
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid gap-4 md:grid-cols-2">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            Gejala pendukung
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {item.supportingSymptoms.map((symptom) => (
+                              <span
+                                key={symptom}
+                                className="rounded-full border border-gray-300 bg-gray-50 px-3 py-1 text-xs text-gray-700"
+                              >
+                                {symptom}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            Saran awal
+                          </p>
+                          <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                            {item.advice || "-"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </section>
+          </>
+        )}
       </div>
     </main>
   );

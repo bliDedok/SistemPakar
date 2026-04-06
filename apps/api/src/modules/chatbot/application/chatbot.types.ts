@@ -12,16 +12,28 @@ export type StructuredSymptomCandidate = {
   matchedAlias: string;
 };
 
+export type NegativeSymptomCandidate = {
+  code: string;
+  symptomName: string;
+  matchedAlias: string;
+};
+
 export type ChildProfileDraft = {
   childName?: string | null;
   childAgeMonths?: number | null;
   gender?: "MALE" | "FEMALE" | null;
 };
 
+export type KnownSymptomDto = {
+  code: string;
+  currentCf: number;
+};
+
 export type ChatbotRequestDto = {
   message: string;
   history?: ChatMessageDto[];
   profile?: ChildProfileDraft;
+  knownSymptoms?: KnownSymptomDto[];
 };
 
 export type ChatbotResponseDto = {
@@ -29,11 +41,12 @@ export type ChatbotResponseDto = {
   profile: ChildProfileDraft;
   structured: {
     symptoms: StructuredSymptomCandidate[];
+    negativeSymptoms: NegativeSymptomCandidate[];
     missingFields: string[];
     canDiagnose: boolean;
   };
   meta: {
-    source: "rule-based-fallback";
+    source: "llm" | "rule-based-fallback";
     note: string;
   };
 };

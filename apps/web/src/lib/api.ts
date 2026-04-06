@@ -670,8 +670,12 @@ export async function sendChatbotMessage(payload: {
     childAgeMonths?: number | null;
     gender?: "MALE" | "FEMALE" | null;
   };
+  knownSymptoms?: {
+    code: string;
+    currentCf: number;
+  }[];
 }) {
-  const res = await fetch(`${API_BASE_URL}/api/chatbot/message`, {
+  const response = await fetch(`${API_BASE_URL}/api/chatbot/message`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -679,11 +683,11 @@ export async function sendChatbotMessage(payload: {
     body: JSON.stringify(payload),
   });
 
-  const data = await res.json();
+  const result = await response.json();
 
-  if (!res.ok) {
-    throw new Error(data?.message || "Gagal memproses pesan chatbot");
+  if (!response.ok) {
+    throw new Error(result?.message || "Gagal mengirim pesan ke chatbot.");
   }
 
-  return data;
+  return result;
 }
