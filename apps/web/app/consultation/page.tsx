@@ -540,47 +540,38 @@ export default function ConsultationPage() {
   }
 
 return (
-    <main className="min-h-screen bg-[#F9FAFB] p-2 md:p-4 font-sans">
-      {/* Container utama dilepas dari paksaan h-full di HP, agar bisa di-scroll ke bawah untuk melihat Status Pasien */}
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:h-[90vh] lg:flex-row">
+  <main className="relative min-h-[100dvh] bg-[#F9FAFB] bg-[radial-gradient(#C7BBB5_1px,transparent_1px)] [background-size:24px_24px] p-2 md:p-4 font-sans overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 -z-10 bg-white/60"></div>
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-4 lg:h-[90vh] lg:flex-row">
         
-        {/* ==========================================
-            KOLOM KIRI: CHAT WINDOW
-            ========================================== */}
-        {/* Di HP, tinggi chat window dipatok 80vh agar luas. Di Laptop, menyesuaikan layar */}
-        <section className="relative flex h-[80vh] flex-col overflow-hidden rounded-2xl border border-[#C7BBB5]/30 bg-white shadow-sm lg:h-full lg:flex-1 lg:rounded-3xl">
-          
-          {/* ZONA 1: HEADER (Shrink-0 agar tidak ikut memipih) */}
-          <div className="z-10 flex shrink-0 flex-col justify-between gap-3 border-b border-[#E2E8E5] bg-white p-4 md:flex-row md:items-center md:p-5">
+        <section className="relative flex h-[80vh] flex-col overflow-hidden rounded-2xl border border-[#C7BBB5]/30 bg-white/80 backdrop-blur-md shadow-sm lg:h-full lg:flex-1 lg:rounded-3xl">
+          <div className="z-10 flex shrink-0 flex-col justify-between gap-3 border-b border-[#E2E8E5] bg-white/50 p-4 md:flex-row md:items-center md:p-5">
             <div>
               <h1 className="text-xl font-bold text-gray-900">Konsultasi ChatBot</h1>
               <p className="text-sm text-gray-500">Jawab pertanyaan untuk diagnosis awal.</p>
             </div>
             <div className="w-full md:w-1/3">
-              <div className="mb-1 flex justify-between text-xs text-gray-500">
+              <div className="mb-1 flex justify-between text-xs text-gray-500 font-bold">
                 <span>Progres</span>
                 <span>{progress}%</span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
                 <div
-                  className="h-full rounded-full bg-[#8BA49A] transition-all duration-500"
+                  className="h-full rounded-full bg-[#8BA49A] transition-all duration-500 shadow-sm"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
           </div>
 
-{/* ZONA 2: AREA OBROLAN (Bisa di-scroll) */}
-          {/* pb-36 dihapus karena kita tidak pakai absolute positioning lagi di bawah */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-5">
-            
+          <div className="flex-1 overflow-y-auto p-4 md:p-5 custom-scrollbar">
             {loading && (
-              <div className="rounded-2xl border border-dashed border-[#B3B3AC] p-4 text-center text-sm text-gray-500">
+              <div className="rounded-2xl border border-dashed border-[#B3B3AC] p-4 text-center text-sm text-gray-500 italic">
                 Memuat data sistem pakar...
               </div>
             )}
             {error && !symptoms.length && (
-              <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 font-medium">
                 {error}
               </div>
             )}
@@ -590,10 +581,10 @@ return (
                 {chatMessages.map((message) => (
                   <div
                     key={message.id}
-                    className={`max-w-[85%] rounded-2xl px-4 py-3 md:px-5 text-[14px] md:text-[15px] leading-relaxed shadow-sm ${
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 md:px-5 text-[14px] md:text-[15px] leading-relaxed shadow-sm transition-all duration-300 ${
                       message.sender === "bot"
-                        ? "rounded-bl-sm border border-[#DBC3BE]/40 bg-[#DBC3BE]/20 text-gray-900 font-medium border border-[#dbc3be]/30"
-                        : "ml-auto rounded-br-sm bg-[#8BA49A] text-white"
+                        ? "rounded-bl-sm border border-[#DBC3BE]/50 bg-[#DBC3BE]/25 text-gray-900 font-medium"
+                        : "ml-auto rounded-br-sm bg-[#8BA49A] text-white font-medium shadow-[#8BA49A]/20 shadow-md"
                     }`}
                   >
                     {message.content}
@@ -605,8 +596,8 @@ return (
                     key={`ai-${index}`}
                     className={`max-w-[85%] rounded-2xl px-4 py-3 md:px-5 text-[14px] md:text-[15px] leading-relaxed shadow-sm ${
                       item.role === "assistant"
-                        ? "rounded-bl-sm border border-[#DBC3BE]/40 bg-[#DBC3BE]/20 text-gray-900 font-medium border border-[#dbc3be]/30"
-                        : "ml-auto rounded-br-sm bg-[#8BA49A] text-white"
+                        ? "rounded-bl-sm border border-[#DBC3BE]/50 bg-[#DBC3BE]/25 text-gray-900 font-medium"
+                        : "ml-auto rounded-br-sm bg-[#8BA49A] text-white font-medium shadow-[#8BA49A]/20 shadow-md"
                     }`}
                   >
                     {item.content}
@@ -626,39 +617,38 @@ return (
               </div>
             )}
 
-            {/* Form Manual */}
             <div className="mt-6">
               {!isTyping && step === "childName" && (
-                <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
-                  <label className="block text-sm font-semibold text-gray-800">Nama anak</label>
+                <div className="space-y-4 rounded-2xl border-2 border-[#DBC3BE]/30 bg-white p-4 shadow-xl shadow-[#DBC3BE]/10 md:p-6 animate-in fade-in zoom-in duration-300">
+                  <label className="block text-sm font-bold text-gray-800 uppercase tracking-wider">Nama anak</label>
                   <input
                     value={nameInput}
                     onChange={(e) => setNameInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") handleSubmitName(); }}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#8BA49A]"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 outline-none transition-all focus:border-[#8BA49A] focus:bg-white focus:ring-2 focus:ring-[#8BA49A]/20"
                     placeholder="Contoh: Alya"
                   />
-                  <button onClick={handleSubmitName} className="rounded-xl bg-[#8BA49A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#9FABA3]">
+                  <button onClick={handleSubmitName} className="w-full md:w-auto rounded-xl bg-[#8BA49A] px-8 py-3 text-sm font-bold text-white transition-all hover:bg-[#6D847A] hover:shadow-lg active:scale-95">
                     Lanjut
                   </button>
                 </div>
               )}
 
               {!isTyping && step === "childAgeMonths" && (
-                <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
-                  <label className="block text-sm font-semibold text-gray-800">Usia anak (bulan)</label>
+                <div className="space-y-4 rounded-2xl border-2 border-[#DBC3BE]/30 bg-white p-4 shadow-xl shadow-[#DBC3BE]/10 md:p-6 animate-in fade-in zoom-in duration-300">
+                  <label className="block text-sm font-bold text-gray-800 uppercase tracking-wider">Usia anak (bulan)</label>
                   <input
                     value={ageInput}
                     onChange={(e) => setAgeInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") handleSubmitAge(); }}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#8BA49A]"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 outline-none transition-all focus:border-[#8BA49A] focus:bg-white focus:ring-2 focus:ring-[#8BA49A]/20"
                     placeholder="Contoh: 24 (untuk 2 tahun)"
                   />
                   <div className="flex gap-3">
-                    <button onClick={handleBack} className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                    <button onClick={handleBack} className="rounded-xl border border-gray-300 px-6 py-3 text-sm font-bold text-gray-600 transition-all hover:bg-gray-50">
                       Kembali
                     </button>
-                    <button onClick={handleSubmitAge} className="rounded-xl bg-[#8BA49A] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#9FABA3]">
+                    <button onClick={handleSubmitAge} className="flex-1 md:flex-none rounded-xl bg-[#8BA49A] px-8 py-3 text-sm font-bold text-white transition-all hover:bg-[#6D847A] hover:shadow-lg active:scale-95">
                       Lanjut
                     </button>
                   </div>
@@ -666,17 +656,17 @@ return (
               )}
 
               {!isTyping && step === "gender" && (
-                <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
-                  <p className="text-sm font-semibold text-gray-800">Pilih jenis kelamin anak</p>
+                <div className="space-y-4 rounded-2xl border-2 border-[#DBC3BE]/30 bg-white p-4 shadow-xl shadow-[#DBC3BE]/10 md:p-6 animate-in fade-in zoom-in duration-300">
+                  <p className="text-sm font-bold text-gray-800 uppercase tracking-wider">Pilih jenis kelamin anak</p>
                   <div className="grid gap-3 md:grid-cols-2">
-                    <button onClick={() => handleSelectGender("MALE")} className="rounded-xl border border-gray-300 px-4 py-3 text-left hover:bg-[#8BA49A]/5 hover:border-[#8BA49A]">
-                      Laki-laki
+                    <button onClick={() => handleSelectGender("MALE")} className="group flex flex-col items-center justify-center rounded-2xl border-2 border-gray-100 p-4 transition-all hover:border-[#8BA49A] hover:bg-[#8BA49A]/5">
+                      <span className="text-sm font-bold text-gray-700 group-hover:text-[#8BA49A]">Laki-laki</span>
                     </button>
-                    <button onClick={() => handleSelectGender("FEMALE")} className="rounded-xl border border-gray-300 px-4 py-3 text-left hover:bg-[#8BA49A]/5 hover:border-[#8BA49A]">
-                      Perempuan
+                    <button onClick={() => handleSelectGender("FEMALE")} className="group flex flex-col items-center justify-center rounded-2xl border-2 border-gray-100 p-4 transition-all hover:border-[#8BA49A] hover:bg-[#8BA49A]/5">
+                      <span className="text-sm font-bold text-gray-700 group-hover:text-[#8BA49A]">Perempuan</span>
                     </button>
                   </div>
-                  <button onClick={handleBack} className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                  <button onClick={handleBack} className="w-full md:w-auto rounded-xl border border-gray-300 px-6 py-3 text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">
                     Kembali
                   </button>
                 </div>
@@ -684,22 +674,20 @@ return (
             </div>
           </div>
 
-          {/* ZONA 3: INPUT CHAT AREA (Shrink-0 agar diam di bawah, tapi BUKAN absolute) */}
-          <div className="z-20 flex shrink-0 flex-col items-center border-t border-[#E2E8E5] bg-white p-3 md:p-4">
+          <div className="z-20 flex shrink-0 flex-col items-center border-t border-[#E2E8E5] bg-white/70 backdrop-blur-md p-3 md:p-4">
             
-            {/* Tombol Diagnosis */}
             {canProcessDiagnosis && (
               <button
                 type="button"
                 onClick={handleProcessDiagnosis}
                 disabled={submitting}
-                className="mb-3 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8ba49a] to-[#9faba3] text-white shadow-[#8ba49a]/30 shadow-lg hover:from-[#9faba3] hover:to-[#8ba49a] px-6 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+                className="mb-3 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8ba49a] to-[#9faba3] px-8 py-3.5 text-sm font-black uppercase tracking-widest text-white shadow-[#8ba49a]/40 shadow-xl transition-all hover:scale-105 hover:shadow-2xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {submitting ? (
-                  "Memproses..."
+                  <span className="flex items-center gap-2"><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></span> Memproses...</span>
                 ) : (
                   <>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
                       <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
                     </svg>
                     Proses Diagnosis Sekarang
@@ -715,29 +703,28 @@ return (
                 <button
                   type="button"
                   onClick={() => moveToNextMissingStep()}
-                  className="mb-1 shrink-0 rounded-full p-2 text-[#9FABA3] transition hover:bg-gray-100 hover:text-gray-800 md:p-3"
+                  className="mb-1 shrink-0 rounded-full p-2 text-[#9FABA3] transition-all hover:bg-[#8BA49A]/10 hover:text-[#8BA49A] md:p-3"
                   title="Isi form manual"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5 md:h-6 md:w-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-5 w-5 md:h-6 md:w-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                 </button>
               )}
 
-              {/* Textarea padding diperkecil dan min-h dihapus agar tidak muncul scrollbar jelek */}
               <textarea
                 value={freeText}
                 onChange={(e) => setFreeText(e.target.value)}
                 placeholder="Ceritakan keluhan anak..."
                 rows={1}
-                className="flex-1 w-full max-h-[120px] resize-none overflow-y-auto rounded-2xl border border-[#C7BBB5] bg-white px-4 py-3 text-[14px] outline-none focus:border-[#8BA49A] focus:ring-1 focus:ring-[#8BA49A] shadow-sm md:text-[15px]"
+                className="flex-1 w-full max-h-[120px] resize-none overflow-y-auto rounded-2xl border-2 border-[#C7BBB5]/40 bg-white/80 px-4 py-3 text-[14px] font-medium outline-none transition-all focus:border-[#8BA49A] focus:bg-white shadow-sm md:text-[15px]"
               />
               
               <button
                 type="button"
                 onClick={handleAnalyzeWithAI}
                 disabled={aiLoading || !freeText.trim()}
-                className="mb-1 flex shrink-0 items-center justify-center rounded-full bg-[#8BA49A] p-2.5 text-white transition hover:bg-[#9FABA3] disabled:cursor-not-allowed disabled:opacity-50 md:p-3"
+                className="mb-1 flex shrink-0 items-center justify-center rounded-full bg-[#8BA49A] p-2.5 text-white shadow-lg shadow-[#8BA49A]/20 transition-all hover:bg-[#6D847A] hover:scale-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 md:p-3"
               >
                 {aiLoading ? (
                   <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></span>
@@ -751,28 +738,27 @@ return (
             )}
             
             {error && symptoms.length > 0 && (
-               <p className="mt-2 text-center text-xs font-medium text-red-500">{error}</p>
+               <p className="mt-2 text-center text-xs font-bold text-red-500 animate-pulse">{error}</p>
             )}
           </div>
         </section>
 
-        {/* ==========================================
-            KOLOM KANAN: STATUS KONSULTASI
-            ========================================== */}
-        {/* Di HP dia akan jatuh ke bawah chat, user tinggal scroll halamannya ke bawah */}
-        <aside className="flex w-full shrink-0 flex-col overflow-y-auto rounded-2xl border border-[#C7BBB5]/30 border-t-[6px] border-t-[#dbc3be] bg-white shadow-lg shadow-[#dbc3be]/20 lg:h-full lg:w-[320px] lg:rounded-3xl">
-          <div className="sticky top-0 z-10 border-b border-gray-100 bg-white p-5">
-            <h2 className="text-lg font-bold text-gray-900">Status Pasien</h2>
+        <aside className="flex w-full shrink-0 flex-col overflow-y-auto rounded-2xl border border-[#C7BBB5]/30 border-t-[6px] border-t-[#DBC3BE] bg-white/80 backdrop-blur-md shadow-lg shadow-[#DBC3BE]/20 lg:h-full lg:w-[320px] lg:rounded-3xl">
+          <div className="sticky top-0 z-10 border-b border-gray-100 bg-white/50 p-5 backdrop-blur-sm">
+            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+               <span className="h-2 w-2 rounded-full bg-[#8BA49A]"></span>
+               Status Pasien
+            </h2>
           </div>
           
-          <div className="space-y-5 p-5">
+          <div className="space-y-6 p-5">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Nama anak</p>
-              <p className="mt-1 text-[15px] font-semibold text-gray-800">{childName || "-"}</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#9FABA3]">Nama anak</p>
+              <p className="mt-1 text-[16px] font-bold text-gray-800">{childName || "-"}</p>
             </div>
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Usia</p>
-              <p className="mt-1 text-[15px] font-semibold text-gray-800">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#9FABA3]">Usia</p>
+              <p className="mt-1 text-[16px] font-bold text-gray-800">
                 {childAgeMonths === null 
                   ? "-" 
                   : (() => {
@@ -784,20 +770,22 @@ return (
               </p>
             </div>
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Jenis kelamin</p>
-              <p className="mt-1 text-[15px] font-semibold text-gray-800">{gender ? (gender === "MALE" ? "Laki-laki" : "Perempuan") : "-"}</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#9FABA3]">Jenis kelamin</p>
+              <p className="mt-1 text-[16px] font-bold text-gray-800">{gender ? (gender === "MALE" ? "Laki-laki" : "Perempuan") : "-"}</p>
             </div>
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Gejala Dijawab</p>
-              <p className="mt-1 text-[15px] font-semibold text-[#8BA49A]">{answeredCount} dari {symptoms.length}</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#9FABA3]">Gejala Dijawab</p>
+              <p className="mt-1 text-[16px] font-bold text-[#8BA49A] flex items-center gap-2">
+                {answeredCount} <span className="text-[10px] text-gray-400">dari</span> {symptoms.length}
+              </p>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-[#DBC3BE]/30 bg-[#DBC3BE]/10 p-4">
-              <h3 className="text-sm font-bold text-gray-800">Catatan Medis</h3>
-              <ul className="ml-4 mt-2 list-disc space-y-2 text-xs text-gray-600">
-                <li>Sistem ini hanya mendiagnosis awal.</li>
-                <li>Bukan pengganti saran dokter asli.</li>
-                <li>Jika ada tanda bahaya, segera ke IGD.</li>
+            <div className="mt-6 rounded-2xl border-2 border-[#DBC3BE]/40 bg-[#DBC3BE]/10 p-5 shadow-inner">
+              <h3 className="text-[11px] font-black uppercase tracking-widest text-gray-800">Penting</h3>
+              <ul className="ml-3 mt-3 space-y-3 text-[11px] font-semibold leading-relaxed text-gray-600">
+                <li className="flex gap-2 font-medium"><span className="text-[#8BA49A]">✦</span> Diagnosis ini bersifat awal.</li>
+                <li className="flex gap-2 font-medium"><span className="text-[#8BA49A]">✦</span> Bukan pengganti dokter.</li>
+                <li className="flex gap-2 font-medium"><span className="text-[#8BA49A]">✦</span> Ke IGD jika kondisi darurat.</li>
               </ul>
             </div>
           </div>
