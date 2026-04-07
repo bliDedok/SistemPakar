@@ -128,3 +128,36 @@
     @apply font-sans;
   }
 }
+
+@layer utilities {
+
+  .sakura-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+  @keyframes sakura-fall {
+    0% {
+      transform: translateY(-10vh) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(110vh) translateX(120px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+
+  .animate-sakura-fall {
+    animation: sakura-fall linear infinite;
+    will-change: transform, opacity;
+  }
+}

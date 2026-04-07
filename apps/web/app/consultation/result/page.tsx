@@ -75,18 +75,17 @@ function isPayloadResponse(
   return !!value && "consultation" in value;
 }
 
-function AnimatedPercentage({ value }: { value: number }) {
+function AnimatedPercentage({ value, delay = 0 }: { value: number; delay?: number }) {
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     let startTimestamp: number;
-    const duration = 1500; // Durasi animasi 1.5 detik (1500ms)
+    const duration = 1500; // Durasi animasi 1.5 detik
 
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
       
-      // Efek Ease-Out (melambat saat hampir sampai target)
       const easeOut = 1 - Math.pow(1 - progress, 3);
       setDisplayValue(value * easeOut);
 
@@ -97,10 +96,14 @@ function AnimatedPercentage({ value }: { value: number }) {
       }
     };
 
-    window.requestAnimationFrame(step);
-  }, [value]);
+    // Tahan eksekusi penghitungan sesuai dengan 'delay' (dalam milidetik)
+    const timer = setTimeout(() => {
+      window.requestAnimationFrame(step);
+    }, delay);
 
-  // Handle desimal secara otomatis (jika bulat, hilangkan koma)
+    return () => clearTimeout(timer); // Pembersihan memori
+  }, [value, delay]);
+
   const formattedValue = Number.isInteger(value) 
     ? displayValue.toFixed(0) 
     : displayValue.toFixed(2);
@@ -144,9 +147,6 @@ export default function ConsultationResultPage() {
     loadResult();
   }, [consultationId]);
 
-// ==========================================
-  // 1. PERBAIKAN LOGIC PENGAMBILAN DATA
-  // ==========================================
   const normalizedPayload: ConsultationPayload | null = isWrappedResponse(result)
     ? result.data ?? null
     : isPayloadResponse(result)
@@ -168,16 +168,12 @@ export default function ConsultationResultPage() {
     return diagnosisResults[0] ?? null;
   }, [diagnosisResults]);
 
-  // ==========================================
-  // 2. TAMPILAN UI (Dengan Efek & Palet Warna)
-  // ==========================================
-  return (
-    <main className="relative min-h-[100dvh] bg-[#F9FAFB] bg-[radial-gradient(#C7BBB5_1px,transparent_1px)] [background-size:24px_24px] px-4 py-8 font-sans">
+return (
+    <main className="relative min-h-[100dvh] bg-[#F9FAFB] bg-[radial-gradient(#C7BBB5_1px,transparent_1px)] [background-size:24px_24px] px-4 py-8 font-sans overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-white/60"></div>
+      
       <div className="mx-auto max-w-6xl space-y-6 relative z-10">
-        
-        {/* HEADER SECTION */}
-        <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-3xl bg-white p-6 md:p-8 shadow-sm border border-[#C7BBB5]/20">
+        <section className="animate-in fade-in slide-in-from-top-4 duration-700 flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-3xl bg-white p-6 md:p-8 shadow-sm border border-[#C7BBB5]/20">
           <div>
             <p className="text-[12px] font-bold uppercase tracking-wider text-[#8BA49A]">
               Tahap Akhir
@@ -198,18 +194,18 @@ export default function ConsultationResultPage() {
         </section>
 
         {loading ? (
-          <section className="rounded-3xl bg-white p-8 shadow-sm text-center border border-[#C7BBB5]/20">
+          <section className="rounded-3xl bg-white p-8 shadow-sm text-center border border-[#C7BBB5]/20 animate-in fade-in duration-500">
             <span className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-[#DBC3BE] border-t-[#8BA49A]"></span>
             <p className="mt-4 text-sm font-medium text-[#9FABA3]">Menyusun hasil diagnosis...</p>
           </section>
         ) : error ? (
-          <section className="rounded-3xl bg-white p-6 shadow-sm border border-red-100">
+          <section className="rounded-3xl bg-white p-6 shadow-sm border border-red-100 animate-in fade-in duration-500">
             <div className="rounded-2xl bg-red-50 p-5 text-sm font-medium text-red-700 text-center">
               {error}
             </div>
           </section>
         ) : !result ? (
-          <section className="rounded-3xl bg-white p-6 shadow-sm">
+          <section className="rounded-3xl bg-white p-6 shadow-sm animate-in fade-in duration-500">
             <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 text-sm text-gray-700 text-center">
               Data hasil diagnosis belum tersedia.
             </div>
@@ -218,12 +214,12 @@ export default function ConsultationResultPage() {
           <>
             <section className="flex flex-col lg:flex-row gap-6 items-start">
               
-              {/* KOLOM KIRI: HASIL DIAGNOSIS */}
               <div className="flex-1 w-full space-y-6">
                 
-                {/* KARTU HASIL UTAMA (Dengan Efek Glow) */}
-                <div className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-xl shadow-[#C7BBB5]/20 border border-[#8BA49A]/30 md:p-8">
-                  {/* Efek Latar Blur Gradasi (Kiri Atas & Kanan Bawah) */}
+                <div 
+                  className="animate-in fade-in zoom-in-[0.95] slide-in-from-bottom-8 duration-700 relative overflow-hidden rounded-3xl bg-white p-6 shadow-xl shadow-[#C7BBB5]/20 border border-[#8BA49A]/30 md:p-8"
+                  style={{ animationFillMode: 'both', animationDelay: '300ms' }}
+                >
                   <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#8BA49A]/15 to-[#DBC3BE]/15 blur-3xl pointer-events-none"></div>
                   <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-gradient-to-tl from-[#DBC3BE]/15 to-[#8BA49A]/15 blur-3xl pointer-events-none"></div>
 
@@ -247,7 +243,7 @@ export default function ConsultationResultPage() {
                           {getRiskTone(topResult.percentage).label}
                         </p>
                         <p className="mt-2 text-4xl font-black tracking-tight">
-                          <AnimatedPercentage value={topResult.percentage} />%
+                          <AnimatedPercentage value={topResult.percentage} delay={800} />%
                         </p>
                       </div>
                     )}
@@ -318,9 +314,11 @@ export default function ConsultationResultPage() {
                   )}
                 </div>
 
-                {/* KARTU KEMUNGKINAN LAIN (Peringkat) */}
                 {diagnosisResults.length > 1 && (
-                  <div className="rounded-3xl bg-white p-6 shadow-sm border border-[#C7BBB5]/30 md:p-8">
+                  <div 
+                    className="animate-in fade-in slide-in-from-bottom-8 duration-700 rounded-3xl bg-white p-6 shadow-sm border border-[#C7BBB5]/30 md:p-8"
+                    style={{ animationFillMode: 'both', animationDelay: '700ms' }}
+                  >
                     <div className="mb-6 border-b border-[#C7BBB5]/20 pb-4">
                       <h2 className="text-lg font-bold text-gray-900">Kemungkinan Diagnosis Lainnya</h2>
                       <p className="mt-1 text-sm text-gray-500">Alternatif penyakit dengan tingkat kecocokan yang lebih rendah.</p>
@@ -328,39 +326,28 @@ export default function ConsultationResultPage() {
 
                     <div className="space-y-4">
                       {diagnosisResults.slice(1).map((item: ConsultationResultItem, index: number) => (
-                        // EFEK HOVER: Kartu akan sedikit naik dan bayangannya menebal saat disentuh mouse
-                        <div key={`${item.diseaseCode}-${index}`} className="group rounded-2xl border border-[#C7BBB5]/30 bg-[#F9FAFB] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#DBC3BE] hover:bg-white hover:shadow-lg hover:shadow-[#DBC3BE]/20">
-                          <div className="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                              <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">
-                                Peringkat #{index + 2} • {item.diseaseCode}
-                              </p>
-                              <h3 className="mt-1 text-[17px] font-bold text-gray-900 group-hover:text-[#8BA49A] transition-colors">
-                                {item.diseaseName}
-                              </h3>
-                            </div>
-                            <div className="rounded-xl bg-white px-4 py-2 shadow-sm border border-[#C7BBB5]/30 text-right min-w-[80px]">
-                              <p className="text-lg font-extrabold text-[#B3B3AC] group-hover:text-[#8BA49A] transition-colors">
-                                <AnimatedPercentage value={item.percentage} />%
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                        <ExpandableDiagnosisCard 
+                          key={`${item.diseaseCode}-${index}`} 
+                          item={item} 
+                          index={index} 
+                        />
                       ))}
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* KOLOM KANAN: STATUS PASIEN */}
-              <aside className="relative z-20 flex w-full shrink-0 flex-col rounded-3xl border border-[#C7BBB5]/30 border-t-[6px] border-t-[#DBC3BE] bg-white shadow-lg shadow-[#DBC3BE]/20 lg:sticky lg:top-8 lg:w-[320px]">                <div className="border-b border-[#C7BBB5]/20 p-6">
+              <aside 
+                className="animate-in fade-in slide-in-from-bottom-8 lg:slide-in-from-right-12 duration-700 relative z-20 flex w-full shrink-0 flex-col rounded-3xl border border-[#C7BBB5]/30 border-t-[6px] border-t-[#DBC3BE] bg-white shadow-lg shadow-[#DBC3BE]/20 lg:sticky lg:top-8 lg:w-[320px]"
+                style={{ animationFillMode: 'both', animationDelay: '500ms' }}
+              >
+                <div className="border-b border-[#C7BBB5]/20 p-6">
                   <h2 className="text-lg font-bold text-gray-900">Data Pasien</h2>
                 </div>
                 
                 <div className="space-y-5 p-6">
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Nama anak</p>
-                    {/* Menggunakan variabel patientData yang sudah diperbaiki */}
                     <p className="mt-1 text-[15px] font-semibold text-gray-800">{patientData?.childName || "-"}</p>
                   </div>
                   <div>
@@ -401,5 +388,87 @@ export default function ConsultationResultPage() {
         )}
       </div>
     </main>
+  );
+}
+
+function ExpandableDiagnosisCard({ item, index }: { item: ConsultationResultItem; index: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className={`group rounded-2xl border transition-all duration-300 ${isOpen ? 'border-[#8BA49A] bg-white shadow-xl shadow-[#8BA49A]/10' : 'border-[#C7BBB5]/30 bg-[#F9FAFB] hover:border-[#DBC3BE] hover:bg-white hover:shadow-lg hover:shadow-[#DBC3BE]/20'}`}>
+      <div
+        className="flex cursor-pointer flex-wrap items-center justify-between gap-4 p-5"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">
+            Peringkat #{index + 2} • {item.diseaseCode}
+          </p>
+          <h3 className={`mt-1 text-[17px] font-bold transition-colors ${isOpen ? 'text-[#8BA49A]' : 'text-gray-900 group-hover:text-[#8BA49A]'}`}>
+            {item.diseaseName}
+          </h3>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <div className="min-w-[80px] rounded-xl border border-[#C7BBB5]/30 bg-white px-4 py-2 text-right shadow-sm">
+            <p className="text-lg font-extrabold text-[#B3B3AC] transition-colors group-hover:text-[#8BA49A]">
+              <AnimatedPercentage value={item.percentage} delay={1200} />%
+            </p>
+          </div>
+          <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${isOpen ? 'rotate-180 bg-[#DBC3BE]/30 text-[#8BA49A]' : 'bg-gray-200/50 text-gray-500'}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+              <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+        <div className="overflow-hidden">
+          <div className="space-y-5 border-t border-[#C7BBB5]/20 p-5 pt-4">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 shadow-sm">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#9FABA3]">Kode Penyakit</p>
+                <p className="mt-1 font-bold text-gray-800">{item.diseaseCode}</p>
+              </div>
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 shadow-sm">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#9FABA3]">Total CF</p>
+                <p className="mt-1 font-bold text-gray-800">{item.cfResult}</p>
+              </div>
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 shadow-sm">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#9FABA3]">Gejala Cocok</p>
+                <p className="mt-1 font-bold text-gray-800">{item.matchCount} Gejala</p>
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-[#9FABA3]">Gejala Pendukung</p>
+              <div className="flex flex-wrap gap-2">
+                {item.supportingSymptoms.length > 0 ? (
+                  item.supportingSymptoms.map((symptom, symIdx) => (
+                    <span key={symIdx} className="inline-flex items-center gap-1.5 rounded-full border border-[#DBC3BE] bg-[#DBC3BE]/10 px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm">
+                      {symptom}
+                      <span className="flex items-center justify-center rounded-full bg-white px-1.5 py-0.5 text-[10px] font-bold text-[#8BA49A] shadow-sm">
+                        CF
+                      </span>
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-xs italic text-gray-500">Tidak ada gejala pendukung tercatat.</p>
+                )}
+              </div>
+            </div>
+
+            {item.advice && (
+              <div className="rounded-xl border border-[#8BA49A]/20 bg-[#8BA49A]/5 p-4">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#6D847A]">Saran Medis Singkat</p>
+                <p className="mt-1 text-sm font-medium text-gray-700">{item.advice}</p>
+              </div>
+            )}
+
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
