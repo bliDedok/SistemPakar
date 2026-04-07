@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   fetchSymptoms,
@@ -118,6 +118,8 @@ export default function ConsultationPage() {
   const [freeText, setFreeText] = useState("");
   const [aiResult, setAiResult] = useState<AiChatbotResult | null>(null);
   const [aiHistory, setAiHistory] = useState<AiChatHistoryItem[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const canProcessDiagnosis =
   !!childName.trim() &&
@@ -144,10 +146,16 @@ export default function ConsultationPage() {
 
   useEffect(() => {
     if (!loading && symptoms.length > 0 && step === "intro") {
-      setStep("childName");
+      setIsTyping(true);
+      const timer = setTimeout(() => {
+        setStep("childName");
+        setIsTyping(false);
+      }, 1500);
+      
+      return () => clearTimeout(timer);
     }
   }, [loading, symptoms.length, step]);
-
+  
   const currentSymptom = useMemo(
     () => symptoms[currentSymptomIndex] ?? null,
     [symptoms, currentSymptomIndex]
@@ -162,71 +170,50 @@ export default function ConsultationPage() {
       {
         id: "intro-bot",
         sender: "bot",
-        content:
-          "Halo, saya akan membantu konsultasi awal. Silakan isi data anak terlebih dahulu, lalu saya akan menanyakan gejala satu per satu.",
+        content: "Halo, saya akan membantu konsultasi awal. Silakan isi data anak terlebih dahulu, lalu saya akan menanyakan gejala satu per satu.",
       },
     ];
 
     if (aiResult?.reply) {
-      messages.push({
-        id: "ai-bot-reply",
-        sender: "bot",
-        content: `AI: ${aiResult.reply}`,
-      });
+      messages.push({ id: "ai-bot-reply", sender: "bot", content: `AI: ${aiResult.reply}` });
     }
 
     if (step !== "intro") {
-      messages.push({
-        id: "name-bot",
-        sender: "bot",
-        content: "Siapa nama anak yang sedang dikonsultasikan?",
-      });
+      messages.push({ id: "name-bot", sender: "bot", content: "Siapa nama anak yang sedang dikonsultasikan?" });
     }
 
     if (childName.trim()) {
-      messages.push({
-        id: "name-user",
-        sender: "user",
-        content: childName,
-      });
+      messages.push({ id: "name-user", sender: "user", content: childName });
 
-    messages.push({
-        id: "age-bot",
-        sender: "bot",
-        content: "Berapa usia anak? (Isi dalam hitungan bulan)",
-      });
+      // Pertanyaan Bot (Menunggu step pindah / animasi selesai)
+      if (step === "childAgeMonths" || step === "gender" || step === "symptoms" || step === "summary") {
+        messages.push({ id: "age-bot", sender: "bot", content: "Berapa usia anak? (Isi dalam hitungan bulan)" });
+      }
     }
 
-if (childAgeMonths !== null && step !== "childAgeMonths" && childName.trim()) {
-      // LOGIC UI: Mengubah angka bulan menjadi format "X tahun Y bulan"
+    // Jawaban Umur User (Muncul instan saat sedang 'isTyping' atau saat step sudah lewat)
+    if (childAgeMonths !== null && (step !== "childAgeMonths" || isTyping) && childName.trim()) {
       const years = Math.floor(childAgeMonths / 12);
       const months = childAgeMonths % 12;
       const ageString = years > 0 
         ? (months > 0 ? `${years} tahun ${months} bulan` : `${years} tahun`)
         : `${months} bulan`;
         
-      messages.push({
-        id: "age-user",
-        sender: "user",
-        content: ageString,
-      });
-
-      messages.push({
-        id: "gender-bot",
-        sender: "bot",
-        content: "Apa jenis kelamin anak?",
-      });
+      messages.push({ id: "age-user", sender: "user", content: ageString });
     }
 
-    if (gender && step !== "gender" && childName.trim()) {
-      messages.push({
-        id: "gender-user",
-        sender: "user",
-        content: gender === "MALE" ? "Laki-laki" : "Perempuan",
-      });
+    // Pertanyaan Gender Bot (Menunggu step pindah / animasi selesai)
+    if (step === "gender" || step === "symptoms" || step === "summary") {
+      messages.push({ id: "gender-bot", sender: "bot", content: "Apa jenis kelamin anak?" });
     }
 
-    if (step === "symptoms") {
+    // Jawaban Gender User (Muncul instan)
+    if (gender && (step !== "gender" || isTyping) && childName.trim()) {
+      messages.push({ id: "gender-user", sender: "user", content: gender === "MALE" ? "Laki-laki" : "Perempuan" });
+    }
+
+    // Perintah Ngetik Bebas (Menunggu step pindah / animasi selesai)
+    if (step === "symptoms" || step === "summary") {
       messages.push({
         id: "symptoms-prompt",
         sender: "bot",
@@ -234,22 +221,13 @@ if (childAgeMonths !== null && step !== "childAgeMonths" && childName.trim()) {
       });
     }
 
-    // if (step === "symptoms" && currentSymptom && answers[currentSymptom.code] === undefined) {
+    // if (step === "summary") {
     //   messages.push({
-    //     id: `current-symptom-${currentSymptom.code}`,
+    //     id: "summary-bot",
     //     sender: "bot",
-    //     content: `${currentSymptomIndex + 1}. ${currentSymptom.questionText}`,
+    //     content: "Terima kasih. Saya sudah mencatat jawaban Anda. Silakan periksa ringkasan di samping sebelum memproses diagnosis.",
     //   });
     // }
-
-    if (step === "summary") {
-      messages.push({
-        id: "summary-bot",
-        sender: "bot",
-        content:
-          "Terima kasih. Saya sudah mencatat jawaban Anda. Silakan periksa ringkasan di samping sebelum memproses diagnosis.",
-      });
-    }
 
     return messages;
   }, [
@@ -262,7 +240,13 @@ if (childAgeMonths !== null && step !== "childAgeMonths" && childName.trim()) {
     answers,
     currentSymptom,
     currentSymptomIndex,
+    isTyping,
   ]);
+
+  useEffect(() => {
+    // Fungsi ini akan menarik layar ke bawah secara halus (smooth)
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages, aiHistory, isTyping, step]);
 
   function moveToNextMissingStep(nextAnswers?: Record<string, AnswerValue>) {
     const mergedAnswers = nextAnswers ?? answers;
@@ -297,32 +281,39 @@ if (childAgeMonths !== null && step !== "childAgeMonths" && childName.trim()) {
 
   function handleSubmitName() {
     const trimmed = nameInput.trim();
-    if (!trimmed) {
-      setError("Nama anak belum diisi.");
-      return;
-    }
-
+    if (!trimmed) { setError("Nama anak belum diisi."); return; }
     setError("");
     setChildName(trimmed);
-    setStep("childAgeMonths");
+    
+    setIsTyping(true);
+    setTimeout(() => {
+      setStep("childAgeMonths");
+      setIsTyping(false);
+    }, 1000); 
   }
 
   function handleSubmitAge() {
     const parsedAge = Number(ageInput);
-    if (!Number.isFinite(parsedAge) || parsedAge < 0) {
-      setError("Usia anak harus berupa angka 0 atau lebih.");
-      return;
-    }
-
+    if (!Number.isFinite(parsedAge) || parsedAge < 0) { setError("Usia anak harus berupa angka 0 atau lebih."); return; }
     setError("");
     setChildAgeMonths(parsedAge);
-    setStep("gender");
+    
+    setIsTyping(true);
+    setTimeout(() => {
+      setStep("gender");
+      setIsTyping(false);
+    }, 1000);
   }
 
   function handleSelectGender(value: Gender) {
     setError("");
     setGender(value);
-    moveToNextMissingStep();
+    
+    setIsTyping(true);
+    setTimeout(() => {
+      setStep("symptoms");
+      setIsTyping(false);
+    }, 1000);
   }
 
   function handleSelectAnswer(symptomCode: string, value: AnswerValue) {
@@ -562,7 +553,7 @@ return (
           {/* ZONA 1: HEADER (Shrink-0 agar tidak ikut memipih) */}
           <div className="z-10 flex shrink-0 flex-col justify-between gap-3 border-b border-[#E2E8E5] bg-white p-4 md:flex-row md:items-center md:p-5">
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Konsultasi AI</h1>
+              <h1 className="text-xl font-bold text-gray-900">Konsultasi ChatBot</h1>
               <p className="text-sm text-gray-500">Jawab pertanyaan untuk diagnosis awal.</p>
             </div>
             <div className="w-full md:w-1/3">
@@ -579,7 +570,7 @@ return (
             </div>
           </div>
 
-          {/* ZONA 2: AREA OBROLAN (Bisa di-scroll) */}
+{/* ZONA 2: AREA OBROLAN (Bisa di-scroll) */}
           {/* pb-36 dihapus karena kita tidak pakai absolute positioning lagi di bawah */}
           <div className="flex-1 overflow-y-auto p-4 md:p-5">
             
@@ -621,12 +612,23 @@ return (
                     {item.content}
                   </div>
                 ))}
+                
+                {(isTyping || aiLoading) && (
+                  <div className="max-w-[85%] rounded-2xl px-5 py-4 w-fit shadow-sm rounded-bl-sm border border-[#DBC3BE]/40 bg-[#DBC3BE]/20">
+                    <div className="flex gap-1.5 items-center h-2.5">
+                      <span className="w-2 h-2 bg-gray-500/80 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-gray-500/80 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-2 h-2 bg-gray-500/80 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    </div>
+                  </div>
+                )}
+                <div ref={chatEndRef} className="h-1" />  
               </div>
             )}
 
             {/* Form Manual */}
             <div className="mt-6">
-              {step === "childName" && (
+              {!isTyping && step === "childName" && (
                 <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
                   <label className="block text-sm font-semibold text-gray-800">Nama anak</label>
                   <input
@@ -642,7 +644,7 @@ return (
                 </div>
               )}
 
-              {step === "childAgeMonths" && (
+              {!isTyping && step === "childAgeMonths" && (
                 <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
                   <label className="block text-sm font-semibold text-gray-800">Usia anak (bulan)</label>
                   <input
@@ -663,7 +665,7 @@ return (
                 </div>
               )}
 
-              {step === "gender" && (
+              {!isTyping && step === "gender" && (
                 <div className="space-y-3 rounded-2xl border border-[#C7BBB5]/50 bg-white p-4 shadow-sm md:p-5">
                   <p className="text-sm font-semibold text-gray-800">Pilih jenis kelamin anak</p>
                   <div className="grid gap-3 md:grid-cols-2">
@@ -706,6 +708,7 @@ return (
               </button>
             )}
 
+            {(step === "symptoms" || step === "summary") && (
             <div className="mx-auto flex w-full max-w-4xl items-end gap-2 relative">
               
               {!canProcessDiagnosis && (
@@ -745,6 +748,7 @@ return (
                 )}
               </button>
             </div>
+            )}
             
             {error && symptoms.length > 0 && (
                <p className="mt-2 text-center text-xs font-medium text-red-500">{error}</p>
