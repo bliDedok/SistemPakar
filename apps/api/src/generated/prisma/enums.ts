@@ -23,3 +23,57 @@ export const Gender = {
 } as const
 
 export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const SymptomItemType = {
+  SYMPTOM: 'SYMPTOM',
+  WARNING: 'WARNING',
+  SEVERITY: 'SEVERITY',
+  CONTEXT: 'CONTEXT',
+  LAB: 'LAB',
+  COMPLICATION: 'COMPLICATION'
+} as const
+
+export type SymptomItemType = (typeof SymptomItemType)[keyof typeof SymptomItemType]
+
+
+export const InputTier = {
+  CAREGIVER: 'CAREGIVER',
+  CAREGIVER_OR_CLINICIAN: 'CAREGIVER_OR_CLINICIAN',
+  CLINICIAN: 'CLINICIAN',
+  CLINICIAN_OR_CAREGIVER: 'CLINICIAN_OR_CAREGIVER',
+  HISTORY_CONTEXT: 'HISTORY_CONTEXT',
+  LAB: 'LAB',
+  LAB_OR_CLINICIAN: 'LAB_OR_CLINICIAN'
+} as const
+
+export type InputTier = (typeof InputTier)[keyof typeof InputTier]
+
+
+export const SymptomRole = {
+  CORE: 'CORE',
+  SUPPORTING: 'SUPPORTING',
+  WARNING_SIGN: 'WARNING_SIGN',
+  SEVERE: 'SEVERE',
+  CONTEXT_ONLY: 'CONTEXT_ONLY',
+  COMPLICATION: 'COMPLICATION'
+} as const
+
+export type SymptomRole = (typeof SymptomRole)[keyof typeof SymptomRole]
+
+
+export const KeepStatus = {
+  KEEP: 'KEEP',
+  KEEP_OPTIONAL: 'KEEP_OPTIONAL',
+  EXCLUDE: 'EXCLUDE'
+} as const
+
+export type KeepStatus = (typeof KeepStatus)[keyof typeof KeepStatus]
+
+
+export const UrgencyMode = {
+  ORDINARY: 'ORDINARY',
+  URGENCY_ONLY: 'URGENCY_ONLY'
+} as const
+
+export type UrgencyMode = (typeof UrgencyMode)[keyof typeof UrgencyMode]

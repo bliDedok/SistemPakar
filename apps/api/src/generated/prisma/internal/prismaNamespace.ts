@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Disease: 'Disease',
   Symptom: 'Symptom',
+  SymptomAlias: 'SymptomAlias',
   Rule: 'Rule',
   RuleDetail: 'RuleDetail',
   DiseaseSymptomWeight: 'DiseaseSymptomWeight',
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "disease" | "symptom" | "rule" | "ruleDetail" | "diseaseSymptomWeight" | "consultation" | "consultationAnswer" | "consultationResult"
+    modelProps: "disease" | "symptom" | "symptomAlias" | "rule" | "ruleDetail" | "diseaseSymptomWeight" | "consultation" | "consultationAnswer" | "consultationResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -556,6 +557,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SymptomCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SymptomCountAggregateOutputType> | number
+        }
+      }
+    }
+    SymptomAlias: {
+      payload: Prisma.$SymptomAliasPayload<ExtArgs>
+      fields: Prisma.SymptomAliasFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SymptomAliasFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SymptomAliasFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>
+        }
+        findFirst: {
+          args: Prisma.SymptomAliasFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SymptomAliasFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>
+        }
+        findMany: {
+          args: Prisma.SymptomAliasFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>[]
+        }
+        create: {
+          args: Prisma.SymptomAliasCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>
+        }
+        createMany: {
+          args: Prisma.SymptomAliasCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SymptomAliasCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>[]
+        }
+        delete: {
+          args: Prisma.SymptomAliasDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>
+        }
+        update: {
+          args: Prisma.SymptomAliasUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>
+        }
+        deleteMany: {
+          args: Prisma.SymptomAliasDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SymptomAliasUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SymptomAliasUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>[]
+        }
+        upsert: {
+          args: Prisma.SymptomAliasUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SymptomAliasPayload>
+        }
+        aggregate: {
+          args: Prisma.SymptomAliasAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSymptomAlias>
+        }
+        groupBy: {
+          args: Prisma.SymptomAliasGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SymptomAliasGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SymptomAliasCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SymptomAliasCountAggregateOutputType> | number
         }
       }
     }
@@ -1062,15 +1137,30 @@ export const SymptomScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
+  normalizedName: 'normalizedName',
   questionText: 'questionText',
   category: 'category',
+  itemType: 'itemType',
+  defaultInputTier: 'defaultInputTier',
   isRedFlag: 'isRedFlag',
+  isAskable: 'isAskable',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type SymptomScalarFieldEnum = (typeof SymptomScalarFieldEnum)[keyof typeof SymptomScalarFieldEnum]
+
+
+export const SymptomAliasScalarFieldEnum = {
+  id: 'id',
+  symptomId: 'symptomId',
+  aliasText: 'aliasText',
+  normalizedAlias: 'normalizedAlias',
+  createdAt: 'createdAt'
+} as const
+
+export type SymptomAliasScalarFieldEnum = (typeof SymptomAliasScalarFieldEnum)[keyof typeof SymptomAliasScalarFieldEnum]
 
 
 export const RuleScalarFieldEnum = {
@@ -1104,6 +1194,13 @@ export const DiseaseSymptomWeightScalarFieldEnum = {
   diseaseId: 'diseaseId',
   symptomId: 'symptomId',
   cfExpert: 'cfExpert',
+  candidateCfMin: 'candidateCfMin',
+  candidateCfMax: 'candidateCfMax',
+  symptomRole: 'symptomRole',
+  phase: 'phase',
+  keepStatus: 'keepStatus',
+  urgencyMode: 'urgencyMode',
+  evidenceDoi: 'evidenceDoi',
   note: 'note'
 } as const
 
@@ -1209,6 +1306,34 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'SymptomItemType'
+ */
+export type EnumSymptomItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SymptomItemType'>
+    
+
+
+/**
+ * Reference to a field of type 'SymptomItemType[]'
+ */
+export type ListEnumSymptomItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SymptomItemType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InputTier'
+ */
+export type EnumInputTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InputTier'>
+    
+
+
+/**
+ * Reference to a field of type 'InputTier[]'
+ */
+export type ListEnumInputTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InputTier[]'>
+    
+
+
+/**
  * Reference to a field of type 'RuleOperator'
  */
 export type EnumRuleOperatorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleOperator'>
@@ -1247,6 +1372,48 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SymptomRole'
+ */
+export type EnumSymptomRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SymptomRole'>
+    
+
+
+/**
+ * Reference to a field of type 'SymptomRole[]'
+ */
+export type ListEnumSymptomRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SymptomRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'KeepStatus'
+ */
+export type EnumKeepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KeepStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'KeepStatus[]'
+ */
+export type ListEnumKeepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KeepStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UrgencyMode'
+ */
+export type EnumUrgencyModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UrgencyMode'>
+    
+
+
+/**
+ * Reference to a field of type 'UrgencyMode[]'
+ */
+export type ListEnumUrgencyModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UrgencyMode[]'>
     
 
 
@@ -1360,6 +1527,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   disease?: Prisma.DiseaseOmit
   symptom?: Prisma.SymptomOmit
+  symptomAlias?: Prisma.SymptomAliasOmit
   rule?: Prisma.RuleOmit
   ruleDetail?: Prisma.RuleDetailOmit
   diseaseSymptomWeight?: Prisma.DiseaseSymptomWeightOmit

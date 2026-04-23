@@ -28,10 +28,14 @@ export type AggregateDiseaseSymptomWeight = {
 
 export type DiseaseSymptomWeightAvgAggregateOutputType = {
   cfExpert: number | null
+  candidateCfMin: number | null
+  candidateCfMax: number | null
 }
 
 export type DiseaseSymptomWeightSumAggregateOutputType = {
   cfExpert: number | null
+  candidateCfMin: number | null
+  candidateCfMax: number | null
 }
 
 export type DiseaseSymptomWeightMinAggregateOutputType = {
@@ -39,6 +43,13 @@ export type DiseaseSymptomWeightMinAggregateOutputType = {
   diseaseId: string | null
   symptomId: string | null
   cfExpert: number | null
+  candidateCfMin: number | null
+  candidateCfMax: number | null
+  symptomRole: $Enums.SymptomRole | null
+  phase: string | null
+  keepStatus: $Enums.KeepStatus | null
+  urgencyMode: $Enums.UrgencyMode | null
+  evidenceDoi: string | null
   note: string | null
 }
 
@@ -47,6 +58,13 @@ export type DiseaseSymptomWeightMaxAggregateOutputType = {
   diseaseId: string | null
   symptomId: string | null
   cfExpert: number | null
+  candidateCfMin: number | null
+  candidateCfMax: number | null
+  symptomRole: $Enums.SymptomRole | null
+  phase: string | null
+  keepStatus: $Enums.KeepStatus | null
+  urgencyMode: $Enums.UrgencyMode | null
+  evidenceDoi: string | null
   note: string | null
 }
 
@@ -55,6 +73,13 @@ export type DiseaseSymptomWeightCountAggregateOutputType = {
   diseaseId: number
   symptomId: number
   cfExpert: number
+  candidateCfMin: number
+  candidateCfMax: number
+  symptomRole: number
+  phase: number
+  keepStatus: number
+  urgencyMode: number
+  evidenceDoi: number
   note: number
   _all: number
 }
@@ -62,10 +87,14 @@ export type DiseaseSymptomWeightCountAggregateOutputType = {
 
 export type DiseaseSymptomWeightAvgAggregateInputType = {
   cfExpert?: true
+  candidateCfMin?: true
+  candidateCfMax?: true
 }
 
 export type DiseaseSymptomWeightSumAggregateInputType = {
   cfExpert?: true
+  candidateCfMin?: true
+  candidateCfMax?: true
 }
 
 export type DiseaseSymptomWeightMinAggregateInputType = {
@@ -73,6 +102,13 @@ export type DiseaseSymptomWeightMinAggregateInputType = {
   diseaseId?: true
   symptomId?: true
   cfExpert?: true
+  candidateCfMin?: true
+  candidateCfMax?: true
+  symptomRole?: true
+  phase?: true
+  keepStatus?: true
+  urgencyMode?: true
+  evidenceDoi?: true
   note?: true
 }
 
@@ -81,6 +117,13 @@ export type DiseaseSymptomWeightMaxAggregateInputType = {
   diseaseId?: true
   symptomId?: true
   cfExpert?: true
+  candidateCfMin?: true
+  candidateCfMax?: true
+  symptomRole?: true
+  phase?: true
+  keepStatus?: true
+  urgencyMode?: true
+  evidenceDoi?: true
   note?: true
 }
 
@@ -89,6 +132,13 @@ export type DiseaseSymptomWeightCountAggregateInputType = {
   diseaseId?: true
   symptomId?: true
   cfExpert?: true
+  candidateCfMin?: true
+  candidateCfMax?: true
+  symptomRole?: true
+  phase?: true
+  keepStatus?: true
+  urgencyMode?: true
+  evidenceDoi?: true
   note?: true
   _all?: true
 }
@@ -184,6 +234,13 @@ export type DiseaseSymptomWeightGroupByOutputType = {
   diseaseId: string
   symptomId: string
   cfExpert: number
+  candidateCfMin: number | null
+  candidateCfMax: number | null
+  symptomRole: $Enums.SymptomRole
+  phase: string | null
+  keepStatus: $Enums.KeepStatus
+  urgencyMode: $Enums.UrgencyMode
+  evidenceDoi: string | null
   note: string | null
   _count: DiseaseSymptomWeightCountAggregateOutputType | null
   _avg: DiseaseSymptomWeightAvgAggregateOutputType | null
@@ -215,6 +272,13 @@ export type DiseaseSymptomWeightWhereInput = {
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  candidateCfMin?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
+  candidateCfMax?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFilter<"DiseaseSymptomWeight"> | $Enums.SymptomRole
+  phase?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
+  keepStatus?: Prisma.EnumKeepStatusFilter<"DiseaseSymptomWeight"> | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFilter<"DiseaseSymptomWeight"> | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   note?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
   symptom?: Prisma.XOR<Prisma.SymptomScalarRelationFilter, Prisma.SymptomWhereInput>
@@ -225,6 +289,13 @@ export type DiseaseSymptomWeightOrderByWithRelationInput = {
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrderInput | Prisma.SortOrder
+  symptomRole?: Prisma.SortOrder
+  phase?: Prisma.SortOrderInput | Prisma.SortOrder
+  keepStatus?: Prisma.SortOrder
+  urgencyMode?: Prisma.SortOrder
+  evidenceDoi?: Prisma.SortOrderInput | Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   disease?: Prisma.DiseaseOrderByWithRelationInput
   symptom?: Prisma.SymptomOrderByWithRelationInput
@@ -239,6 +310,13 @@ export type DiseaseSymptomWeightWhereUniqueInput = Prisma.AtLeast<{
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  candidateCfMin?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
+  candidateCfMax?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFilter<"DiseaseSymptomWeight"> | $Enums.SymptomRole
+  phase?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
+  keepStatus?: Prisma.EnumKeepStatusFilter<"DiseaseSymptomWeight"> | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFilter<"DiseaseSymptomWeight"> | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   note?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
   symptom?: Prisma.XOR<Prisma.SymptomScalarRelationFilter, Prisma.SymptomWhereInput>
@@ -249,6 +327,13 @@ export type DiseaseSymptomWeightOrderByWithAggregationInput = {
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrderInput | Prisma.SortOrder
+  symptomRole?: Prisma.SortOrder
+  phase?: Prisma.SortOrderInput | Prisma.SortOrder
+  keepStatus?: Prisma.SortOrder
+  urgencyMode?: Prisma.SortOrder
+  evidenceDoi?: Prisma.SortOrderInput | Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DiseaseSymptomWeightCountOrderByAggregateInput
   _avg?: Prisma.DiseaseSymptomWeightAvgOrderByAggregateInput
@@ -265,12 +350,26 @@ export type DiseaseSymptomWeightScalarWhereWithAggregatesInput = {
   diseaseId?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
   cfExpert?: Prisma.FloatWithAggregatesFilter<"DiseaseSymptomWeight"> | number
+  candidateCfMin?: Prisma.FloatNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | number | null
+  candidateCfMax?: Prisma.FloatNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | number | null
+  symptomRole?: Prisma.EnumSymptomRoleWithAggregatesFilter<"DiseaseSymptomWeight"> | $Enums.SymptomRole
+  phase?: Prisma.StringNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | string | null
+  keepStatus?: Prisma.EnumKeepStatusWithAggregatesFilter<"DiseaseSymptomWeight"> | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeWithAggregatesFilter<"DiseaseSymptomWeight"> | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.StringNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | string | null
   note?: Prisma.StringNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | string | null
 }
 
 export type DiseaseSymptomWeightCreateInput = {
   id?: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
   disease: Prisma.DiseaseCreateNestedOneWithoutWeightsInput
   symptom: Prisma.SymptomCreateNestedOneWithoutWeightsInput
@@ -281,12 +380,26 @@ export type DiseaseSymptomWeightUncheckedCreateInput = {
   diseaseId: string
   symptomId: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutWeightsNestedInput
   symptom?: Prisma.SymptomUpdateOneRequiredWithoutWeightsNestedInput
@@ -297,6 +410,13 @@ export type DiseaseSymptomWeightUncheckedUpdateInput = {
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -305,12 +425,26 @@ export type DiseaseSymptomWeightCreateManyInput = {
   diseaseId: string
   symptomId: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -319,6 +453,13 @@ export type DiseaseSymptomWeightUncheckedUpdateManyInput = {
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -342,11 +483,20 @@ export type DiseaseSymptomWeightCountOrderByAggregateInput = {
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrder
+  symptomRole?: Prisma.SortOrder
+  phase?: Prisma.SortOrder
+  keepStatus?: Prisma.SortOrder
+  urgencyMode?: Prisma.SortOrder
+  evidenceDoi?: Prisma.SortOrder
   note?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightAvgOrderByAggregateInput = {
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightMaxOrderByAggregateInput = {
@@ -354,6 +504,13 @@ export type DiseaseSymptomWeightMaxOrderByAggregateInput = {
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrder
+  symptomRole?: Prisma.SortOrder
+  phase?: Prisma.SortOrder
+  keepStatus?: Prisma.SortOrder
+  urgencyMode?: Prisma.SortOrder
+  evidenceDoi?: Prisma.SortOrder
   note?: Prisma.SortOrder
 }
 
@@ -362,11 +519,20 @@ export type DiseaseSymptomWeightMinOrderByAggregateInput = {
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrder
+  symptomRole?: Prisma.SortOrder
+  phase?: Prisma.SortOrder
+  keepStatus?: Prisma.SortOrder
+  urgencyMode?: Prisma.SortOrder
+  evidenceDoi?: Prisma.SortOrder
   note?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightSumOrderByAggregateInput = {
   cfExpert?: Prisma.SortOrder
+  candidateCfMin?: Prisma.SortOrder
+  candidateCfMax?: Prisma.SortOrder
 }
 
 export type DiseaseSymptomWeightCreateNestedManyWithoutDiseaseInput = {
@@ -461,9 +627,36 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type EnumSymptomRoleFieldUpdateOperationsInput = {
+  set?: $Enums.SymptomRole
+}
+
+export type EnumKeepStatusFieldUpdateOperationsInput = {
+  set?: $Enums.KeepStatus
+}
+
+export type EnumUrgencyModeFieldUpdateOperationsInput = {
+  set?: $Enums.UrgencyMode
+}
+
 export type DiseaseSymptomWeightCreateWithoutDiseaseInput = {
   id?: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
   symptom: Prisma.SymptomCreateNestedOneWithoutWeightsInput
 }
@@ -472,6 +665,13 @@ export type DiseaseSymptomWeightUncheckedCreateWithoutDiseaseInput = {
   id?: string
   symptomId: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
 }
 
@@ -509,12 +709,26 @@ export type DiseaseSymptomWeightScalarWhereInput = {
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  candidateCfMin?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
+  candidateCfMax?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFilter<"DiseaseSymptomWeight"> | $Enums.SymptomRole
+  phase?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
+  keepStatus?: Prisma.EnumKeepStatusFilter<"DiseaseSymptomWeight"> | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFilter<"DiseaseSymptomWeight"> | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
   note?: Prisma.StringNullableFilter<"DiseaseSymptomWeight"> | string | null
 }
 
 export type DiseaseSymptomWeightCreateWithoutSymptomInput = {
   id?: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
   disease: Prisma.DiseaseCreateNestedOneWithoutWeightsInput
 }
@@ -523,6 +737,13 @@ export type DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput = {
   id?: string
   diseaseId: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
 }
 
@@ -556,12 +777,26 @@ export type DiseaseSymptomWeightCreateManyDiseaseInput = {
   id?: string
   symptomId: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   symptom?: Prisma.SymptomUpdateOneRequiredWithoutWeightsNestedInput
 }
@@ -570,6 +805,13 @@ export type DiseaseSymptomWeightUncheckedUpdateWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -577,6 +819,13 @@ export type DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -584,12 +833,26 @@ export type DiseaseSymptomWeightCreateManySymptomInput = {
   id?: string
   diseaseId: string
   cfExpert: number
+  candidateCfMin?: number | null
+  candidateCfMax?: number | null
+  symptomRole?: $Enums.SymptomRole
+  phase?: string | null
+  keepStatus?: $Enums.KeepStatus
+  urgencyMode?: $Enums.UrgencyMode
+  evidenceDoi?: string | null
   note?: string | null
 }
 
 export type DiseaseSymptomWeightUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutWeightsNestedInput
 }
@@ -598,6 +861,13 @@ export type DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -605,6 +875,13 @@ export type DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
+  candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  symptomRole?: Prisma.EnumSymptomRoleFieldUpdateOperationsInput | $Enums.SymptomRole
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keepStatus?: Prisma.EnumKeepStatusFieldUpdateOperationsInput | $Enums.KeepStatus
+  urgencyMode?: Prisma.EnumUrgencyModeFieldUpdateOperationsInput | $Enums.UrgencyMode
+  evidenceDoi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -615,6 +892,13 @@ export type DiseaseSymptomWeightSelect<ExtArgs extends runtime.Types.Extensions.
   diseaseId?: boolean
   symptomId?: boolean
   cfExpert?: boolean
+  candidateCfMin?: boolean
+  candidateCfMax?: boolean
+  symptomRole?: boolean
+  phase?: boolean
+  keepStatus?: boolean
+  urgencyMode?: boolean
+  evidenceDoi?: boolean
   note?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -625,6 +909,13 @@ export type DiseaseSymptomWeightSelectCreateManyAndReturn<ExtArgs extends runtim
   diseaseId?: boolean
   symptomId?: boolean
   cfExpert?: boolean
+  candidateCfMin?: boolean
+  candidateCfMax?: boolean
+  symptomRole?: boolean
+  phase?: boolean
+  keepStatus?: boolean
+  urgencyMode?: boolean
+  evidenceDoi?: boolean
   note?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -635,6 +926,13 @@ export type DiseaseSymptomWeightSelectUpdateManyAndReturn<ExtArgs extends runtim
   diseaseId?: boolean
   symptomId?: boolean
   cfExpert?: boolean
+  candidateCfMin?: boolean
+  candidateCfMax?: boolean
+  symptomRole?: boolean
+  phase?: boolean
+  keepStatus?: boolean
+  urgencyMode?: boolean
+  evidenceDoi?: boolean
   note?: boolean
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -645,10 +943,17 @@ export type DiseaseSymptomWeightSelectScalar = {
   diseaseId?: boolean
   symptomId?: boolean
   cfExpert?: boolean
+  candidateCfMin?: boolean
+  candidateCfMax?: boolean
+  symptomRole?: boolean
+  phase?: boolean
+  keepStatus?: boolean
+  urgencyMode?: boolean
+  evidenceDoi?: boolean
   note?: boolean
 }
 
-export type DiseaseSymptomWeightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "diseaseId" | "symptomId" | "cfExpert" | "note", ExtArgs["result"]["diseaseSymptomWeight"]>
+export type DiseaseSymptomWeightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "diseaseId" | "symptomId" | "cfExpert" | "candidateCfMin" | "candidateCfMax" | "symptomRole" | "phase" | "keepStatus" | "urgencyMode" | "evidenceDoi" | "note", ExtArgs["result"]["diseaseSymptomWeight"]>
 export type DiseaseSymptomWeightInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -673,6 +978,13 @@ export type $DiseaseSymptomWeightPayload<ExtArgs extends runtime.Types.Extension
     diseaseId: string
     symptomId: string
     cfExpert: number
+    candidateCfMin: number | null
+    candidateCfMax: number | null
+    symptomRole: $Enums.SymptomRole
+    phase: string | null
+    keepStatus: $Enums.KeepStatus
+    urgencyMode: $Enums.UrgencyMode
+    evidenceDoi: string | null
     note: string | null
   }, ExtArgs["result"]["diseaseSymptomWeight"]>
   composites: {}
@@ -1103,6 +1415,13 @@ export interface DiseaseSymptomWeightFieldRefs {
   readonly diseaseId: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly symptomId: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly cfExpert: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
+  readonly candidateCfMin: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
+  readonly candidateCfMax: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
+  readonly symptomRole: Prisma.FieldRef<"DiseaseSymptomWeight", 'SymptomRole'>
+  readonly phase: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
+  readonly keepStatus: Prisma.FieldRef<"DiseaseSymptomWeight", 'KeepStatus'>
+  readonly urgencyMode: Prisma.FieldRef<"DiseaseSymptomWeight", 'UrgencyMode'>
+  readonly evidenceDoi: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly note: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
 }
     

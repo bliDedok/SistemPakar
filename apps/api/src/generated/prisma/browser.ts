@@ -28,6 +28,11 @@ export type Disease = Prisma.DiseaseModel
  */
 export type Symptom = Prisma.SymptomModel
 /**
+ * Model SymptomAlias
+ * 
+ */
+export type SymptomAlias = Prisma.SymptomAliasModel
+/**
  * Model Rule
  * 
  */

@@ -28,9 +28,13 @@ export type SymptomMinAggregateOutputType = {
   id: string | null
   code: string | null
   name: string | null
+  normalizedName: string | null
   questionText: string | null
   category: string | null
+  itemType: $Enums.SymptomItemType | null
+  defaultInputTier: $Enums.InputTier | null
   isRedFlag: boolean | null
+  isAskable: boolean | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -40,9 +44,13 @@ export type SymptomMaxAggregateOutputType = {
   id: string | null
   code: string | null
   name: string | null
+  normalizedName: string | null
   questionText: string | null
   category: string | null
+  itemType: $Enums.SymptomItemType | null
+  defaultInputTier: $Enums.InputTier | null
   isRedFlag: boolean | null
+  isAskable: boolean | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,9 +60,13 @@ export type SymptomCountAggregateOutputType = {
   id: number
   code: number
   name: number
+  normalizedName: number
   questionText: number
   category: number
+  itemType: number
+  defaultInputTier: number
   isRedFlag: number
+  isAskable: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -66,9 +78,13 @@ export type SymptomMinAggregateInputType = {
   id?: true
   code?: true
   name?: true
+  normalizedName?: true
   questionText?: true
   category?: true
+  itemType?: true
+  defaultInputTier?: true
   isRedFlag?: true
+  isAskable?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -78,9 +94,13 @@ export type SymptomMaxAggregateInputType = {
   id?: true
   code?: true
   name?: true
+  normalizedName?: true
   questionText?: true
   category?: true
+  itemType?: true
+  defaultInputTier?: true
   isRedFlag?: true
+  isAskable?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -90,9 +110,13 @@ export type SymptomCountAggregateInputType = {
   id?: true
   code?: true
   name?: true
+  normalizedName?: true
   questionText?: true
   category?: true
+  itemType?: true
+  defaultInputTier?: true
   isRedFlag?: true
+  isAskable?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -175,9 +199,13 @@ export type SymptomGroupByOutputType = {
   id: string
   code: string
   name: string
+  normalizedName: string | null
   questionText: string
   category: string | null
+  itemType: $Enums.SymptomItemType
+  defaultInputTier: $Enums.InputTier | null
   isRedFlag: boolean
+  isAskable: boolean
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -208,12 +236,17 @@ export type SymptomWhereInput = {
   id?: Prisma.StringFilter<"Symptom"> | string
   code?: Prisma.StringFilter<"Symptom"> | string
   name?: Prisma.StringFilter<"Symptom"> | string
+  normalizedName?: Prisma.StringNullableFilter<"Symptom"> | string | null
   questionText?: Prisma.StringFilter<"Symptom"> | string
   category?: Prisma.StringNullableFilter<"Symptom"> | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFilter<"Symptom"> | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.EnumInputTierNullableFilter<"Symptom"> | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFilter<"Symptom"> | boolean
+  isAskable?: Prisma.BoolFilter<"Symptom"> | boolean
   isActive?: Prisma.BoolFilter<"Symptom"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Symptom"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Symptom"> | Date | string
+  aliases?: Prisma.SymptomAliasListRelationFilter
   ruleDetails?: Prisma.RuleDetailListRelationFilter
   weights?: Prisma.DiseaseSymptomWeightListRelationFilter
   answers?: Prisma.ConsultationAnswerListRelationFilter
@@ -223,12 +256,17 @@ export type SymptomOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  normalizedName?: Prisma.SortOrderInput | Prisma.SortOrder
   questionText?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
+  itemType?: Prisma.SortOrder
+  defaultInputTier?: Prisma.SortOrderInput | Prisma.SortOrder
   isRedFlag?: Prisma.SortOrder
+  isAskable?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aliases?: Prisma.SymptomAliasOrderByRelationAggregateInput
   ruleDetails?: Prisma.RuleDetailOrderByRelationAggregateInput
   weights?: Prisma.DiseaseSymptomWeightOrderByRelationAggregateInput
   answers?: Prisma.ConsultationAnswerOrderByRelationAggregateInput
@@ -241,12 +279,17 @@ export type SymptomWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SymptomWhereInput[]
   NOT?: Prisma.SymptomWhereInput | Prisma.SymptomWhereInput[]
   name?: Prisma.StringFilter<"Symptom"> | string
+  normalizedName?: Prisma.StringNullableFilter<"Symptom"> | string | null
   questionText?: Prisma.StringFilter<"Symptom"> | string
   category?: Prisma.StringNullableFilter<"Symptom"> | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFilter<"Symptom"> | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.EnumInputTierNullableFilter<"Symptom"> | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFilter<"Symptom"> | boolean
+  isAskable?: Prisma.BoolFilter<"Symptom"> | boolean
   isActive?: Prisma.BoolFilter<"Symptom"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Symptom"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Symptom"> | Date | string
+  aliases?: Prisma.SymptomAliasListRelationFilter
   ruleDetails?: Prisma.RuleDetailListRelationFilter
   weights?: Prisma.DiseaseSymptomWeightListRelationFilter
   answers?: Prisma.ConsultationAnswerListRelationFilter
@@ -256,9 +299,13 @@ export type SymptomOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  normalizedName?: Prisma.SortOrderInput | Prisma.SortOrder
   questionText?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
+  itemType?: Prisma.SortOrder
+  defaultInputTier?: Prisma.SortOrderInput | Prisma.SortOrder
   isRedFlag?: Prisma.SortOrder
+  isAskable?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -274,9 +321,13 @@ export type SymptomScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Symptom"> | string
   code?: Prisma.StringWithAggregatesFilter<"Symptom"> | string
   name?: Prisma.StringWithAggregatesFilter<"Symptom"> | string
+  normalizedName?: Prisma.StringNullableWithAggregatesFilter<"Symptom"> | string | null
   questionText?: Prisma.StringWithAggregatesFilter<"Symptom"> | string
   category?: Prisma.StringNullableWithAggregatesFilter<"Symptom"> | string | null
+  itemType?: Prisma.EnumSymptomItemTypeWithAggregatesFilter<"Symptom"> | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.EnumInputTierNullableWithAggregatesFilter<"Symptom"> | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolWithAggregatesFilter<"Symptom"> | boolean
+  isAskable?: Prisma.BoolWithAggregatesFilter<"Symptom"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"Symptom"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Symptom"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Symptom"> | Date | string
@@ -286,12 +337,17 @@ export type SymptomCreateInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
@@ -301,12 +357,17 @@ export type SymptomUncheckedCreateInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
@@ -316,12 +377,17 @@ export type SymptomUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
@@ -331,12 +397,17 @@ export type SymptomUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
@@ -346,9 +417,13 @@ export type SymptomCreateManyInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -358,9 +433,13 @@ export type SymptomUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -370,9 +449,13 @@ export type SymptomUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -382,9 +465,13 @@ export type SymptomCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  normalizedName?: Prisma.SortOrder
   questionText?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  itemType?: Prisma.SortOrder
+  defaultInputTier?: Prisma.SortOrder
   isRedFlag?: Prisma.SortOrder
+  isAskable?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -394,9 +481,13 @@ export type SymptomMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  normalizedName?: Prisma.SortOrder
   questionText?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  itemType?: Prisma.SortOrder
+  defaultInputTier?: Prisma.SortOrder
   isRedFlag?: Prisma.SortOrder
+  isAskable?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -406,9 +497,13 @@ export type SymptomMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  normalizedName?: Prisma.SortOrder
   questionText?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  itemType?: Prisma.SortOrder
+  defaultInputTier?: Prisma.SortOrder
   isRedFlag?: Prisma.SortOrder
+  isAskable?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -417,6 +512,28 @@ export type SymptomMinOrderByAggregateInput = {
 export type SymptomScalarRelationFilter = {
   is?: Prisma.SymptomWhereInput
   isNot?: Prisma.SymptomWhereInput
+}
+
+export type EnumSymptomItemTypeFieldUpdateOperationsInput = {
+  set?: $Enums.SymptomItemType
+}
+
+export type NullableEnumInputTierFieldUpdateOperationsInput = {
+  set?: $Enums.InputTier | null
+}
+
+export type SymptomCreateNestedOneWithoutAliasesInput = {
+  create?: Prisma.XOR<Prisma.SymptomCreateWithoutAliasesInput, Prisma.SymptomUncheckedCreateWithoutAliasesInput>
+  connectOrCreate?: Prisma.SymptomCreateOrConnectWithoutAliasesInput
+  connect?: Prisma.SymptomWhereUniqueInput
+}
+
+export type SymptomUpdateOneRequiredWithoutAliasesNestedInput = {
+  create?: Prisma.XOR<Prisma.SymptomCreateWithoutAliasesInput, Prisma.SymptomUncheckedCreateWithoutAliasesInput>
+  connectOrCreate?: Prisma.SymptomCreateOrConnectWithoutAliasesInput
+  upsert?: Prisma.SymptomUpsertWithoutAliasesInput
+  connect?: Prisma.SymptomWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SymptomUpdateToOneWithWhereWithoutAliasesInput, Prisma.SymptomUpdateWithoutAliasesInput>, Prisma.SymptomUncheckedUpdateWithoutAliasesInput>
 }
 
 export type SymptomCreateNestedOneWithoutRuleDetailsInput = {
@@ -461,16 +578,113 @@ export type SymptomUpdateOneRequiredWithoutAnswersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SymptomUpdateToOneWithWhereWithoutAnswersInput, Prisma.SymptomUpdateWithoutAnswersInput>, Prisma.SymptomUncheckedUpdateWithoutAnswersInput>
 }
 
+export type SymptomCreateWithoutAliasesInput = {
+  id?: string
+  code: string
+  name: string
+  normalizedName?: string | null
+  questionText: string
+  category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
+  isRedFlag?: boolean
+  isAskable?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
+  weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
+  answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
+}
+
+export type SymptomUncheckedCreateWithoutAliasesInput = {
+  id?: string
+  code: string
+  name: string
+  normalizedName?: string | null
+  questionText: string
+  category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
+  isRedFlag?: boolean
+  isAskable?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
+  weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
+  answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
+}
+
+export type SymptomCreateOrConnectWithoutAliasesInput = {
+  where: Prisma.SymptomWhereUniqueInput
+  create: Prisma.XOR<Prisma.SymptomCreateWithoutAliasesInput, Prisma.SymptomUncheckedCreateWithoutAliasesInput>
+}
+
+export type SymptomUpsertWithoutAliasesInput = {
+  update: Prisma.XOR<Prisma.SymptomUpdateWithoutAliasesInput, Prisma.SymptomUncheckedUpdateWithoutAliasesInput>
+  create: Prisma.XOR<Prisma.SymptomCreateWithoutAliasesInput, Prisma.SymptomUncheckedCreateWithoutAliasesInput>
+  where?: Prisma.SymptomWhereInput
+}
+
+export type SymptomUpdateToOneWithWhereWithoutAliasesInput = {
+  where?: Prisma.SymptomWhereInput
+  data: Prisma.XOR<Prisma.SymptomUpdateWithoutAliasesInput, Prisma.SymptomUncheckedUpdateWithoutAliasesInput>
+}
+
+export type SymptomUpdateWithoutAliasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionText?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
+  isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
+  weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
+  answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
+}
+
+export type SymptomUncheckedUpdateWithoutAliasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionText?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
+  isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
+  weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
+  answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
+}
+
 export type SymptomCreateWithoutRuleDetailsInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
 }
@@ -479,12 +693,17 @@ export type SymptomUncheckedCreateWithoutRuleDetailsInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
 }
@@ -509,12 +728,17 @@ export type SymptomUpdateWithoutRuleDetailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
 }
@@ -523,12 +747,17 @@ export type SymptomUncheckedUpdateWithoutRuleDetailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
 }
@@ -537,12 +766,17 @@ export type SymptomCreateWithoutWeightsInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
 }
@@ -551,12 +785,17 @@ export type SymptomUncheckedCreateWithoutWeightsInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
 }
@@ -581,12 +820,17 @@ export type SymptomUpdateWithoutWeightsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
 }
@@ -595,12 +839,17 @@ export type SymptomUncheckedUpdateWithoutWeightsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
 }
@@ -609,12 +858,17 @@ export type SymptomCreateWithoutAnswersInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
 }
@@ -623,12 +877,17 @@ export type SymptomUncheckedCreateWithoutAnswersInput = {
   id?: string
   code: string
   name: string
+  normalizedName?: string | null
   questionText: string
   category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
 }
@@ -653,12 +912,17 @@ export type SymptomUpdateWithoutAnswersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
 }
@@ -667,12 +931,17 @@ export type SymptomUncheckedUpdateWithoutAnswersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
   isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
 }
@@ -683,12 +952,14 @@ export type SymptomUncheckedUpdateWithoutAnswersInput = {
  */
 
 export type SymptomCountOutputType = {
+  aliases: number
   ruleDetails: number
   weights: number
   answers: number
 }
 
 export type SymptomCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  aliases?: boolean | SymptomCountOutputTypeCountAliasesArgs
   ruleDetails?: boolean | SymptomCountOutputTypeCountRuleDetailsArgs
   weights?: boolean | SymptomCountOutputTypeCountWeightsArgs
   answers?: boolean | SymptomCountOutputTypeCountAnswersArgs
@@ -702,6 +973,13 @@ export type SymptomCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
    * Select specific fields to fetch from the SymptomCountOutputType
    */
   select?: Prisma.SymptomCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SymptomCountOutputType without action
+ */
+export type SymptomCountOutputTypeCountAliasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SymptomAliasWhereInput
 }
 
 /**
@@ -730,12 +1008,17 @@ export type SymptomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   code?: boolean
   name?: boolean
+  normalizedName?: boolean
   questionText?: boolean
   category?: boolean
+  itemType?: boolean
+  defaultInputTier?: boolean
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aliases?: boolean | Prisma.Symptom$aliasesArgs<ExtArgs>
   ruleDetails?: boolean | Prisma.Symptom$ruleDetailsArgs<ExtArgs>
   weights?: boolean | Prisma.Symptom$weightsArgs<ExtArgs>
   answers?: boolean | Prisma.Symptom$answersArgs<ExtArgs>
@@ -746,9 +1029,13 @@ export type SymptomSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   code?: boolean
   name?: boolean
+  normalizedName?: boolean
   questionText?: boolean
   category?: boolean
+  itemType?: boolean
+  defaultInputTier?: boolean
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -758,9 +1045,13 @@ export type SymptomSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   code?: boolean
   name?: boolean
+  normalizedName?: boolean
   questionText?: boolean
   category?: boolean
+  itemType?: boolean
+  defaultInputTier?: boolean
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -770,16 +1061,21 @@ export type SymptomSelectScalar = {
   id?: boolean
   code?: boolean
   name?: boolean
+  normalizedName?: boolean
   questionText?: boolean
   category?: boolean
+  itemType?: boolean
+  defaultInputTier?: boolean
   isRedFlag?: boolean
+  isAskable?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SymptomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "questionText" | "category" | "isRedFlag" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["symptom"]>
+export type SymptomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "normalizedName" | "questionText" | "category" | "itemType" | "defaultInputTier" | "isRedFlag" | "isAskable" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["symptom"]>
 export type SymptomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  aliases?: boolean | Prisma.Symptom$aliasesArgs<ExtArgs>
   ruleDetails?: boolean | Prisma.Symptom$ruleDetailsArgs<ExtArgs>
   weights?: boolean | Prisma.Symptom$weightsArgs<ExtArgs>
   answers?: boolean | Prisma.Symptom$answersArgs<ExtArgs>
@@ -791,6 +1087,7 @@ export type SymptomIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $SymptomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Symptom"
   objects: {
+    aliases: Prisma.$SymptomAliasPayload<ExtArgs>[]
     ruleDetails: Prisma.$RuleDetailPayload<ExtArgs>[]
     weights: Prisma.$DiseaseSymptomWeightPayload<ExtArgs>[]
     answers: Prisma.$ConsultationAnswerPayload<ExtArgs>[]
@@ -799,9 +1096,13 @@ export type $SymptomPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: string
     code: string
     name: string
+    normalizedName: string | null
     questionText: string
     category: string | null
+    itemType: $Enums.SymptomItemType
+    defaultInputTier: $Enums.InputTier | null
     isRedFlag: boolean
+    isAskable: boolean
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1199,6 +1500,7 @@ readonly fields: SymptomFieldRefs;
  */
 export interface Prisma__SymptomClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  aliases<T extends Prisma.Symptom$aliasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$aliasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SymptomAliasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ruleDetails<T extends Prisma.Symptom$ruleDetailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$ruleDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   weights<T extends Prisma.Symptom$weightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$weightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiseaseSymptomWeightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   answers<T extends Prisma.Symptom$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1234,9 +1536,13 @@ export interface SymptomFieldRefs {
   readonly id: Prisma.FieldRef<"Symptom", 'String'>
   readonly code: Prisma.FieldRef<"Symptom", 'String'>
   readonly name: Prisma.FieldRef<"Symptom", 'String'>
+  readonly normalizedName: Prisma.FieldRef<"Symptom", 'String'>
   readonly questionText: Prisma.FieldRef<"Symptom", 'String'>
   readonly category: Prisma.FieldRef<"Symptom", 'String'>
+  readonly itemType: Prisma.FieldRef<"Symptom", 'SymptomItemType'>
+  readonly defaultInputTier: Prisma.FieldRef<"Symptom", 'InputTier'>
   readonly isRedFlag: Prisma.FieldRef<"Symptom", 'Boolean'>
+  readonly isAskable: Prisma.FieldRef<"Symptom", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"Symptom", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Symptom", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Symptom", 'DateTime'>
@@ -1630,6 +1936,30 @@ export type SymptomDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Symptoms to delete.
    */
   limit?: number
+}
+
+/**
+ * Symptom.aliases
+ */
+export type Symptom$aliasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SymptomAlias
+   */
+  select?: Prisma.SymptomAliasSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SymptomAlias
+   */
+  omit?: Prisma.SymptomAliasOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SymptomAliasInclude<ExtArgs> | null
+  where?: Prisma.SymptomAliasWhereInput
+  orderBy?: Prisma.SymptomAliasOrderByWithRelationInput | Prisma.SymptomAliasOrderByWithRelationInput[]
+  cursor?: Prisma.SymptomAliasWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SymptomAliasScalarFieldEnum | Prisma.SymptomAliasScalarFieldEnum[]
 }
 
 /**

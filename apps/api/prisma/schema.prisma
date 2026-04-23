@@ -17,6 +17,45 @@ enum Gender {
   FEMALE
 }
 
+enum SymptomItemType {
+  SYMPTOM
+  WARNING
+  SEVERITY
+  CONTEXT
+  LAB
+  COMPLICATION
+}
+
+enum InputTier {
+  CAREGIVER
+  CAREGIVER_OR_CLINICIAN
+  CLINICIAN
+  CLINICIAN_OR_CAREGIVER
+  HISTORY_CONTEXT
+  LAB
+  LAB_OR_CLINICIAN
+}
+
+enum SymptomRole {
+  CORE
+  SUPPORTING
+  WARNING_SIGN
+  SEVERE
+  CONTEXT_ONLY
+  COMPLICATION
+}
+
+enum KeepStatus {
+  KEEP
+  KEEP_OPTIONAL
+  EXCLUDE
+}
+
+enum UrgencyMode {
+  ORDINARY
+  URGENCY_ONLY
+}
+
 model Disease {
   id            String                 @id @default(cuid())
   code          String                 @unique
@@ -35,19 +74,38 @@ model Disease {
 }
 
 model Symptom {
-  id           String                 @id @default(cuid())
-  code         String                 @unique
-  name         String
-  questionText String
-  category     String?
-  isRedFlag    Boolean                @default(false)
-  isActive     Boolean                @default(true)
-  createdAt    DateTime               @default(now())
-  updatedAt    DateTime               @updatedAt
+  id               String                 @id @default(cuid())
+  code             String                 @unique
+  name             String
+  normalizedName   String?
+  questionText     String
+  category         String?
+  itemType         SymptomItemType        @default(SYMPTOM)
+  defaultInputTier InputTier?
+  isRedFlag        Boolean                @default(false)
+  isAskable        Boolean                @default(true)
+  isActive         Boolean                @default(true)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
 
-  ruleDetails  RuleDetail[]
-  weights      DiseaseSymptomWeight[]
-  answers      ConsultationAnswer[]
+  aliases          SymptomAlias[]
+  ruleDetails      RuleDetail[]
+  weights          DiseaseSymptomWeight[]
+  answers          ConsultationAnswer[]
+
+  @@index([normalizedName])
+}
+
+model SymptomAlias {
+  id              String   @id @default(cuid())
+  symptomId       String
+  aliasText       String   @unique
+  normalizedAlias String?
+  createdAt       DateTime @default(now())
+
+  symptom         Symptom  @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+
+  @@index([normalizedAlias])
 }
 
 model Rule {
@@ -79,14 +137,21 @@ model RuleDetail {
 }
 
 model DiseaseSymptomWeight {
-  id        String   @id @default(cuid())
-  diseaseId String
-  symptomId String
-  cfExpert  Float
-  note      String?
+  id             String       @id @default(cuid())
+  diseaseId      String
+  symptomId      String
+  cfExpert       Float
+  candidateCfMin Float?
+  candidateCfMax Float?
+  symptomRole    SymptomRole  @default(SUPPORTING)
+  phase          String?
+  keepStatus     KeepStatus   @default(KEEP)
+  urgencyMode    UrgencyMode  @default(ORDINARY)
+  evidenceDoi    String?
+  note           String?
 
-  disease   Disease  @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
-  symptom   Symptom  @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+  disease        Disease      @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  symptom        Symptom      @relation(fields: [symptomId], references: [id], onDelete: Cascade)
 
   @@unique([diseaseId, symptomId])
 }

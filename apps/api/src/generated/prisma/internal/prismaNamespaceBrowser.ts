@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Disease: 'Disease',
   Symptom: 'Symptom',
+  SymptomAlias: 'SymptomAlias',
   Rule: 'Rule',
   RuleDetail: 'RuleDetail',
   DiseaseSymptomWeight: 'DiseaseSymptomWeight',
@@ -97,15 +98,30 @@ export const SymptomScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
+  normalizedName: 'normalizedName',
   questionText: 'questionText',
   category: 'category',
+  itemType: 'itemType',
+  defaultInputTier: 'defaultInputTier',
   isRedFlag: 'isRedFlag',
+  isAskable: 'isAskable',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type SymptomScalarFieldEnum = (typeof SymptomScalarFieldEnum)[keyof typeof SymptomScalarFieldEnum]
+
+
+export const SymptomAliasScalarFieldEnum = {
+  id: 'id',
+  symptomId: 'symptomId',
+  aliasText: 'aliasText',
+  normalizedAlias: 'normalizedAlias',
+  createdAt: 'createdAt'
+} as const
+
+export type SymptomAliasScalarFieldEnum = (typeof SymptomAliasScalarFieldEnum)[keyof typeof SymptomAliasScalarFieldEnum]
 
 
 export const RuleScalarFieldEnum = {
@@ -139,6 +155,13 @@ export const DiseaseSymptomWeightScalarFieldEnum = {
   diseaseId: 'diseaseId',
   symptomId: 'symptomId',
   cfExpert: 'cfExpert',
+  candidateCfMin: 'candidateCfMin',
+  candidateCfMax: 'candidateCfMax',
+  symptomRole: 'symptomRole',
+  phase: 'phase',
+  keepStatus: 'keepStatus',
+  urgencyMode: 'urgencyMode',
+  evidenceDoi: 'evidenceDoi',
   note: 'note'
 } as const
 

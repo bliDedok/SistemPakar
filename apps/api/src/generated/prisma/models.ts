@@ -10,6 +10,7 @@
  */
 export type * from './models/Disease.ts'
 export type * from './models/Symptom.ts'
+export type * from './models/SymptomAlias.ts'
 export type * from './models/Rule.ts'
 export type * from './models/RuleDetail.ts'
 export type * from './models/DiseaseSymptomWeight.ts'
