@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  EvidenceChunk: 'EvidenceChunk',
   Disease: 'Disease',
   Symptom: 'Symptom',
   SymptomAlias: 'SymptomAlias',
@@ -408,10 +409,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "disease" | "symptom" | "symptomAlias" | "rule" | "ruleDetail" | "diseaseSymptomWeight" | "consultation" | "consultationAnswer" | "consultationResult"
+    modelProps: "evidenceChunk" | "disease" | "symptom" | "symptomAlias" | "rule" | "ruleDetail" | "diseaseSymptomWeight" | "consultation" | "consultationAnswer" | "consultationResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    EvidenceChunk: {
+      payload: Prisma.$EvidenceChunkPayload<ExtArgs>
+      fields: Prisma.EvidenceChunkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EvidenceChunkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EvidenceChunkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>
+        }
+        findFirst: {
+          args: Prisma.EvidenceChunkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EvidenceChunkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>
+        }
+        findMany: {
+          args: Prisma.EvidenceChunkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>[]
+        }
+        create: {
+          args: Prisma.EvidenceChunkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>
+        }
+        createMany: {
+          args: Prisma.EvidenceChunkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EvidenceChunkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>[]
+        }
+        delete: {
+          args: Prisma.EvidenceChunkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>
+        }
+        update: {
+          args: Prisma.EvidenceChunkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>
+        }
+        deleteMany: {
+          args: Prisma.EvidenceChunkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EvidenceChunkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EvidenceChunkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>[]
+        }
+        upsert: {
+          args: Prisma.EvidenceChunkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvidenceChunkPayload>
+        }
+        aggregate: {
+          args: Prisma.EvidenceChunkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvidenceChunk>
+        }
+        groupBy: {
+          args: Prisma.EvidenceChunkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvidenceChunkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EvidenceChunkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvidenceChunkCountAggregateOutputType> | number
+        }
+      }
+    }
     Disease: {
       payload: Prisma.$DiseasePayload<ExtArgs>
       fields: Prisma.DiseaseFieldRefs
@@ -1117,6 +1192,24 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const EvidenceChunkScalarFieldEnum = {
+  id: 'id',
+  diseaseId: 'diseaseId',
+  symptomId: 'symptomId',
+  title: 'title',
+  content: 'content',
+  sourceName: 'sourceName',
+  sourceType: 'sourceType',
+  sourceUrl: 'sourceUrl',
+  evidenceDoi: 'evidenceDoi',
+  embedding: 'embedding',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvidenceChunkScalarFieldEnum = (typeof EvidenceChunkScalarFieldEnum)[keyof typeof EvidenceChunkScalarFieldEnum]
+
+
 export const DiseaseScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -1248,12 +1341,29 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {
@@ -1285,9 +1395,16 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Boolean'
+ * Reference to a field of type 'Json'
  */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1302,6 +1419,13 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1525,6 +1649,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  evidenceChunk?: Prisma.EvidenceChunkOmit
   disease?: Prisma.DiseaseOmit
   symptom?: Prisma.SymptomOmit
   symptomAlias?: Prisma.SymptomAliasOmit

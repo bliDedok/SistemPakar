@@ -56,6 +56,31 @@ enum UrgencyMode {
   URGENCY_ONLY
 }
 
+model EvidenceChunk {
+  id          String   @id @default(cuid())
+
+  diseaseId   String?
+  symptomId   String?
+
+  title       String
+  content     String
+  sourceName  String?
+  sourceType  String   @default("curated_reference")
+  sourceUrl   String?
+  evidenceDoi String?
+
+  embedding   Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  disease     Disease? @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  symptom     Symptom? @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+
+  @@index([diseaseId])
+  @@index([symptomId])
+}
+
 model Disease {
   id            String                 @id @default(cuid())
   code          String                 @unique
@@ -71,6 +96,7 @@ model Disease {
   rules         Rule[]
   weights       DiseaseSymptomWeight[]
   results       ConsultationResult[]
+  evidenceChunks EvidenceChunk[]
 }
 
 model Symptom {
@@ -92,6 +118,7 @@ model Symptom {
   ruleDetails      RuleDetail[]
   weights          DiseaseSymptomWeight[]
   answers          ConsultationAnswer[]
+  evidenceChunks   EvidenceChunk[]
 
   @@index([normalizedName])
 }
@@ -155,6 +182,7 @@ model DiseaseSymptomWeight {
 
   @@unique([diseaseId, symptomId])
 }
+
 
 model Consultation {
   id             String               @id @default(cuid())

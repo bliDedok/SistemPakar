@@ -9,6 +9,7 @@ import {
   SymptomRole,
   UrgencyMode,
 } from "../src/generated/prisma/enums.ts";
+import { normalizeText } from "../src/shared/utils/normalize-text";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -16,13 +17,7 @@ const adapter = new PrismaPg({
 
 const prisma = new PrismaClient({ adapter });
 
-const normalizeText = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+
 
 const symptoms = [
   {
@@ -553,6 +548,7 @@ const symptomAliases = [
   { aliasText: "tidak mau minum", symptomCode: "G024" },
   { aliasText: "pilek", symptomCode: "G004" },
   { aliasText: "nyeri telinga", symptomCode: "G027" },
+
   { aliasText: "cairan telinga", symptomCode: "G028" },
   { aliasText: "demam tinggi 3-4 hari", symptomCode: "G029" },
   { aliasText: "ruam setelah demam turun", symptomCode: "G030" },
@@ -560,6 +556,62 @@ const symptomAliases = [
   { aliasText: "riwayat perjalanan malaria", symptomCode: "G040" },
   { aliasText: "kulit kuning", symptomCode: "G041" },
   { aliasText: "mata kuning", symptomCode: "G041" },
+  { aliasText: "panas", symptomCode: "G001" },
+  { aliasText: "badan panas", symptomCode: "G001" },
+  { aliasText: "meriang", symptomCode: "G001" },
+  { aliasText: "demam biasa", symptomCode: "G001" },
+
+  { aliasText: "panas tinggi", symptomCode: "G002" },
+  { aliasText: "demam tinggi", symptomCode: "G002" },
+
+  { aliasText: "batuk-batuk", symptomCode: "G003" },
+  { aliasText: "batuk terus", symptomCode: "G003" },
+  { aliasText: "batuk parah", symptomCode: "G003" },
+
+  { aliasText: "hidung berair", symptomCode: "G004" },
+  { aliasText: "ingusan", symptomCode: "G004" },
+  { aliasText: "flu", symptomCode: "G004" },
+
+  { aliasText: "tenggorokan sakit", symptomCode: "G005" },
+  { aliasText: "sakit saat menelan", symptomCode: "G005" },
+
+  { aliasText: "kepala sakit", symptomCode: "G006" },
+  { aliasText: "pusing", symptomCode: "G006" },
+
+  { aliasText: "badan pegal", symptomCode: "G007" },
+  { aliasText: "pegal-pegal", symptomCode: "G007" },
+
+  { aliasText: "mual-mual", symptomCode: "G011" },
+  { aliasText: "pengen muntah", symptomCode: "G011" },
+
+  { aliasText: "muntah", symptomCode: "G012" },
+  { aliasText: "muntah berulang", symptomCode: "G013" },
+
+  { aliasText: "sakit perut", symptomCode: "G014" },
+  { aliasText: "perut sakit", symptomCode: "G014" },
+
+  { aliasText: "lemas sekali", symptomCode: "G019" },
+  { aliasText: "anak sangat lemas", symptomCode: "G019" },
+  { aliasText: "kurang responsif", symptomCode: "G019" },
+
+  { aliasText: "susah napas", symptomCode: "G022" },
+  { aliasText: "sulit nafas", symptomCode: "G022" },
+  { aliasText: "nafas cepat", symptomCode: "G023" },
+
+  { aliasText: "malas minum", symptomCode: "G024" },
+  { aliasText: "sulit minum", symptomCode: "G024" },
+
+  { aliasText: "mencret", symptomCode: "G025" },
+  { aliasText: "bab cair", symptomCode: "G025" },
+  { aliasText: "buang air besar cair", symptomCode: "G025" },
+
+  { aliasText: "rewel", symptomCode: "G037" },
+  { aliasText: "mudah marah", symptomCode: "G037" },
+
+  { aliasText: "kejang-kejang", symptomCode: "G045" },
+  { aliasText: "pingsan", symptomCode: "G044" },
+  { aliasText: "tidak sadar", symptomCode: "G044" },
+  { aliasText: "pucat dingin", symptomCode: "G046" },
 ] as const;
 
 const diseases = [
@@ -853,9 +905,13 @@ const weights = [
 ] as const;
 
 async function main() {
-  await prisma.consultationResult.deleteMany();
-  await prisma.consultationAnswer.deleteMany();
-  await prisma.consultation.deleteMany();
+  const resetConsultations = process.env.RESET_CONSULTATIONS === "true";
+
+  if (resetConsultations) {
+    await prisma.consultationResult.deleteMany();
+    await prisma.consultationAnswer.deleteMany();
+    await prisma.consultation.deleteMany();
+  }
   await prisma.ruleDetail.deleteMany();
   await prisma.rule.deleteMany();
   await prisma.diseaseSymptomWeight.deleteMany();

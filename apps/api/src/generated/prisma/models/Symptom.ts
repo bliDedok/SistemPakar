@@ -250,6 +250,7 @@ export type SymptomWhereInput = {
   ruleDetails?: Prisma.RuleDetailListRelationFilter
   weights?: Prisma.DiseaseSymptomWeightListRelationFilter
   answers?: Prisma.ConsultationAnswerListRelationFilter
+  evidenceChunks?: Prisma.EvidenceChunkListRelationFilter
 }
 
 export type SymptomOrderByWithRelationInput = {
@@ -270,6 +271,7 @@ export type SymptomOrderByWithRelationInput = {
   ruleDetails?: Prisma.RuleDetailOrderByRelationAggregateInput
   weights?: Prisma.DiseaseSymptomWeightOrderByRelationAggregateInput
   answers?: Prisma.ConsultationAnswerOrderByRelationAggregateInput
+  evidenceChunks?: Prisma.EvidenceChunkOrderByRelationAggregateInput
 }
 
 export type SymptomWhereUniqueInput = Prisma.AtLeast<{
@@ -293,6 +295,7 @@ export type SymptomWhereUniqueInput = Prisma.AtLeast<{
   ruleDetails?: Prisma.RuleDetailListRelationFilter
   weights?: Prisma.DiseaseSymptomWeightListRelationFilter
   answers?: Prisma.ConsultationAnswerListRelationFilter
+  evidenceChunks?: Prisma.EvidenceChunkListRelationFilter
 }, "id" | "code">
 
 export type SymptomOrderByWithAggregationInput = {
@@ -351,6 +354,7 @@ export type SymptomCreateInput = {
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomUncheckedCreateInput = {
@@ -371,6 +375,7 @@ export type SymptomUncheckedCreateInput = {
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomUpdateInput = {
@@ -391,6 +396,7 @@ export type SymptomUpdateInput = {
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomUncheckedUpdateInput = {
@@ -411,6 +417,7 @@ export type SymptomUncheckedUpdateInput = {
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomCreateManyInput = {
@@ -459,6 +466,11 @@ export type SymptomUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SymptomNullableScalarRelationFilter = {
+  is?: Prisma.SymptomWhereInput | null
+  isNot?: Prisma.SymptomWhereInput | null
 }
 
 export type SymptomCountOrderByAggregateInput = {
@@ -512,6 +524,22 @@ export type SymptomMinOrderByAggregateInput = {
 export type SymptomScalarRelationFilter = {
   is?: Prisma.SymptomWhereInput
   isNot?: Prisma.SymptomWhereInput
+}
+
+export type SymptomCreateNestedOneWithoutEvidenceChunksInput = {
+  create?: Prisma.XOR<Prisma.SymptomCreateWithoutEvidenceChunksInput, Prisma.SymptomUncheckedCreateWithoutEvidenceChunksInput>
+  connectOrCreate?: Prisma.SymptomCreateOrConnectWithoutEvidenceChunksInput
+  connect?: Prisma.SymptomWhereUniqueInput
+}
+
+export type SymptomUpdateOneWithoutEvidenceChunksNestedInput = {
+  create?: Prisma.XOR<Prisma.SymptomCreateWithoutEvidenceChunksInput, Prisma.SymptomUncheckedCreateWithoutEvidenceChunksInput>
+  connectOrCreate?: Prisma.SymptomCreateOrConnectWithoutEvidenceChunksInput
+  upsert?: Prisma.SymptomUpsertWithoutEvidenceChunksInput
+  disconnect?: Prisma.SymptomWhereInput | boolean
+  delete?: Prisma.SymptomWhereInput | boolean
+  connect?: Prisma.SymptomWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SymptomUpdateToOneWithWhereWithoutEvidenceChunksInput, Prisma.SymptomUpdateWithoutEvidenceChunksInput>, Prisma.SymptomUncheckedUpdateWithoutEvidenceChunksInput>
 }
 
 export type EnumSymptomItemTypeFieldUpdateOperationsInput = {
@@ -578,6 +606,102 @@ export type SymptomUpdateOneRequiredWithoutAnswersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SymptomUpdateToOneWithWhereWithoutAnswersInput, Prisma.SymptomUpdateWithoutAnswersInput>, Prisma.SymptomUncheckedUpdateWithoutAnswersInput>
 }
 
+export type SymptomCreateWithoutEvidenceChunksInput = {
+  id?: string
+  code: string
+  name: string
+  normalizedName?: string | null
+  questionText: string
+  category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
+  isRedFlag?: boolean
+  isAskable?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
+  ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
+  weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
+  answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
+}
+
+export type SymptomUncheckedCreateWithoutEvidenceChunksInput = {
+  id?: string
+  code: string
+  name: string
+  normalizedName?: string | null
+  questionText: string
+  category?: string | null
+  itemType?: $Enums.SymptomItemType
+  defaultInputTier?: $Enums.InputTier | null
+  isRedFlag?: boolean
+  isAskable?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
+  ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
+  weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
+  answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
+}
+
+export type SymptomCreateOrConnectWithoutEvidenceChunksInput = {
+  where: Prisma.SymptomWhereUniqueInput
+  create: Prisma.XOR<Prisma.SymptomCreateWithoutEvidenceChunksInput, Prisma.SymptomUncheckedCreateWithoutEvidenceChunksInput>
+}
+
+export type SymptomUpsertWithoutEvidenceChunksInput = {
+  update: Prisma.XOR<Prisma.SymptomUpdateWithoutEvidenceChunksInput, Prisma.SymptomUncheckedUpdateWithoutEvidenceChunksInput>
+  create: Prisma.XOR<Prisma.SymptomCreateWithoutEvidenceChunksInput, Prisma.SymptomUncheckedCreateWithoutEvidenceChunksInput>
+  where?: Prisma.SymptomWhereInput
+}
+
+export type SymptomUpdateToOneWithWhereWithoutEvidenceChunksInput = {
+  where?: Prisma.SymptomWhereInput
+  data: Prisma.XOR<Prisma.SymptomUpdateWithoutEvidenceChunksInput, Prisma.SymptomUncheckedUpdateWithoutEvidenceChunksInput>
+}
+
+export type SymptomUpdateWithoutEvidenceChunksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionText?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
+  isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
+  ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
+  weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
+  answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
+}
+
+export type SymptomUncheckedUpdateWithoutEvidenceChunksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  normalizedName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionText?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.EnumSymptomItemTypeFieldUpdateOperationsInput | $Enums.SymptomItemType
+  defaultInputTier?: Prisma.NullableEnumInputTierFieldUpdateOperationsInput | $Enums.InputTier | null
+  isRedFlag?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAskable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
+  ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
+  weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
+  answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
+}
+
 export type SymptomCreateWithoutAliasesInput = {
   id?: string
   code: string
@@ -595,6 +719,7 @@ export type SymptomCreateWithoutAliasesInput = {
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomUncheckedCreateWithoutAliasesInput = {
@@ -614,6 +739,7 @@ export type SymptomUncheckedCreateWithoutAliasesInput = {
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomCreateOrConnectWithoutAliasesInput = {
@@ -649,6 +775,7 @@ export type SymptomUpdateWithoutAliasesInput = {
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomUncheckedUpdateWithoutAliasesInput = {
@@ -668,6 +795,7 @@ export type SymptomUncheckedUpdateWithoutAliasesInput = {
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomCreateWithoutRuleDetailsInput = {
@@ -687,6 +815,7 @@ export type SymptomCreateWithoutRuleDetailsInput = {
   aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomUncheckedCreateWithoutRuleDetailsInput = {
@@ -706,6 +835,7 @@ export type SymptomUncheckedCreateWithoutRuleDetailsInput = {
   aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomCreateOrConnectWithoutRuleDetailsInput = {
@@ -741,6 +871,7 @@ export type SymptomUpdateWithoutRuleDetailsInput = {
   aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomUncheckedUpdateWithoutRuleDetailsInput = {
@@ -760,6 +891,7 @@ export type SymptomUncheckedUpdateWithoutRuleDetailsInput = {
   aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomCreateWithoutWeightsInput = {
@@ -779,6 +911,7 @@ export type SymptomCreateWithoutWeightsInput = {
   aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomUncheckedCreateWithoutWeightsInput = {
@@ -798,6 +931,7 @@ export type SymptomUncheckedCreateWithoutWeightsInput = {
   aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   answers?: Prisma.ConsultationAnswerUncheckedCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomCreateOrConnectWithoutWeightsInput = {
@@ -833,6 +967,7 @@ export type SymptomUpdateWithoutWeightsInput = {
   aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomUncheckedUpdateWithoutWeightsInput = {
@@ -852,6 +987,7 @@ export type SymptomUncheckedUpdateWithoutWeightsInput = {
   aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   answers?: Prisma.ConsultationAnswerUncheckedUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomCreateWithoutAnswersInput = {
@@ -871,6 +1007,7 @@ export type SymptomCreateWithoutAnswersInput = {
   aliases?: Prisma.SymptomAliasCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomUncheckedCreateWithoutAnswersInput = {
@@ -890,6 +1027,7 @@ export type SymptomUncheckedCreateWithoutAnswersInput = {
   aliases?: Prisma.SymptomAliasUncheckedCreateNestedManyWithoutSymptomInput
   ruleDetails?: Prisma.RuleDetailUncheckedCreateNestedManyWithoutSymptomInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedCreateNestedManyWithoutSymptomInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedCreateNestedManyWithoutSymptomInput
 }
 
 export type SymptomCreateOrConnectWithoutAnswersInput = {
@@ -925,6 +1063,7 @@ export type SymptomUpdateWithoutAnswersInput = {
   aliases?: Prisma.SymptomAliasUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUpdateManyWithoutSymptomNestedInput
 }
 
 export type SymptomUncheckedUpdateWithoutAnswersInput = {
@@ -944,6 +1083,7 @@ export type SymptomUncheckedUpdateWithoutAnswersInput = {
   aliases?: Prisma.SymptomAliasUncheckedUpdateManyWithoutSymptomNestedInput
   ruleDetails?: Prisma.RuleDetailUncheckedUpdateManyWithoutSymptomNestedInput
   weights?: Prisma.DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomNestedInput
+  evidenceChunks?: Prisma.EvidenceChunkUncheckedUpdateManyWithoutSymptomNestedInput
 }
 
 
@@ -956,6 +1096,7 @@ export type SymptomCountOutputType = {
   ruleDetails: number
   weights: number
   answers: number
+  evidenceChunks: number
 }
 
 export type SymptomCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -963,6 +1104,7 @@ export type SymptomCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   ruleDetails?: boolean | SymptomCountOutputTypeCountRuleDetailsArgs
   weights?: boolean | SymptomCountOutputTypeCountWeightsArgs
   answers?: boolean | SymptomCountOutputTypeCountAnswersArgs
+  evidenceChunks?: boolean | SymptomCountOutputTypeCountEvidenceChunksArgs
 }
 
 /**
@@ -1003,6 +1145,13 @@ export type SymptomCountOutputTypeCountAnswersArgs<ExtArgs extends runtime.Types
   where?: Prisma.ConsultationAnswerWhereInput
 }
 
+/**
+ * SymptomCountOutputType without action
+ */
+export type SymptomCountOutputTypeCountEvidenceChunksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvidenceChunkWhereInput
+}
+
 
 export type SymptomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1022,6 +1171,7 @@ export type SymptomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ruleDetails?: boolean | Prisma.Symptom$ruleDetailsArgs<ExtArgs>
   weights?: boolean | Prisma.Symptom$weightsArgs<ExtArgs>
   answers?: boolean | Prisma.Symptom$answersArgs<ExtArgs>
+  evidenceChunks?: boolean | Prisma.Symptom$evidenceChunksArgs<ExtArgs>
   _count?: boolean | Prisma.SymptomCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["symptom"]>
 
@@ -1079,6 +1229,7 @@ export type SymptomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   ruleDetails?: boolean | Prisma.Symptom$ruleDetailsArgs<ExtArgs>
   weights?: boolean | Prisma.Symptom$weightsArgs<ExtArgs>
   answers?: boolean | Prisma.Symptom$answersArgs<ExtArgs>
+  evidenceChunks?: boolean | Prisma.Symptom$evidenceChunksArgs<ExtArgs>
   _count?: boolean | Prisma.SymptomCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SymptomIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1091,6 +1242,7 @@ export type $SymptomPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ruleDetails: Prisma.$RuleDetailPayload<ExtArgs>[]
     weights: Prisma.$DiseaseSymptomWeightPayload<ExtArgs>[]
     answers: Prisma.$ConsultationAnswerPayload<ExtArgs>[]
+    evidenceChunks: Prisma.$EvidenceChunkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1504,6 +1656,7 @@ export interface Prisma__SymptomClient<T, Null = never, ExtArgs extends runtime.
   ruleDetails<T extends Prisma.Symptom$ruleDetailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$ruleDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   weights<T extends Prisma.Symptom$weightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$weightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiseaseSymptomWeightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   answers<T extends Prisma.Symptom$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  evidenceChunks<T extends Prisma.Symptom$evidenceChunksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Symptom$evidenceChunksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvidenceChunkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2032,6 +2185,30 @@ export type Symptom$answersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ConsultationAnswerScalarFieldEnum | Prisma.ConsultationAnswerScalarFieldEnum[]
+}
+
+/**
+ * Symptom.evidenceChunks
+ */
+export type Symptom$evidenceChunksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EvidenceChunk
+   */
+  select?: Prisma.EvidenceChunkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EvidenceChunk
+   */
+  omit?: Prisma.EvidenceChunkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EvidenceChunkInclude<ExtArgs> | null
+  where?: Prisma.EvidenceChunkWhereInput
+  orderBy?: Prisma.EvidenceChunkOrderByWithRelationInput | Prisma.EvidenceChunkOrderByWithRelationInput[]
+  cursor?: Prisma.EvidenceChunkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EvidenceChunkScalarFieldEnum | Prisma.EvidenceChunkScalarFieldEnum[]
 }
 
 /**

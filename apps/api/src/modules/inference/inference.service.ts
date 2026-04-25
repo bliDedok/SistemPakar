@@ -1,14 +1,36 @@
 import "dotenv/config";
 import { prisma } from "../../shared/db/prisma";
-import { RuleOperator } from "../../generated/prisma/enums";
 import { DiagnoseRequestDto } from "../consultations/dto/diagnose.dto";
+import {
+  KeepStatus,
+  RuleOperator,
+  SymptomRole,
+  UrgencyMode,
+} from "../../generated/prisma/enums";
+import { determineUrgency, type UrgencyResult } from "./urgency.service";
+import {
+  generateRagExplanation,
+  type ExplanationResult,
+} from "../explanation/explanation.service";
+import {
+  calculateRawEvidenceCf,
+  calculateEffectiveEvidenceCf,
+  combineEvidenceValues,
+} from "./cf-calibration.service"
+
 
 
 type DiagnosisResult = {
   diseaseCode: string;
   diseaseName: string;
+  severityLevel: string | null;
+
+  rawCfResult?: number;
+  rawPercentage?: number;
+
   cfResult: number;
   percentage: number;
+
   matchCount: number;
   supportingSymptoms: string[];
   advice: string | null;
@@ -17,22 +39,24 @@ type DiagnosisResult = {
 type DiagnoseResponse = {
   consultationId: string;
   redFlags: string[];
+  urgency: UrgencyResult;
+  explanation: ExplanationResult;
   results: DiagnosisResult[];
 };
 
 export type ConsultationDetailResponse = {
-  consultationId: string;
-  childName: string | null;
-  childAgeMonths: number;
-  gender: "MALE" | "FEMALE" | null;
-  createdAt: string;
+  consultation: {
+    id: string;
+    childName: string | null;
+    childAgeMonths: number;
+    gender: "MALE" | "FEMALE" | null;
+    createdAt: string;
+  };
   redFlags: string[];
+  urgency: UrgencyResult;
+  explanation: ExplanationResult;
   results: DiagnosisResult[];
 };
-
-function combineCf(current: number, next: number): number {
-  return current + next * (1 - current);
-}
 
 function round(value: number, digits = 4): number {
   return Number(value.toFixed(digits));
@@ -76,6 +100,16 @@ export async function diagnoseChild(
         .map((s) => s.name)
     ),
   ];
+
+  const selectedSymptomsForUrgency = selectedAnswers
+  .map((answer) => symptomByCode.get(answer.symptomCode))
+  .filter((symptom): symptom is NonNullable<typeof symptom> => Boolean(symptom))
+  .map((symptom) => ({
+    code: symptom.code,
+    name: symptom.name,
+    isRedFlag: symptom.isRedFlag,
+    itemType: String(symptom.itemType),
+  }));
 
   const diseases = await prisma.disease.findMany({
     where: { isActive: true },
@@ -128,28 +162,70 @@ export async function diagnoseChild(
       matchedRules.flatMap((rule) => rule.details.map((detail) => detail.symptomId))
     );
 
-    const matchedWeights = disease.weights.filter(
-      (w) =>
-        answerMap.has(w.symptom.code) && matchedRuleSymptomIds.has(w.symptomId)
-    );
+    const matchedWeights = disease.weights.filter((w) => {
+    const isSelected = answerMap.has(w.symptom.code);
+    const isInMatchedRule = matchedRuleSymptomIds.has(w.symptomId);
+
+    const canAffectDiagnosis =
+      w.keepStatus !== KeepStatus.EXCLUDE &&
+      w.urgencyMode !== UrgencyMode.URGENCY_ONLY &&
+      w.symptomRole !== SymptomRole.CONTEXT_ONLY;
+
+    return isSelected && isInMatchedRule && canAffectDiagnosis;
+    });
 
     if (matchedWeights.length === 0) continue;
 
-    let totalCf = 0;
+    const rawEvidenceValues: number[] = [];
+    const effectiveEvidenceValues: number[] = [];
     const supportingSymptoms = new Set<string>();
 
     for (const weight of matchedWeights) {
-      const userCf = answerMap.get(weight.symptom.code) ?? 0;
-      const evidenceCf = userCf * weight.cfExpert;
-      totalCf = totalCf === 0 ? evidenceCf : combineCf(totalCf, evidenceCf);
-      supportingSymptoms.add(weight.symptom.name);
+      const userCf = answerMap.get(weight.symptom.code);
+
+      if (userCf === undefined) continue;
+
+      const rawEvidenceCf = calculateRawEvidenceCf({
+        userCf,
+        cfExpert: weight.cfExpert,
+      });
+
+      const effectiveEvidenceCf = calculateEffectiveEvidenceCf({
+        userCf,
+        cfExpert: weight.cfExpert,
+        symptomRole: weight.symptomRole,
+        urgencyMode: weight.urgencyMode,
+        keepStatus: weight.keepStatus,
+      });
+
+      rawEvidenceValues.push(rawEvidenceCf);
+
+      if (effectiveEvidenceCf > 0) {
+        effectiveEvidenceValues.push(effectiveEvidenceCf);
+        supportingSymptoms.add(weight.symptom.name);
+      }
     }
+
+    const rawTotalCf = combineEvidenceValues(rawEvidenceValues);
+    let calibratedTotalCf = combineEvidenceValues(effectiveEvidenceValues);
+
+    if (disease.code === "P014" && !answerMap.has("G040")) {
+      calibratedTotalCf = round(calibratedTotalCf * 0.65);
+    }
+
+    if (calibratedTotalCf <= 0) continue;
 
     results.push({
       diseaseCode: disease.code,
       diseaseName: disease.name,
-      cfResult: round(totalCf),
-      percentage: round(totalCf * 100, 2),
+      severityLevel: disease.severityLevel ?? null,
+
+      rawCfResult: round(rawTotalCf),
+      rawPercentage: round(rawTotalCf * 100, 2),
+
+      cfResult: round(calibratedTotalCf),
+      percentage: round(calibratedTotalCf * 100, 2),
+
       matchCount: matchedWeights.length,
       supportingSymptoms: [...supportingSymptoms],
       advice: disease.advice,
@@ -162,6 +238,29 @@ export async function diagnoseChild(
   });
 
   const topResults = results.slice(0, 3);
+
+  const topDisease = topResults[0]
+  ? {
+      diseaseName: topResults[0].diseaseName,
+      severityLevel: topResults[0].severityLevel,
+    }
+  : null;
+
+  const urgency = determineUrgency({
+    selectedSymptoms: selectedSymptomsForUrgency,
+    topDisease,
+  });
+
+  const explanation = await generateRagExplanation({
+    childProfile: {
+      childName: payload.childName ?? null,
+      childAgeMonths: payload.childAgeMonths,
+      gender: payload.gender ?? null,
+    },
+    results: topResults,
+    redFlags,
+    urgency,
+  });
 
   const consultationId = await prisma.$transaction(async (tx) => {
     const consultation = await tx.consultation.create({
@@ -206,6 +305,8 @@ export async function diagnoseChild(
   return {
     consultationId,
     redFlags,
+    urgency,
+    explanation,
     results: topResults,
   };
 }
@@ -255,22 +356,63 @@ export async function getConsultationResultById(
   const results: DiagnosisResult[] = consultation.results.map((item) => ({
     diseaseCode: item.disease.code,
     diseaseName: item.disease.name,
+    severityLevel: item.disease.severityLevel ?? null,
     cfResult: round(item.cfResult),
     percentage: round(item.cfResult * 100, 2),
     matchCount: item.matchCount,
     supportingSymptoms: item.disease.weights
-      .filter((w) => selectedSymptomIds.has(w.symptomId))
+      .filter(
+        (w) =>
+          selectedSymptomIds.has(w.symptomId) &&
+          w.keepStatus !== KeepStatus.EXCLUDE &&
+          w.urgencyMode !== UrgencyMode.URGENCY_ONLY &&
+          w.symptomRole !== SymptomRole.CONTEXT_ONLY
+      )
       .map((w) => w.symptom.name),
     advice: item.disease.advice,
   }));
 
-  return {
-    consultationId: consultation.id,
-    childName: consultation.childName ?? null,
-    childAgeMonths: consultation.childAgeMonths,
-    gender: consultation.gender ?? null,
-    createdAt: consultation.createdAt.toISOString(),
+  const selectedSymptomsForUrgency = consultation.answers.map((answer) => ({
+    code: answer.symptom.code,
+    name: answer.symptom.name,
+    isRedFlag: answer.symptom.isRedFlag,
+    itemType: String(answer.symptom.itemType),
+  }));
+
+  const topDisease = results[0]
+    ? {
+        diseaseName: results[0].diseaseName,
+        severityLevel: results[0].severityLevel,
+      }
+    : null;
+
+  const urgency = determineUrgency({
+    selectedSymptoms: selectedSymptomsForUrgency,
+    topDisease,
+  });
+
+  const explanation = await generateRagExplanation({
+    childProfile: {
+      childName: consultation.childName ?? null,
+      childAgeMonths: consultation.childAgeMonths,
+      gender: consultation.gender ?? null,
+    },
+    results,
     redFlags,
+    urgency,
+  });
+
+  return {
+    consultation: {
+      id: consultation.id,
+      childName: consultation.childName ?? null,
+      childAgeMonths: consultation.childAgeMonths,
+      gender: consultation.gender ?? null,
+      createdAt: consultation.createdAt.toISOString(),
+    },
+    redFlags,
+    urgency,
+    explanation,
     results,
   };
 }

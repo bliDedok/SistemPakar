@@ -1,5 +1,6 @@
 import { prisma } from "../../../shared/db/prisma";
 import { extractWithGemini } from "./llm-extractor";
+import { normalizeText } from "../../../shared/utils/normalize-text";
 import type {
   ChatbotRequestDto,
   ChatbotResponseDto,
@@ -9,28 +10,24 @@ import type {
   StructuredSymptomCandidate,
 } from "./chatbot.types";
 
+
 type ActiveSymptom = {
   id: string;
   code: string;
   name: string;
+  normalizedName: string | null;
   questionText: string;
   category: string | null;
   isRedFlag: boolean;
+  aliases: {
+    aliasText: string;
+    normalizedAlias: string | null;
+  }[];
 };
 
-const symptomAliasMap: Record<string, string[]> = {
-  batuk: ["batuk", "batuk-batuk", "cough"],
-  pilek: ["pilek", "flu", "ingusan"],
-  demam: ["demam", "panas", "meriang", "fever"],
-  napas_cepat: ["napas cepat", "nafas cepat", "megap-megap", "sesak", "susah napas"],
-  tarikan_dinding_dada: ["tarikan dinding dada", "dada tertarik", "cekung dada"],
-  muntah: ["muntah", "muntah-muntah"],
-  diare: ["diare", "mencret", "berak cair", "bab cair"],
-  tidak_bisa_minum: ["tidak bisa minum", "sulit minum", "malas minum"],
-};
 
 function normalize(text: string) {
-  return text.toLowerCase().trim();
+  return normalizeText(text);
 }
 
 function escapeRegExp(value: string) {
@@ -141,16 +138,28 @@ function getMissingProfileFields(profile: ChildProfileDraft): string[] {
 
 async function getActiveSymptoms(): Promise<ActiveSymptom[]> {
   const symptoms = await prisma.symptom.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      isAskable: true,
+    },
     select: {
       id: true,
       code: true,
       name: true,
+      normalizedName: true,
       questionText: true,
       category: true,
       isRedFlag: true,
+      aliases: {
+        select: {
+          aliasText: true,
+          normalizedAlias: true,
+        },
+      },
     },
-    orderBy: { code: "asc" },
+    orderBy: {
+      code: "asc",
+    },
   });
 
   return symptoms;
@@ -158,14 +167,23 @@ async function getActiveSymptoms(): Promise<ActiveSymptom[]> {
 
 function buildAliasIndex(symptoms: ActiveSymptom[]) {
   return symptoms.map((symptom) => {
-    const aliases = symptomAliasMap[symptom.code] ?? [
-      symptom.name.toLowerCase(),
-      symptom.questionText.toLowerCase(),
-    ];
+    const aliases = [
+      symptom.name,
+      symptom.normalizedName ?? "",
+      symptom.questionText,
+      ...symptom.aliases.map((item) => item.aliasText),
+      ...symptom.aliases.map((item) => item.normalizedAlias ?? ""),
+    ]
+      .filter(Boolean)
+      .map((alias) => normalize(alias));
+
+    const uniqueAliases = [...new Set(aliases)].filter(
+      (alias) => alias.length >= 3
+    );
 
     return {
       symptom,
-      aliases: aliases.map((alias) => normalize(alias)),
+      aliases: uniqueAliases,
     };
   });
 }
@@ -241,6 +259,8 @@ function buildMergedKnownSymptomMap(args: {
   return map;
 }
 
+// Input profile anak (nama, usia dalam bulan, jenis kelamin) dan gejala yang sudah diketahui (bisa dari pesan sebelumnya atau hasil ekstraksi LLM)
+// Output pesan balasan yang sesuai dengan konteks, daftar gejala positif yang terstruktur, dan indikator apakah data sudah cukup untuk diproses ke diagnosis awal
 function buildReply(args: {
   profile: ChildProfileDraft;
   currentPositiveSymptoms: StructuredSymptomCandidate[];
@@ -258,6 +278,7 @@ function buildReply(args: {
     };
   }
 
+  // jika belum ada gejala positif yang teridentifikasi, minta pengguna untuk menyebutkan gejala dengan lebih spesifik (Diluar konteks chatbot, ini bisa jadi indikasi bahwa pesan yang diberikan belum mengandung informasi gejala yang cukup jelas)
   if (args.cumulativePositiveCount === 0) {
     return {
       reply:

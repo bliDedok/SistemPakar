@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/EvidenceChunk.ts'
 export type * from './models/Disease.ts'
 export type * from './models/Symptom.ts'
 export type * from './models/SymptomAlias.ts'

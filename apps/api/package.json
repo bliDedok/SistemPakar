@@ -14,8 +14,9 @@
     "db:migrate": "prisma migrate deploy --schema ./prisma/schema.prisma",
     "db:reset": "prisma migrate reset --schema ./prisma/schema.prisma --force",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:evidence": "tsx prisma/seed-evidence.ts",
     "db:setup": "pnpm run db:migrate && pnpm run db:seed",
-    "db:fresh": "pnpm run db:reset && pnpm run db:seed"
+    "db:fresh": "pnpm run db:reset && pnpm run db:seed && pnpm run db:seed:evidence"
   },
   "dependencies": {
     "@fastify/cors": "^11.0.0",
