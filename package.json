@@ -14,6 +14,13 @@
     "db:reset": "pnpm --dir apps/api run db:reset",
     "db:seed": "pnpm --dir apps/api run db:seed",
     "db:setup": "pnpm --dir apps/api run db:setup",
-    "db:fresh": "pnpm --dir apps/api run db:fresh"
+    "db:fresh": "pnpm --dir apps/api run db:fresh",
+    "eval": "tsx ./apps/api/evaluation/evaluate.ts --scenarios=./apps/api/evaluation/test-scenarios.json --base-url=http://localhost:3001 --output=./apps/api/evaluation/results --delay=150",
+    "eval:figures": "tsx ./apps/api/evaluation/generate-figures.ts --input=./apps/api/evaluation/results/results-detail.json --output=./apps/api/evaluation/results/figures",
+    "eval:all": "pnpm eval && pnpm eval:figures"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "tsx": "^4.21.0"
   }
 }

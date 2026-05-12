@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1000" height="560" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-family="Times New Roman, serif" font-size="18" font-weight="700">Gambar X. Ringkasan Metrik Inferensi Certainty Factor</text>
+  
+      <line x1="90" y1="440" x2="958" y2="440" stroke="#e5e7eb"/>
+      <text x="78" y="445" text-anchor="end" font-family="Times New Roman, serif" font-size="13">0.0</text>
+      <line x1="90" y1="366" x2="958" y2="366" stroke="#e5e7eb"/>
+      <text x="78" y="371" text-anchor="end" font-family="Times New Roman, serif" font-size="13">0.2</text>
+      <line x1="90" y1="292" x2="958" y2="292" stroke="#e5e7eb"/>
+      <text x="78" y="297" text-anchor="end" font-family="Times New Roman, serif" font-size="13">0.4</text>
+      <line x1="90" y1="217.99999999999997" x2="958" y2="217.99999999999997" stroke="#e5e7eb"/>
+      <text x="78" y="222.99999999999997" text-anchor="end" font-family="Times New Roman, serif" font-size="13">0.6</text>
+      <line x1="90" y1="144" x2="958" y2="144" stroke="#e5e7eb"/>
+      <text x="78" y="149" text-anchor="end" font-family="Times New Roman, serif" font-size="13">0.8</text>
+      <line x1="90" y1="70" x2="958" y2="70" stroke="#e5e7eb"/>
+      <text x="78" y="75" text-anchor="end" font-family="Times New Roman, serif" font-size="13">1.0</text>
+    <line x1="90" y1="70" x2="90" y2="440" stroke="#111827" stroke-width="1.2"/>
+    <line x1="90" y1="440" x2="958" y2="440" stroke="#111827" stroke-width="1.2"/>
+      <rect x="90" y="111.07" width="159.2" height="328.93" fill="#7aa6d9" stroke="#1f2937" stroke-width="0.5"/>
+      <text x="169.6" y="103.07" text-anchor="middle" font-family="Times New Roman, serif" font-size="14">0.889</text>
+      <text transform="translate(169.6, 462) rotate(35)" text-anchor="start" font-family="Times New Roman, serif" font-size="14">Top-1</text>
+      <rect x="267.2" y="70" width="159.2" height="370" fill="#7aa6d9" stroke="#1f2937" stroke-width="0.5"/>
+      <text x="346.79999999999995" y="62" text-anchor="middle" font-family="Times New Roman, serif" font-size="14">1.000</text>
+      <text transform="translate(346.79999999999995, 462) rotate(35)" text-anchor="start" font-family="Times New Roman, serif" font-size="14">Top-3</text>
+      <rect x="444.4" y="92.94" width="159.2" height="347.06" fill="#7aa6d9" stroke="#1f2937" stroke-width="0.5"/>
+      <text x="524" y="84.94" text-anchor="middle" font-family="Times New Roman, serif" font-size="14">0.938</text>
+      <text transform="translate(524, 462) rotate(35)" text-anchor="start" font-family="Times New Roman, serif" font-size="14">Precision</text>
+      <rect x="621.5999999999999" y="111.44" width="159.2" height="328.56" fill="#7aa6d9" stroke="#1f2937" stroke-width="0.5"/>
+      <text x="701.1999999999999" y="103.44" text-anchor="middle" font-family="Times New Roman, serif" font-size="14">0.888</text>
+      <text transform="translate(701.1999999999999, 462) rotate(35)" text-anchor="start" font-family="Times New Roman, serif" font-size="14">Recall</text>
+      <rect x="798.8" y="107.74000000000001" width="159.2" height="332.26" fill="#7aa6d9" stroke="#1f2937" stroke-width="0.5"/>
+      <text x="878.4" y="99.74000000000001" text-anchor="middle" font-family="Times New Roman, serif" font-size="14">0.898</text>
+      <text transform="translate(878.4, 462) rotate(35)" text-anchor="start" font-family="Times New Roman, serif" font-size="14">F1</text>
+</svg>

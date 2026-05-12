@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1300" height="433" viewBox="0 0 1300 433" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1300" height="433" fill="#ffffff"/>
+  <text x="650" y="32" text-anchor="middle" font-family="Times New Roman, serif" font-size="18" font-weight="700">Tabel VI. Performa Klasifikasi per Penyakit</text>
+  
+      <rect x="36" y="55" width="95" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="83.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Kode</text>
+      <rect x="131" y="55" width="230" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="246" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Penyakit</text>
+      <rect x="361" y="55" width="85" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="403.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">TP</text>
+      <rect x="446" y="55" width="85" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="488.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">FP</text>
+      <rect x="531" y="55" width="85" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="573.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">FN</text>
+      <rect x="616" y="55" width="145" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="688.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Precision</text>
+      <rect x="761" y="55" width="135" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="828.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Recall</text>
+      <rect x="896" y="55" width="135" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="963.5" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">F1-score</text>
+      <rect x="1031" y="55" width="120" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="1091" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Support</text>
+        <rect x="36" y="93" width="95" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P001</text>
+        <rect x="131" y="93" width="230" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Enterobiasis</text>
+        <rect x="361" y="93" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">2</text>
+        <rect x="446" y="93" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="531" y="93" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="616" y="93" width="145" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="761" y="93" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="896" y="93" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="1031" y="93" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">2</text>
+        <rect x="36" y="131" width="95" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P003</text>
+        <rect x="131" y="131" width="230" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Influenza</text>
+        <rect x="361" y="131" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">6</text>
+        <rect x="446" y="131" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">2</text>
+        <rect x="531" y="131" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1</text>
+        <rect x="616" y="131" width="145" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.750</text>
+        <rect x="761" y="131" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.857</text>
+        <rect x="896" y="131" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.800</text>
+        <rect x="1031" y="131" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">7</text>
+        <rect x="36" y="169" width="95" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P004</text>
+        <rect x="131" y="169" width="230" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">DBD</text>
+        <rect x="361" y="169" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="446" y="169" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1</text>
+        <rect x="531" y="169" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="616" y="169" width="145" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.750</text>
+        <rect x="761" y="169" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="896" y="169" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.857</text>
+        <rect x="1031" y="169" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="36" y="207" width="95" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P005</text>
+        <rect x="131" y="207" width="230" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Gastroenteritis</text>
+        <rect x="361" y="207" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="446" y="207" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="531" y="207" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="616" y="207" width="145" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="761" y="207" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="896" y="207" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="1031" y="207" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="36" y="245" width="95" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P006</text>
+        <rect x="131" y="245" width="230" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Pneumonia</text>
+        <rect x="361" y="245" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="446" y="245" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="531" y="245" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1</text>
+        <rect x="616" y="245" width="145" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="761" y="245" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.750</text>
+        <rect x="896" y="245" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.857</text>
+        <rect x="1031" y="245" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">4</text>
+        <rect x="36" y="283" width="95" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P010</text>
+        <rect x="131" y="283" width="230" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Roseola</text>
+        <rect x="361" y="283" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="446" y="283" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="531" y="283" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="616" y="283" width="145" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="761" y="283" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="896" y="283" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="1031" y="283" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="36" y="321" width="95" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P013</text>
+        <rect x="131" y="321" width="230" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Otitis Media</text>
+        <rect x="361" y="321" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1</text>
+        <rect x="446" y="321" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="531" y="321" width="85" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1</text>
+        <rect x="616" y="321" width="145" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="761" y="321" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.500</text>
+        <rect x="896" y="321" width="135" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.667</text>
+        <rect x="1031" y="321" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="345" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">2</text>
+        <rect x="36" y="359" width="95" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="83.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">P014</text>
+        <rect x="131" y="359" width="230" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="246" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Malaria</text>
+        <rect x="361" y="359" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="403.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">2</text>
+        <rect x="446" y="359" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="488.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="531" y="359" width="85" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="573.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="616" y="359" width="145" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="688.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="761" y="359" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="828.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="896" y="359" width="135" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="963.5" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1.000</text>
+        <rect x="1031" y="359" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1091" y="383" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">2</text>
+</svg>

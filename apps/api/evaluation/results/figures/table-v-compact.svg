@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1300" height="281" viewBox="0 0 1300 281" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1300" height="281" fill="#ffffff"/>
+  <text x="650" y="32" text-anchor="middle" font-family="Times New Roman, serif" font-size="18" font-weight="700">Tabel V. Hasil Pengujian Inferensi Certainty Factor per Kategori</text>
+  
+      <rect x="36" y="55" width="170" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="121" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Kategori</text>
+      <rect x="206" y="55" width="170" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="291" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Skenario</text>
+      <rect x="376" y="55" width="120" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="436" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Jumlah</text>
+      <rect x="496" y="55" width="120" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="556" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Top-1</text>
+      <rect x="616" y="55" width="120" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="676" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Top-3</text>
+      <rect x="736" y="55" width="170" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="821" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Rata-rata CF</text>
+      <rect x="906" y="55" width="270" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="1041" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Top-1 Tidak Sesuai</text>
+        <rect x="36" y="93" width="170" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="121" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Typical</text>
+        <rect x="206" y="93" width="170" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="291" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">S01-S10</text>
+        <rect x="376" y="93" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="436" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">10</text>
+        <rect x="496" y="93" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="556" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">10/10</text>
+        <rect x="616" y="93" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="676" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">10/10</text>
+        <rect x="736" y="93" width="170" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.818</text>
+        <rect x="906" y="93" width="270" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1041" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">-</text>
+        <rect x="36" y="131" width="170" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="121" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Overlap</text>
+        <rect x="206" y="131" width="170" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="291" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">S11-S18</text>
+        <rect x="376" y="131" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="436" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">8</text>
+        <rect x="496" y="131" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="556" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">5/8</text>
+        <rect x="616" y="131" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="676" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">8/8</text>
+        <rect x="736" y="131" width="170" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.737</text>
+        <rect x="906" y="131" width="270" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1041" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">S15, S16, S18</text>
+        <rect x="36" y="169" width="170" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="121" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Red flag</text>
+        <rect x="206" y="169" width="170" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="291" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">S19-S24</text>
+        <rect x="376" y="169" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="436" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">6</text>
+        <rect x="496" y="169" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="556" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">6/6</text>
+        <rect x="616" y="169" width="120" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="676" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">6/6</text>
+        <rect x="736" y="169" width="170" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.840</text>
+        <rect x="906" y="169" width="270" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1041" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">-</text>
+        <rect x="36" y="207" width="170" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="121" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Edge case</text>
+        <rect x="206" y="207" width="170" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="291" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">S25-S27</text>
+        <rect x="376" y="207" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="436" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3</text>
+        <rect x="496" y="207" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="556" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3/3</text>
+        <rect x="616" y="207" width="120" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="676" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3/3</text>
+        <rect x="736" y="207" width="170" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.527</text>
+        <rect x="906" y="207" width="270" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="1041" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">-</text>
+</svg>

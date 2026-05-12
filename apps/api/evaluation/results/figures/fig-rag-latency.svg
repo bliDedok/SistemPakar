@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1100" height="281" viewBox="0 0 1100 281" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="281" fill="#ffffff"/>
+  <text x="550" y="32" text-anchor="middle" font-family="Times New Roman, serif" font-size="18" font-weight="700">Gambar X. Ringkasan Penggunaan RAG dan Latency</text>
+  
+      <rect x="36" y="55" width="330" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="201" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Aspek</text>
+      <rect x="366" y="55" width="220" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="476" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Nilai</text>
+      <rect x="586" y="55" width="440" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="806" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Keterangan</text>
+        <rect x="36" y="93" width="330" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="201" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">RAG LLM digunakan</text>
+        <rect x="366" y="93" width="220" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="476" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">26/30</text>
+        <rect x="586" y="93" width="440" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="806" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">86.7%</text>
+        <rect x="36" y="131" width="330" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="201" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Template fallback</text>
+        <rect x="366" y="131" width="220" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="476" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">1/30</text>
+        <rect x="586" y="131" width="440" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="806" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3.3%</text>
+        <rect x="36" y="169" width="330" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="201" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Tanpa source</text>
+        <rect x="366" y="169" width="220" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="476" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">3/30</text>
+        <rect x="586" y="169" width="440" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="806" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">10.0%</text>
+        <rect x="36" y="207" width="330" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="201" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Rata-rata latency</text>
+        <rect x="366" y="207" width="220" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="476" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">10.9 detik</text>
+        <rect x="586" y="207" width="440" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="806" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Dipengaruhi pemanggilan LLM/RAG</text>
+</svg>

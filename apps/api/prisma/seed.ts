@@ -564,6 +564,34 @@ const symptomAliases = [
   { aliasText: "panas tinggi", symptomCode: "G002" },
   { aliasText: "demam tinggi", symptomCode: "G002" },
 
+  // Alias tambahan untuk Dengue / DBD
+  { aliasText: "demam tinggi akut", symptomCode: "G002" },
+  { aliasText: "demam mendadak", symptomCode: "G002" },
+  { aliasText: "demam tinggi mendadak", symptomCode: "G002" },
+  { aliasText: "panas tinggi mendadak", symptomCode: "G002" },
+  { aliasText: "panas mendadak", symptomCode: "G002" },
+  { aliasText: "demam akut", symptomCode: "G002" },
+
+  { aliasText: "nyeri kepala", symptomCode: "G006" },
+  { aliasText: "kepala nyeri", symptomCode: "G006" },
+  { aliasText: "sakit kepala berat", symptomCode: "G006" },
+
+  { aliasText: "nyeri badan", symptomCode: "G007" },
+  { aliasText: "badan nyeri", symptomCode: "G007" },
+  { aliasText: "badan sakit", symptomCode: "G007" },
+  { aliasText: "badan sakit semua", symptomCode: "G007" },
+
+  { aliasText: "bintik merah", symptomCode: "G018" },
+  { aliasText: "muncul bintik merah", symptomCode: "G018" },
+  { aliasText: "bintik-bintik merah", symptomCode: "G018" },
+  { aliasText: "bintik merah pada kulit", symptomCode: "G018" },
+  { aliasText: "perdarahan ringan", symptomCode: "G018" },
+  { aliasText: "bintik perdarahan ringan", symptomCode: "G018" },
+  { aliasText: "muncul bintik perdarahan", symptomCode: "G018" },
+  { aliasText: "ruam merah perdarahan", symptomCode: "G018" },
+  { aliasText: "petechiae", symptomCode: "G018" },
+  { aliasText: "petekie", symptomCode: "G018" },
+
   { aliasText: "batuk-batuk", symptomCode: "G003" },
   { aliasText: "batuk terus", symptomCode: "G003" },
   { aliasText: "batuk parah", symptomCode: "G003" },
@@ -612,6 +640,18 @@ const symptomAliases = [
   { aliasText: "pingsan", symptomCode: "G044" },
   { aliasText: "tidak sadar", symptomCode: "G044" },
   { aliasText: "pucat dingin", symptomCode: "G046" },
+
+   // Alias tambahan untuk Malaria
+  { aliasText: "menggigil hebat", symptomCode: "G039" },
+  { aliasText: "badan menggigil", symptomCode: "G039" },
+  { aliasText: "demam menggigil", symptomCode: "G039" },
+  { aliasText: "demam naik turun", symptomCode: "G039" },
+  { aliasText: "demam hilang timbul", symptomCode: "G039" },
+  { aliasText: "demam periodik", symptomCode: "G039" },
+  { aliasText: "perjalanan ke daerah malaria", symptomCode: "G040" },
+  { aliasText: "dari daerah endemis malaria", symptomCode: "G040" },
+  { aliasText: "pernah ke papua", symptomCode: "G040" },
+  { aliasText: "tinggal di daerah malaria", symptomCode: "G040" },
 ] as const;
 
 const diseases = [
@@ -721,29 +761,29 @@ const rules = [
     ],
   },
   {
-    code: "R004",
-    name: "Aturan Dengue / DBD",
-    diseaseCode: "P004",
-    operator: RuleOperator.AND,
-    minMatch: 4,
-    priority: 12,
-    symptoms: [
-      { code: "G002", isMandatory: true },
-      { code: "G006", isMandatory: false },
-      { code: "G007", isMandatory: false },
-      { code: "G008", isMandatory: false },
-      { code: "G009", isMandatory: false },
-      { code: "G010", isMandatory: false },
-      { code: "G011", isMandatory: false },
-      { code: "G012", isMandatory: false },
-      { code: "G014", isMandatory: false },
-      { code: "G016", isMandatory: false },
-      { code: "G017", isMandatory: false },
-      { code: "G018", isMandatory: false },
-      { code: "G013", isMandatory: false },
-      { code: "G019", isMandatory: false },
-    ],
-  },
+  code: "R004",
+  name: "Aturan Dengue / DBD",
+  diseaseCode: "P004",
+  operator: RuleOperator.AND,
+  minMatch: 4,
+  priority: 13,
+  symptoms: [
+    { code: "G002", isMandatory: true },  // Demam tinggi akut
+    { code: "G006", isMandatory: false }, // Sakit kepala
+    { code: "G007", isMandatory: false }, // Nyeri otot
+    { code: "G008", isMandatory: false }, // Nyeri sendi
+    { code: "G009", isMandatory: false }, // Nyeri belakang mata
+    { code: "G010", isMandatory: false }, // Ruam
+    { code: "G011", isMandatory: false }, // Mual
+    { code: "G012", isMandatory: false }, // Muntah
+    { code: "G014", isMandatory: false }, // Nyeri perut
+    { code: "G016", isMandatory: false }, // Mimisan
+    { code: "G017", isMandatory: false }, // Gusi berdarah
+    { code: "G018", isMandatory: false }, // Mudah memar / bintik perdarahan
+    { code: "G013", isMandatory: false }, // Muntah persisten
+    { code: "G019", isMandatory: false }, // Letih berat
+  ],
+},
   {
     code: "R005",
     name: "Aturan Acute Gastroenteritis with Dehydration",
@@ -807,22 +847,22 @@ const rules = [
     ],
   },
   {
-    code: "R014",
-    name: "Aturan Malaria",
-    diseaseCode: "P014",
-    operator: RuleOperator.AND,
-    minMatch: 3,
-    priority: 11,
-    symptoms: [
-      { code: "G001", isMandatory: true },
-      { code: "G039", isMandatory: false },
-      { code: "G006", isMandatory: false },
-      { code: "G007", isMandatory: false },
-      { code: "G025", isMandatory: false },
-      { code: "G040", isMandatory: false },
-      { code: "G041", isMandatory: false },
-    ],
-  },
+  code: "R014",
+  name: "Aturan Malaria",
+  diseaseCode: "P014",
+  operator: RuleOperator.AND,
+  minMatch: 3,
+  priority: 9,
+  symptoms: [
+    { code: "G001", isMandatory: true },  // Demam
+    { code: "G039", isMandatory: true },  // Menggigil wajib
+    { code: "G006", isMandatory: false }, // Sakit kepala
+    { code: "G007", isMandatory: false }, // Nyeri otot
+    { code: "G025", isMandatory: false }, // Diare
+    { code: "G040", isMandatory: false }, // Riwayat perjalanan endemis
+    { code: "G041", isMandatory: false }, // Kulit/mata kuning
+  ],
+},
 ] as const;
 
 const weights = [
@@ -860,7 +900,7 @@ const weights = [
   { diseaseCode: "P004", symptomCode: "G014", cfExpert: 0.85, candidateCfMin: 0.80, candidateCfMax: 0.95, symptomRole: SymptomRole.WARNING_SIGN, phase: "critical_preceding", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Abdominal pain warning sign" },
   { diseaseCode: "P004", symptomCode: "G016", cfExpert: 0.85, candidateCfMin: 0.80, candidateCfMax: 0.90, symptomRole: SymptomRole.WARNING_SIGN, phase: "critical_preceding", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Mimisan" },
   { diseaseCode: "P004", symptomCode: "G017", cfExpert: 0.85, candidateCfMin: 0.80, candidateCfMax: 0.90, symptomRole: SymptomRole.WARNING_SIGN, phase: "critical_preceding", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Gusi berdarah" },
-  { diseaseCode: "P004", symptomCode: "G018", cfExpert: 0.70, candidateCfMin: 0.45, candidateCfMax: 0.65, symptomRole: SymptomRole.SUPPORTING, phase: "febrile", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Minor bleeding" },
+  { diseaseCode: "P004", symptomCode: "G018", cfExpert: 0.85, candidateCfMin: 0.75, candidateCfMax: 0.90, symptomRole: SymptomRole.WARNING_SIGN, phase: "critical_preceding", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Minor bleeding / petechiae / bintik perdarahan" },
   { diseaseCode: "P004", symptomCode: "G013", cfExpert: 0.90, candidateCfMin: 0.85, candidateCfMax: 0.95, symptomRole: SymptomRole.WARNING_SIGN, phase: "critical_preceding", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Persistent vomiting" },
   { diseaseCode: "P004", symptomCode: "G019", cfExpert: 0.90, candidateCfMin: 0.80, candidateCfMax: 0.95, symptomRole: SymptomRole.WARNING_SIGN, phase: "critical_preceding", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/S0140-6736(23)02576-X", note: "Lethargy" },
 
@@ -895,13 +935,13 @@ const weights = [
   { diseaseCode: "P013", symptomCode: "G037", cfExpert: 0.30, candidateCfMin: 0.25, candidateCfMax: 0.40, symptomRole: SymptomRole.SUPPORTING, phase: "acute", keepStatus: KeepStatus.KEEP_OPTIONAL, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1186/s13052-024-01588-y", note: "Infants can be nonspecific" },
 
   // P014 Malaria
-  { diseaseCode: "P014", symptomCode: "G001", cfExpert: 0.90, candidateCfMin: 0.85, candidateCfMax: 0.95, symptomRole: SymptomRole.CORE, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: null },
-  { diseaseCode: "P014", symptomCode: "G039", cfExpert: 0.70, candidateCfMin: 0.60, candidateCfMax: 0.75, symptomRole: SymptomRole.CORE, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: null },
-  { diseaseCode: "P014", symptomCode: "G006", cfExpert: 0.60, candidateCfMin: 0.50, candidateCfMax: 0.65, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: null },
-  { diseaseCode: "P014", symptomCode: "G007", cfExpert: 0.50, candidateCfMin: 0.40, candidateCfMax: 0.55, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: null },
-  { diseaseCode: "P014", symptomCode: "G025", cfExpert: 0.35, candidateCfMin: 0.25, candidateCfMax: 0.40, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Diarrhoea can occur in children" },
-  { diseaseCode: "P014", symptomCode: "G040", cfExpert: 0.90, candidateCfMin: null, candidateCfMax: null, symptomRole: SymptomRole.CONTEXT_ONLY, phase: "exposure_context", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Essential travel context" },
-  { diseaseCode: "P014", symptomCode: "G041", cfExpert: 0.45, candidateCfMin: 0.35, candidateCfMax: 0.50, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP_OPTIONAL, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Can contribute to misdiagnosis" },
+{ diseaseCode: "P014", symptomCode: "G001", cfExpert: 0.75, candidateCfMin: 0.65, candidateCfMax: 0.85, symptomRole: SymptomRole.CORE, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Fever is common but non-specific" },
+{ diseaseCode: "P014", symptomCode: "G039", cfExpert: 0.85, candidateCfMin: 0.75, candidateCfMax: 0.90, symptomRole: SymptomRole.CORE, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Chills strengthen malaria suspicion" },
+{ diseaseCode: "P014", symptomCode: "G006", cfExpert: 0.45, candidateCfMin: 0.35, candidateCfMax: 0.55, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Non-specific headache" },
+{ diseaseCode: "P014", symptomCode: "G007", cfExpert: 0.40, candidateCfMin: 0.30, candidateCfMax: 0.50, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Non-specific myalgia" },
+{ diseaseCode: "P014", symptomCode: "G025", cfExpert: 0.30, candidateCfMin: 0.20, candidateCfMax: 0.35, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Diarrhoea can occur in children but is non-specific" },
+{ diseaseCode: "P014", symptomCode: "G040", cfExpert: 0.95, candidateCfMin: null, candidateCfMax: null, symptomRole: SymptomRole.CONTEXT_ONLY, phase: "exposure_context", keepStatus: KeepStatus.KEEP, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Essential travel or endemic exposure context" },
+{ diseaseCode: "P014", symptomCode: "G041", cfExpert: 0.45, candidateCfMin: 0.35, candidateCfMax: 0.50, symptomRole: SymptomRole.SUPPORTING, phase: "acute_presentation", keepStatus: KeepStatus.KEEP_OPTIONAL, urgencyMode: UrgencyMode.ORDINARY, evidenceDoi: "10.1016/j.clinme.2024.100258", note: "Can occur in severe malaria" },
 ] as const;
 
 async function main() {

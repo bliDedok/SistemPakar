@@ -1,0 +1,3666 @@
+{
+  "metadata": {
+    "title": "Test Scenarios — Hybrid Expert System Penyakit Anak (CF + RAG)",
+    "version": "1.0",
+    "totalScenarios": 30,
+    "categories": {
+      "typical": "Skenario gejala khas, satu penyakit dominan (S01-S10)",
+      "overlap": "Skenario gejala tumpang tindih, uji top-3 (S11-S18)",
+      "redflag": "Skenario red flag / emergency, uji urgency engine (S19-S24)",
+      "edge": "Skenario sulit / gejala minim / keyakinan rendah (S25-S27)",
+      "out_of_context": "Skenario di luar scope, uji refusal chatbot (S28-S30)"
+    },
+    "userCfScale": {
+      "0": "Tidak — gejala tidak dialami",
+      "0.2": "Kurang yakin — mungkin ada, belum jelas",
+      "0.4": "Sedikit yakin — terlihat ringan",
+      "0.6": "Cukup yakin — cukup terasa",
+      "0.8": "Yakin — jelas terlihat",
+      "1.0": "Sangat yakin — sangat jelas dan kuat"
+    },
+    "evaluationMetrics": [
+      "Top-1 Accuracy",
+      "Top-3 Accuracy",
+      "Macro Precision / Recall / F1",
+      "Urgency Classification Accuracy",
+      "Red Flag Detection Recall",
+      "Refusal Appropriateness (out-of-context)"
+    ],
+    "diseaseCatalog": {
+      "P001": "Enterobiasis (cacing kremi)",
+      "P003": "Influenza",
+      "P004": "Dengue / DBD",
+      "P005": "Acute Gastroenteritis",
+      "P006": "Pneumonia (CAP)",
+      "P010": "Roseola Infantum",
+      "P013": "Otitis Media Akut",
+      "P014": "Malaria"
+    },
+    "ruleConstraints": {
+      "P001": {
+        "mandatory": [
+          "G033"
+        ],
+        "minMatch": 2
+      },
+      "P003": {
+        "mandatory": [
+          "G001",
+          "G003"
+        ],
+        "minMatch": 3
+      },
+      "P004": {
+        "mandatory": [
+          "G002"
+        ],
+        "minMatch": 4
+      },
+      "P005": {
+        "mandatory": [
+          "G025"
+        ],
+        "minMatch": 2
+      },
+      "P006": {
+        "mandatory": [
+          "G003"
+        ],
+        "minMatch": 3
+      },
+      "P010": {
+        "mandatory": [
+          "G029",
+          "G030"
+        ],
+        "minMatch": 2
+      },
+      "P013": {
+        "mandatory": [
+          "G027"
+        ],
+        "minMatch": 2
+      },
+      "P014": {
+        "mandatory": [
+          "G001"
+        ],
+        "minMatch": 3
+      }
+    },
+    "emergencyCodes": [
+      "G044",
+      "G045",
+      "G046"
+    ],
+    "redFlagCodes": [
+      "G013",
+      "G015",
+      "G016",
+      "G017",
+      "G018",
+      "G019",
+      "G021",
+      "G022",
+      "G023",
+      "G024",
+      "G032",
+      "G041",
+      "G044",
+      "G045",
+      "G046"
+    ]
+  },
+  "aggregate": {
+    "totalScenarios": 30,
+    "diagnosticScenarios": 27,
+    "oocScenarios": 3,
+    "topOneAccuracy": 0.889,
+    "topThreeAccuracy": 1,
+    "topThreeCoverage": 0.988,
+    "urgencyAccuracy": 0.296,
+    "redFlagRecallMacro": 1,
+    "refusalAppropriateness": 1,
+    "macroPrecision": 0.938,
+    "macroRecall": 0.888,
+    "macroF1": 0.898,
+    "avgLatencyMs": 10922,
+    "errorCount": 0
+  },
+  "perDisease": [
+    {
+      "disease": "P001",
+      "truePositive": 2,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 2
+    },
+    {
+      "disease": "P003",
+      "truePositive": 6,
+      "falsePositive": 2,
+      "falseNegative": 1,
+      "precision": 0.75,
+      "recall": 0.857,
+      "f1": 0.8,
+      "support": 7
+    },
+    {
+      "disease": "P004",
+      "truePositive": 3,
+      "falsePositive": 1,
+      "falseNegative": 0,
+      "precision": 0.75,
+      "recall": 1,
+      "f1": 0.857,
+      "support": 3
+    },
+    {
+      "disease": "P005",
+      "truePositive": 3,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 3
+    },
+    {
+      "disease": "P006",
+      "truePositive": 3,
+      "falsePositive": 0,
+      "falseNegative": 1,
+      "precision": 1,
+      "recall": 0.75,
+      "f1": 0.857,
+      "support": 4
+    },
+    {
+      "disease": "P010",
+      "truePositive": 3,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 3
+    },
+    {
+      "disease": "P013",
+      "truePositive": 1,
+      "falsePositive": 0,
+      "falseNegative": 1,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.667,
+      "support": 2
+    },
+    {
+      "disease": "P014",
+      "truePositive": 2,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 2
+    }
+  ],
+  "results": [
+    {
+      "scenarioId": "S01",
+      "category": "typical",
+      "name": "Pneumonia klasik dengan distres napas",
+      "durationMs": 9940,
+      "apiTopOne": "P006",
+      "apiTopOneCf": 0.8687,
+      "apiTopThree": [
+        "P006"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [
+        "Napas cepat",
+        "Sulit bernapas"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P006",
+      "expectedTopThreeAll": [
+        "P006"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Sulit bernapas",
+        "Napas cepat"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow80j9o0000ylcwao0avm8a",
+          "redFlags": [
+            "Napas cepat",
+            "Sulit bernapas"
+          ],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Diagnosis teratas (Pneumonia / CAP) memiliki tingkat keparahan kritis.",
+              "Napas cepat",
+              "Sulit bernapas"
+            ],
+            "action": "Segera bawa anak ke fasilitas kesehatan untuk pemeriksaan langsung oleh tenaga medis."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan data gejala yang Anda masukkan untuk Aldi (36 bulan), sistem mendeteksi kecenderungan ke arah Pneumonia / CAP dengan tingkat keyakinan sebesar 86.87%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena Aldi menunjukkan empat gejala utama yang berkaitan dengan kondisi tersebut, yaitu batuk, demam, sulit bernapas, dan napas cepat.",
+            "evidenceBasedExplanation": "Menurut pedoman WHO, pneumonia pada anak sering dicurigai jika terdapat keluhan batuk atau sulit bernapas, baik disertai demam maupun tidak. Tanda-tanda yang perlu diwaspadai secara khusus adalah napas cepat dan adanya tarikan pada dinding dada bagian bawah saat anak bernapas.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai Darurat (EMERGENCY). Tingkat keparahan yang kritis serta adanya gejala seperti napas cepat dan sulit bernapas menunjukkan perlunya perhatian medis segera untuk mencegah komplikasi lebih lanjut.",
+            "nextStep": "Segera bawa Aldi ke fasilitas kesehatan terdekat untuk pemeriksaan langsung oleh dokter atau tenaga medis profesional. Jangan menunda kunjungan ke rumah sakit jika ia tampak sesak atau terlihat sangat lemas.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pneumonia signs in children",
+                "sourceName": "WHO",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.8239
+              },
+              {
+                "title": "Pneumonia signs in children - Sulit bernapas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.763
+              },
+              {
+                "title": "Pneumonia signs in children - Sesak napas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7607
+              },
+              {
+                "title": "Pneumonia signs in children - Napas cepat",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7592
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.756
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P006",
+              "diseaseName": "Pneumonia / CAP",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9897,
+              "rawPercentage": 98.97,
+              "cfResult": 0.8687,
+              "percentage": 86.87,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Batuk",
+                "Demam",
+                "Sulit bernapas",
+                "Napas cepat"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila anak bernapas cepat, sesak, atau tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S02",
+      "category": "typical",
+      "name": "DBD klasik fase febris",
+      "durationMs": 20736,
+      "apiTopOne": "P004",
+      "apiTopOneCf": 0.776,
+      "apiTopThree": [
+        "P004"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P004",
+      "expectedTopThreeAll": [
+        "P004"
+      ],
+      "expectedUrgency": "MEDIUM",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow80ze40006ylcw5rbxjm0m",
+          "redFlags": [],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Diagnosis teratas (Dengue / DBD) memiliki tingkat keparahan kritis."
+            ],
+            "action": "Segera bawa anak ke fasilitas kesehatan untuk pemeriksaan langsung oleh tenaga medis."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Maya (84 bulan), sistem mendeteksi kemungkinan adanya kondisi Dengue / DBD dengan tingkat kecocokan sebesar 77.6%.",
+            "whyThisDiagnosis": "Hasil ini muncul karena Maya menunjukkan gejala yang sesuai dengan pola penyakit tersebut, yaitu demam tinggi akut, sakit kepala, nyeri di belakang mata, mual, dan muntah.",
+            "evidenceBasedExplanation": "Menurut panduan kesehatan (WHO & CDC), gejala-gejala yang dialami Maya perlu diwaspadai karena penyakit ini dapat berkembang menjadi kondisi berat. Penting untuk memantau apakah muncul tanda bahaya seperti nyeri perut yang hebat, muntah terus-menerus (persisten), atau tanda perdarahan seperti mimisan dan gusi berdarah, yang merupakan peringatan dini untuk segera mendapatkan penanganan medis.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai Darurat karena diagnosis Dengue / DBD memiliki tingkat keparahan yang bersifat kritis bagi anak.",
+            "nextStep": "Mohon segera bawa Maya ke fasilitas kesehatan terdekat (puskesmas, klinik, atau rumah sakit) untuk pemeriksaan langsung oleh tenaga medis. Jangan menunda pemeriksaan jika anak tampak sangat lemas, terlihat pucat, atau menunjukkan tanda bahaya lainnya.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Dengue warning signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7483
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Sakit kepala",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7183
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Muntah",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.709
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Sakit kepala",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7081
+              },
+              {
+                "title": "Dengue warning signs - Muntah persisten",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.6912
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P004",
+              "diseaseName": "Dengue / DBD",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9821,
+              "rawPercentage": 98.21,
+              "cfResult": 0.776,
+              "percentage": 77.6,
+              "matchCount": 5,
+              "supportingSymptoms": [
+                "Demam tinggi akut",
+                "Sakit kepala",
+                "Nyeri belakang mata",
+                "Mual",
+                "Muntah"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila ada mimisan, gusi berdarah, muntah persisten, nyeri perut berat, atau anak tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S03",
+      "category": "typical",
+      "name": "Influenza klasik pada anak sekolah",
+      "durationMs": 9476,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.9047,
+      "apiTopThree": [
+        "P003"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow816tg000dylcww4odkpi4",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Influenza) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan data gejala yang dialami Rizki, sistem mengidentifikasi kemungkinan kondisi Influenza dengan tingkat kecocokan sebesar 90,47%. Harap diingat bahwa ini bukan diagnosis medis final, melainkan hasil analisis sistem berdasarkan gejala yang dilaporkan.",
+            "whyThisDiagnosis": "Hasil analisis mengarah pada Influenza karena ditemukannya 6 gejala pendukung pada Rizki, yaitu demam, batuk, pilek, sakit tenggorokan, sakit kepala, dan nyeri otot. Gejala-gejala tersebut secara medis umum ditemukan pada kasus Influenza anak.",
+            "evidenceBasedExplanation": "Menurut pedoman CDC, Influenza pada anak memang sering kali memicu munculnya kombinasi gejala seperti demam, batuk, pilek, sakit tenggorokan, nyeri tubuh (nyeri otot), dan sakit kepala. Gejala yang dialami Rizki sangat sejalan dengan pola klinis tersebut.",
+            "urgencyExplanation": "Tingkat urgensi saat ini berada pada level 'Perlu pemantauan'. Ini berarti kondisi Rizki saat ini dikategorikan sedang. Penting bagi orang tua untuk terus mengawasi kondisi anak secara berkala.",
+            "nextStep": "Langkah yang disarankan adalah memastikan Rizki mendapatkan istirahat yang cukup dan asupan cairan yang memadai. Segera konsultasikan ke dokter atau fasilitas kesehatan terdekat apabila kondisi anak tidak menunjukkan perbaikan, atau jika muncul tanda bahaya seperti anak tampak sesak napas, sangat lemas, atau tidak mau minum.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7761
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Pilek",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7153
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Nyeri otot",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.714
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7133
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Sakit tenggorokan",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7097
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9955,
+              "rawPercentage": 99.55,
+              "cfResult": 0.9047,
+              "percentage": 90.47,
+              "matchCount": 6,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek",
+                "Sakit tenggorokan",
+                "Sakit kepala",
+                "Nyeri otot"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S04",
+      "category": "typical",
+      "name": "Gastroenteritis akut tanpa dehidrasi",
+      "durationMs": 23286,
+      "apiTopOne": "P005",
+      "apiTopOneCf": 0.7861,
+      "apiTopThree": [
+        "P005"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P005",
+      "expectedTopThreeAll": [
+        "P005"
+      ],
+      "expectedUrgency": "MEDIUM",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow81owp000lylcw331ec10c",
+          "redFlags": [],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Diagnosis teratas (Acute Gastroenteritis with Dehydration) memiliki tingkat risiko tinggi."
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami oleh Sari (24 bulan), sistem mendeteksi kemungkinan Acute Gastroenteritis with Dehydration dengan tingkat keyakinan 78.61%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena Sari menunjukkan gejala yang berkaitan dengan kondisi tersebut, yaitu diare, muntah, mual, dan nyeri perut.",
+            "evidenceBasedExplanation": "Menurut pedoman medis dari WHO dan CDC, diare akut pada anak dapat menyebabkan hilangnya cairan dan elektrolit tubuh. Risiko utamanya adalah dehidrasi, terutama ketika diare disertai dengan gejala seperti muntah, mual, dan nyeri perut. Penting untuk memantau asupan cairan anak karena kehilangan cairan yang berlebihan memerlukan perhatian medis khusus.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai prioritas tinggi karena Acute Gastroenteritis with Dehydration memiliki tingkat risiko yang signifikan bagi anak. Kewaspadaan diperlukan untuk mencegah terjadinya dehidrasi berat.",
+            "nextStep": "Anda disarankan untuk memberikan cairan atau oralit kepada Sari. Segera periksakan anak ke dokter atau fasilitas kesehatan terdekat jika anak tidak mau minum, terus-menerus muntah, atau tampak mengalami tanda-tanda dehidrasi serta jika gejala menetap atau memburuk.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Acute diarrhea and dehydration risk",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7887
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Mual",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7187
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Nyeri perut",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7151
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Muntah",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7142
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Tidak mau minum",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7042
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P005",
+              "diseaseName": "Acute Gastroenteritis with Dehydration",
+              "severityLevel": "high",
+              "rawCfResult": 0.9775,
+              "rawPercentage": 97.75,
+              "cfResult": 0.7861,
+              "percentage": 78.61,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Diare",
+                "Muntah",
+                "Mual",
+                "Nyeri perut"
+              ],
+              "advice": "Berikan cairan/oralit dan segera periksa bila anak tidak mau minum, muntah terus, atau tampak dehidrasi."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S05",
+      "category": "typical",
+      "name": "Enterobiasis dengan tanda khas",
+      "durationMs": 9574,
+      "apiTopOne": "P001",
+      "apiTopOneCf": 0.9169,
+      "apiTopThree": [
+        "P001"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P001",
+      "expectedTopThreeAll": [
+        "P001"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow81wep000rylcwygflbuaa",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Threadworm / Enterobiasis) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan data gejala yang dilaporkan untuk Doni, sistem mengidentifikasi kemungkinan kondisi yang dialami adalah Threadworm atau Enterobiasis dengan tingkat kecocokan sebesar 91,69%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena Doni menunjukkan gejala yang sesuai dengan karakteristik infeksi cacing kremi, yaitu adanya gatal di sekitar anus, rasa gatal yang meningkat pada malam hari, ditemukan cacing di sekitar area anus atau pakaian tidur, serta adanya gangguan tidur.",
+            "evidenceBasedExplanation": "Menurut pedoman dari CDC, infeksi ini umum terjadi pada anak-anak. Gejala khasnya mencakup rasa gatal di sekitar anus terutama saat malam hari karena cacing sering keluar pada waktu tersebut. Cacing tersebut terkadang dapat terlihat pada area anus atau pakaian tidur beberapa jam setelah anak tertidur.",
+            "urgencyExplanation": "Kondisi Doni saat ini berada pada tingkat 'Perlu pemantauan' (Medium). Hal ini dikarenakan diagnosis mengarah pada infeksi yang memerlukan perhatian agar tidak mengganggu aktivitas dan kesehatan anak lebih lanjut.",
+            "nextStep": "Mohon pantau kondisi Doni, pastikan ia mendapatkan istirahat yang cukup, dan penuhi kebutuhan cairannya. Sangat disarankan untuk menjaga kebersihan tangan, kuku, sprei, dan pakaian secara rutin. Diskusikan dengan dokter mengenai kemungkinan pengobatan bagi seluruh anggota keluarga untuk memastikan penanganan yang tepat.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pinworm infection symptoms",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.8456
+              },
+              {
+                "title": "Pinworm infection symptoms - Gatal pada malam hari",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.8382
+              },
+              {
+                "title": "Pinworm infection symptoms - Cacing terlihat di area anus / pakaian tidur",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.8309
+              },
+              {
+                "title": "Pinworm infection symptoms - Gatal di sekitar anus",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.8303
+              },
+              {
+                "title": "Pinworm infection symptoms - Gangguan tidur",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.8293
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P001",
+              "diseaseName": "Threadworm / Enterobiasis",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9976,
+              "rawPercentage": 99.76,
+              "cfResult": 0.9169,
+              "percentage": 91.69,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Gatal di sekitar anus",
+                "Gatal pada malam hari",
+                "Cacing terlihat di area anus / pakaian tidur",
+                "Gangguan tidur"
+              ],
+              "advice": "Jaga kebersihan tangan, kuku, sprei, dan pakaian. Konsultasikan pengobatan seluruh anggota rumah bila perlu."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S06",
+      "category": "typical",
+      "name": "Roseola dengan pola signature",
+      "durationMs": 18797,
+      "apiTopOne": "P010",
+      "apiTopOneCf": 0.92,
+      "apiTopThree": [
+        "P010"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P010",
+      "expectedTopThreeAll": [
+        "P010"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow82b17000xylcww5sl3qmq",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Roseola infantum) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami oleh Aira, sistem mengidentifikasi kemungkinan kondisi Roseola infantum dengan tingkat kecocokan 92%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena Aira menunjukkan gejala yang sesuai dengan pola klinis Roseola infantum, yaitu adanya demam tinggi selama 3-4 hari yang diikuti dengan munculnya ruam setelah demam turun, di mana ruam tersebut mulai muncul di area badan atau trunk.",
+            "evidenceBasedExplanation": "Roseola merupakan kondisi yang umum terjadi pada bayi dan anak kecil. Menurut referensi klinis, pola khasnya memang berupa demam tinggi selama beberapa hari yang kemudian diikuti oleh munculnya ruam saat suhu tubuh mulai turun. Selain gejala tersebut, anak mungkin juga mengalami rewel atau penurunan nafsu makan.",
+            "urgencyExplanation": "Kondisi ini masuk dalam kategori keparahan sedang (medium), sehingga perlu pemantauan aktif terhadap perkembangan gejala Aira.",
+            "nextStep": "Mohon pantau suhu tubuh Aira secara berkala, pastikan kebutuhan cairannya tercukupi, dan berikan waktu istirahat yang cukup. Segera konsultasikan ke dokter apabila gejala tidak kunjung membaik atau jika muncul tanda bahaya seperti kejang, anak terlihat sangat lemas, atau mengalami kesulitan minum.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Roseola fever and rash pattern",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "clinical_reference",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.8159
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam mulai di badan / trunk",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7968
+              },
+              {
+                "title": "Roseola fever and rash pattern - Demam tinggi 3-4 hari",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7784
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7707
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam muncul saat demam turun",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7693
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P010",
+              "diseaseName": "Roseola infantum",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9989,
+              "rawPercentage": 99.89,
+              "cfResult": 0.92,
+              "percentage": 92,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam tinggi 3-4 hari",
+                "Ruam muncul saat demam turun",
+                "Ruam",
+                "Ruam mulai di badan / trunk"
+              ],
+              "advice": "Pantau suhu tubuh, cukupkan cairan, dan periksa bila anak kejang, sangat lemas, atau sulit minum."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S07",
+      "category": "typical",
+      "name": "Otitis Media Akut pada balita",
+      "durationMs": 11320,
+      "apiTopOne": "P013",
+      "apiTopOneCf": 0.6837,
+      "apiTopThree": [
+        "P013"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P013",
+      "expectedTopThreeAll": [
+        "P013"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow82jvq0013ylcwxw5ti0bt",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Acute Otitis Media (AOM)) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan data gejala yang dimasukkan, kondisi Lia (30 bulan) terdeteksi memiliki kemungkinan 68.37% mengarah pada Acute Otitis Media (AOM).",
+            "whyThisDiagnosis": "Hasil ini diperoleh dari kecocokan 4 gejala yang dialami Lia, yaitu nyeri telinga, telinga keluar cairan, demam, dan iritabilitas/rewel. Gejala-gejala tersebut secara sistematis dianalisis menggunakan metode Certainty Factor yang menunjukkan adanya keterkaitan dengan penyakit AOM.",
+            "evidenceBasedExplanation": "Menurut referensi klinis (AAP/NCBI), Otitis media akut pada anak memang umum ditandai dengan nyeri telinga. Pada anak usia balita, gejalanya sering muncul berupa rewel, demam, dan cairan yang keluar dari telinga, yang mana gejala-gejala ini telah sesuai dengan laporan kondisi Lia.",
+            "urgencyExplanation": "Tingkat urgensi saat ini adalah 'Perlu pemantauan' (Medium). Hal ini dikarenakan diagnosis Acute Otitis Media (AOM) berada pada tingkat keparahan sedang, sehingga memerlukan perhatian agar kondisi tidak berkembang menjadi lebih serius.",
+            "nextStep": "Mohon pantau kondisi Lia dengan baik, pastikan kebutuhan cairan terpenuhi, dan berikan waktu istirahat yang cukup. Segera periksakan ke dokter jika nyeri telinga terasa berat, demam tinggi, cairan telinga terus keluar, atau gejala tidak menunjukkan perbaikan.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Acute otitis media symptoms",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "clinical_reference",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.8104
+              },
+              {
+                "title": "Acute otitis media symptoms - Iritabilitas / rewel",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7854
+              },
+              {
+                "title": "Acute otitis media symptoms - Demam",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7798
+              },
+              {
+                "title": "Acute otitis media symptoms - Telinga keluar cairan",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7795
+              },
+              {
+                "title": "Acute otitis media symptoms - Nyeri telinga",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7751
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P013",
+              "diseaseName": "Acute Otitis Media (AOM)",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9523,
+              "rawPercentage": 95.23,
+              "cfResult": 0.6837,
+              "percentage": 68.37,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Nyeri telinga",
+                "Telinga keluar cairan",
+                "Demam",
+                "Iritabilitas / rewel"
+              ],
+              "advice": "Periksakan ke dokter bila nyeri telinga berat, demam tinggi, atau cairan telinga terus keluar."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S08",
+      "category": "typical",
+      "name": "Malaria dengan riwayat endemis",
+      "durationMs": 13876,
+      "apiTopOne": "P014",
+      "apiTopOneCf": 0.7628,
+      "apiTopThree": [
+        "P014"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P014",
+      "expectedTopThreeAll": [
+        "P014"
+      ],
+      "expectedUrgency": "MEDIUM",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow82uph0019ylcwf9uyir4w",
+          "redFlags": [],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Diagnosis teratas (Malaria) memiliki tingkat risiko tinggi."
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan, sistem mengidentifikasi kemungkinan Malaria pada Bayu dengan tingkat keyakinan 76,28%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena adanya kecocokan antara kondisi Bayu dengan gejala klinis malaria, yaitu demam, menggigil, sakit kepala, dan nyeri otot.",
+            "evidenceBasedExplanation": "Menurut panduan kesehatan dari WHO dan CDC, malaria memang umum ditandai dengan demam, menggigil, sakit kepala, dan nyeri otot. Riwayat bepergian ke daerah endemis malaria menjadi faktor yang sangat penting untuk diperhatikan dalam mendukung kecurigaan terhadap kondisi ini.",
+            "urgencyExplanation": "Kondisi ini masuk dalam kategori prioritas tinggi karena malaria memiliki tingkat risiko kesehatan yang serius jika tidak ditangani dengan tepat oleh tenaga medis.",
+            "nextStep": "Sangat disarankan untuk segera membawa Bayu ke dokter atau fasilitas kesehatan terdekat agar dapat dilakukan pemeriksaan lebih lanjut dan tindakan medis yang diperlukan, terutama jika ada riwayat perjalanan ke daerah endemis malaria.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Malaria symptoms and severe signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7657
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Nyeri otot",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7164
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Demam",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.716
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Menggigil",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7148
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Riwayat perjalanan ke area endemis malaria",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.712
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P014",
+              "diseaseName": "Malaria",
+              "severityLevel": "high",
+              "rawCfResult": 0.9556,
+              "rawPercentage": 95.56,
+              "cfResult": 0.7628,
+              "percentage": 76.28,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam",
+                "Menggigil",
+                "Sakit kepala",
+                "Nyeri otot"
+              ],
+              "advice": "Segera periksa ke fasilitas kesehatan, terutama bila ada riwayat perjalanan ke daerah endemis malaria."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S09",
+      "category": "typical",
+      "name": "Pneumonia ringan tanpa distres",
+      "durationMs": 6704,
+      "apiTopOne": "P006",
+      "apiTopOneCf": 0.7502,
+      "apiTopThree": [
+        "P006"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [
+        "Napas cepat"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P006",
+      "expectedTopThreeAll": [
+        "P006"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Napas cepat"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow82zzt001gylcw3ud7o4vb",
+          "redFlags": [
+            "Napas cepat"
+          ],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Diagnosis teratas (Pneumonia / CAP) memiliki tingkat keparahan kritis.",
+              "Napas cepat"
+            ],
+            "action": "Segera bawa anak ke fasilitas kesehatan untuk pemeriksaan langsung oleh tenaga medis."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan data gejala yang dimasukkan, sistem mendeteksi kemungkinan adanya kondisi Pneumonia / CAP pada Tina (usia 48 bulan) dengan tingkat keyakinan 75.02%. Harap diingat bahwa hasil ini adalah analisis awal sistem dan bukan merupakan diagnosis medis yang pasti.",
+            "whyThisDiagnosis": "Analisis ini didapatkan dari pencocokan gejala yang dilaporkan, yaitu adanya batuk, demam, dan napas cepat. Gejala-gejala tersebut merupakan indikator klinis yang sering dikaitkan dengan Pneumonia pada anak sesuai dengan panduan kesehatan.",
+            "evidenceBasedExplanation": "Menurut panduan dari WHO, Pneumonia pada anak sering dicurigai jika ditemukan keluhan batuk atau kesulitan bernapas, baik disertai demam maupun tidak. Gejala napas cepat yang dialami Tina merupakan salah satu tanda penting yang perlu diwaspadai karena berpotensi menunjukkan adanya gangguan pada saluran pernapasan.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai Darurat (Emergency). Alasan utamanya adalah adanya gejala napas cepat dan tingkat keparahan yang diklasifikasikan sebagai kritis dalam analisis sistem. Sangat penting bagi orang tua untuk segera bertindak.",
+            "nextStep": "Segera bawa Tina ke fasilitas kesehatan terdekat (puskesmas, dokter, atau rumah sakit) untuk dilakukan pemeriksaan fisik langsung oleh tenaga medis guna mendapatkan diagnosis yang akurat dan penanganan yang tepat.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pneumonia signs in children",
+                "sourceName": "WHO",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.8254
+              },
+              {
+                "title": "Pneumonia signs in children - Napas cepat",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7747
+              },
+              {
+                "title": "Pneumonia signs in children - Sesak napas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.764
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7637
+              },
+              {
+                "title": "Pneumonia signs in children - Batuk",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7614
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P006",
+              "diseaseName": "Pneumonia / CAP",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9586,
+              "rawPercentage": 95.86,
+              "cfResult": 0.7502,
+              "percentage": 75.02,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Batuk",
+                "Demam",
+                "Napas cepat"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila anak bernapas cepat, sesak, atau tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S10",
+      "category": "typical",
+      "name": "Influenza dengan keluhan GI ringan",
+      "durationMs": 8041,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.806,
+      "apiTopThree": [
+        "P003",
+        "P005"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003",
+        "P005"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow836ba001lylcwztd9vsaq",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Influenza) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Rama (84 bulan), sistem mendeteksi kemungkinan Influenza dengan tingkat kecocokan 80.6%. Terdapat juga indikasi lain yang perlu diperhatikan terkait Acute Gastroenteritis with Dehydration sebesar 37.34%.",
+            "whyThisDiagnosis": "Diagnosis Influenza diberikan karena adanya 6 gejala yang cocok, yaitu demam, batuk, pilek, nyeri otot, muntah, dan diare. Gejala-gejala ini sesuai dengan pola klinis yang sering muncul pada kasus Influenza, di mana selain gejala pernapasan, sebagian anak juga bisa mengalami keluhan pencernaan seperti muntah dan diare.",
+            "evidenceBasedExplanation": "Menurut pedoman CDC, Influenza pada anak dapat menyebabkan demam, batuk, pilek, dan nyeri tubuh. Selain itu, muntah dan diare juga dilaporkan dapat terjadi pada sebagian kasus Influenza. Sistem kami menganalisis gejala ini dan mencocokkannya dengan basis data yang tersedia.",
+            "urgencyExplanation": "Kondisi Rama saat ini berada pada tingkat keparahan 'Medium' (Perlu pemantauan). Hal ini dikarenakan diagnosis Influenza yang terdeteksi berada pada kategori sedang. Penting untuk terus mengawasi kondisi anak agar tidak berkembang menjadi lebih buruk.",
+            "nextStep": "Langkah yang disarankan adalah memastikan Rama beristirahat dengan cukup dan kebutuhan cairannya terpenuhi. Segera lakukan pemeriksaan ke dokter jika Rama mengalami sesak napas, tampak sangat lemas, muntah terus-menerus, menunjukkan tanda dehidrasi, atau jika gejala tidak membaik.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7821
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7595
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Muntah",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.74
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Diare",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7324
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7323
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9634,
+              "rawPercentage": 96.34,
+              "cfResult": 0.806,
+              "percentage": 80.6,
+              "matchCount": 6,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek",
+                "Nyeri otot",
+                "Muntah",
+                "Diare"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            },
+            {
+              "diseaseCode": "P005",
+              "diseaseName": "Acute Gastroenteritis with Dehydration",
+              "severityLevel": "high",
+              "rawCfResult": 0.5392,
+              "rawPercentage": 53.92,
+              "cfResult": 0.3734,
+              "percentage": 37.34,
+              "matchCount": 2,
+              "supportingSymptoms": [
+                "Diare",
+                "Muntah"
+              ],
+              "advice": "Berikan cairan/oralit dan segera periksa bila anak tidak mau minum, muntah terus, atau tampak dehidrasi."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S11",
+      "category": "overlap",
+      "name": "Demam batuk pilek standar (Influenza dominan)",
+      "durationMs": 8176,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.802,
+      "apiTopThree": [
+        "P003"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow83cqr001uylcwgj1qnrl3",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Influenza) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Anto, yaitu demam, batuk, dan pilek, sistem memberikan indikasi awal mengarah pada kondisi Influenza dengan tingkat keyakinan 80,2%.",
+            "whyThisDiagnosis": "Analisis sistem mendeteksi adanya kecocokan gejala (demam, batuk, dan pilek) yang umum terjadi pada kasus Influenza. Angka 80,2% menunjukkan tingkat probabilitas berdasarkan aturan sistem pakar yang digunakan.",
+            "evidenceBasedExplanation": "Menurut pedoman CDC, Influenza pada anak memang sering kali ditandai dengan demam, batuk, dan pilek. Selain itu, anak juga bisa merasakan kelelahan, nyeri tubuh, atau sakit tenggorokan. Penjelasan ini terbatas pada data sistem dan bukti klinis yang tersedia mengenai gejala-gejala tersebut.",
+            "urgencyExplanation": "Kondisi Anto dikategorikan dalam tingkat 'Perlu pemantauan' (Medium) karena diagnosis Influenza berada pada tingkat keparahan sedang. Penting untuk tetap waspada terhadap perkembangan gejala lebih lanjut.",
+            "nextStep": "Pastikan Anto mendapatkan istirahat yang cukup dan kebutuhan cairannya terpenuhi. Segera konsultasikan ke dokter apabila kondisi tidak membaik, atau jika muncul tanda bahaya seperti napas cepat, sulit bernapas, anak tampak sangat lemas, atau tidak mau minum.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7557
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Pilek",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7002
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.6991
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Batuk",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.693
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.681
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9549,
+              "rawPercentage": 95.49,
+              "cfResult": 0.802,
+              "percentage": 80.2,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S12",
+      "category": "overlap",
+      "name": "DBD vs Roseola (demam tinggi + ruam)",
+      "durationMs": 21866,
+      "apiTopOne": "P010",
+      "apiTopOneCf": 0.8044,
+      "apiTopThree": [
+        "P010",
+        "P004"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P010",
+      "expectedTopThreeAll": [
+        "P010",
+        "P004"
+      ],
+      "expectedUrgency": "MEDIUM",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow83tq9001zylcwsq2idw8f",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Roseola infantum) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Lala, sistem menunjukkan kemungkinan kondisi Roseola infantum dengan tingkat kemiripan sebesar 80.44%.",
+            "whyThisDiagnosis": "Hasil ini didapatkan karena Lala menunjukkan gejala khas Roseola infantum, yaitu demam tinggi yang berlangsung selama 3-4 hari, diikuti dengan munculnya ruam tepat ketika demam mulai turun.",
+            "evidenceBasedExplanation": "Menurut literatur klinis (Mayo Clinic), pola Roseola infantum pada anak kecil memang diawali dengan demam tinggi selama beberapa hari. Ruam yang muncul setelah demam turun merupakan tanda yang selaras dengan gejala yang Anda laporkan. Selain itu, terdapat kemungkinan lain seperti Dengue/DBD dengan tingkat kemiripan 61.81% yang perlu diwaspadai karena adanya gejala mual dan muntah.",
+            "urgencyExplanation": "Kondisi ini saat ini berada pada tingkat 'Perlu pemantauan'. Meskipun tingkat keparahan Roseola infantum tergolong sedang, adanya potensi diagnosis alternatif yang lebih serius (Dengue/DBD) membuat pemantauan ketat terhadap kondisi fisik Lala sangat penting.",
+            "nextStep": "Pantau suhu tubuh Lala secara berkala dan pastikan kebutuhan cairannya tercukupi. Segera bawa ke fasilitas kesehatan atau dokter jika muncul tanda bahaya seperti kejang, anak tampak sangat lemas, sulit minum, atau muncul tanda perdarahan seperti gusi berdarah atau mimisan.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Roseola fever and rash pattern",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "clinical_reference",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7993
+              },
+              {
+                "title": "Roseola fever and rash pattern - Demam tinggi 3-4 hari",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7831
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7635
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam muncul saat demam turun",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7604
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam mulai di badan / trunk",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7593
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P010",
+              "diseaseName": "Roseola infantum",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9567,
+              "rawPercentage": 95.67,
+              "cfResult": 0.8044,
+              "percentage": 80.44,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam tinggi 3-4 hari",
+                "Ruam muncul saat demam turun",
+                "Ruam"
+              ],
+              "advice": "Pantau suhu tubuh, cukupkan cairan, dan periksa bila anak kejang, sangat lemas, atau sulit minum."
+            },
+            {
+              "diseaseCode": "P004",
+              "diseaseName": "Dengue / DBD",
+              "severityLevel": "critical",
+              "rawCfResult": 0.8796,
+              "rawPercentage": 87.96,
+              "cfResult": 0.6181,
+              "percentage": 61.81,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam tinggi akut",
+                "Ruam",
+                "Mual",
+                "Muntah"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila ada mimisan, gusi berdarah, muntah persisten, nyeri perut berat, atau anak tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S13",
+      "category": "overlap",
+      "name": "Demam menggigil tanpa endemis (Influenza vs Malaria)",
+      "durationMs": 5852,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.7853,
+      "apiTopThree": [
+        "P003",
+        "P014"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003",
+        "P014"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow83ycx0028ylcw2do3wgov",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Influenza) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan, Adi (7 tahun) kemungkinan besar mengalami Influenza dengan tingkat kepercayaan sistem sebesar 78,53%. Selain itu, terdapat kemungkinan lain yaitu Malaria dengan tingkat kepercayaan 46,65%.",
+            "whyThisDiagnosis": "Hasil analisis sistem menunjukkan kecocokan gejala untuk Influenza, yaitu demam, batuk, pilek, sakit kepala, dan nyeri otot. Gejala-gejala tersebut didukung oleh data sistem yang mencocokkan keluhan Adi dengan profil klinis Influenza pada anak.",
+            "evidenceBasedExplanation": "Menurut pedoman kesehatan (CDC), Influenza pada anak memang sering kali disertai demam, batuk, pilek, dan nyeri otot. Sementara itu, Malaria juga dapat memicu gejala seperti demam dan nyeri otot, namun biasanya memiliki konteks riwayat perjalanan ke daerah endemis. Karena adanya kemiripan gejala awal, pemantauan ketat terhadap kondisi Adi tetap diperlukan.",
+            "urgencyExplanation": "Urgensi untuk kondisi Adi berada pada tingkat 'Perlu pemantauan'. Hal ini karena diagnosis Influenza memiliki tingkat keparahan sedang. Tidak ada red flag atau tanda bahaya kritis yang ditemukan saat ini, namun status ini dapat berubah jika kondisi anak menurun.",
+            "nextStep": "Pastikan Adi mendapatkan istirahat yang cukup dan asupan cairan yang memadai. Segera bawa Adi ke fasilitas kesehatan jika ia mulai menunjukkan tanda-tanda sesak napas, sangat lemas, tidak mau minum, atau gejala tidak kunjung membaik.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Malaria symptoms and severe signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7508
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7435
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Nyeri otot",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7108
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Pilek",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7015
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.701
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9573,
+              "rawPercentage": 95.73,
+              "cfResult": 0.7853,
+              "percentage": 78.53,
+              "matchCount": 5,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek",
+                "Sakit kepala",
+                "Nyeri otot"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            },
+            {
+              "diseaseCode": "P014",
+              "diseaseName": "Malaria",
+              "severityLevel": "high",
+              "rawCfResult": 0.929,
+              "rawPercentage": 92.9,
+              "cfResult": 0.4665,
+              "percentage": 46.65,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam",
+                "Menggigil",
+                "Sakit kepala",
+                "Nyeri otot"
+              ],
+              "advice": "Segera periksa ke fasilitas kesehatan, terutama bila ada riwayat perjalanan ke daerah endemis malaria."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S14",
+      "category": "overlap",
+      "name": "Diare muntah demam tinggi (Gastro vs DBD)",
+      "durationMs": 10513,
+      "apiTopOne": "P005",
+      "apiTopOneCf": 0.7861,
+      "apiTopThree": [
+        "P005",
+        "P004"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P005",
+      "expectedTopThreeAll": [
+        "P005",
+        "P004"
+      ],
+      "expectedUrgency": "MEDIUM",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow846l6002hylcwg8yizevf",
+          "redFlags": [],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Diagnosis teratas (Acute Gastroenteritis with Dehydration) memiliki tingkat risiko tinggi."
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Bagas, sistem mendeteksi kemungkinan Acute Gastroenteritis with Dehydration dengan tingkat kecocokan 78.61%. Selain itu, terdapat kemungkinan lain berupa Dengue / DBD dengan tingkat kecocokan 66.1%. Harap diingat bahwa ini bukan diagnosis pasti.",
+            "whyThisDiagnosis": "Hasil ini muncul karena Bagas menunjukkan gejala seperti diare, muntah, mual, dan nyeri perut yang merupakan indikator utama dari Acute Gastroenteritis with Dehydration. Adanya kemiripan gejala dengan kondisi Dengue / DBD, seperti mual, muntah, dan nyeri perut, membuat sistem tetap memberikan peringatan kewaspadaan.",
+            "evidenceBasedExplanation": "Menurut panduan kesehatan, diare akut pada anak berisiko menyebabkan hilangnya cairan dan elektrolit tubuh. Risiko utamanya adalah dehidrasi, terutama jika anak juga mengalami muntah dan penurunan asupan cairan. Sementara itu, untuk kemungkinan Dengue, perlu diwaspadai tanda-tanda seperti nyeri perut hebat, muntah terus-menerus, atau kondisi anak yang tampak sangat lemas.",
+            "urgencyExplanation": "Kondisi ini masuk dalam kategori prioritas tinggi. Urgensi ini diberikan karena Acute Gastroenteritis with Dehydration memiliki risiko dehidrasi yang memerlukan perhatian medis segera, terutama jika kondisi anak memburuk.",
+            "nextStep": "Anda disarankan untuk memberikan cairan atau oralit kepada Bagas. Segera bawa anak ke dokter atau fasilitas kesehatan jika ia menolak minum, muntah terus-menerus, tampak dehidrasi, muncul perdarahan (seperti mimisan atau gusi berdarah), atau kondisi anak terlihat semakin lemas.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Acute diarrhea and dehydration risk",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7785
+              },
+              {
+                "title": "Dengue warning signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7517
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Mual",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.727
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Muntah",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7241
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Nyeri perut",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.719
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P005",
+              "diseaseName": "Acute Gastroenteritis with Dehydration",
+              "severityLevel": "high",
+              "rawCfResult": 0.9775,
+              "rawPercentage": 97.75,
+              "cfResult": 0.7861,
+              "percentage": 78.61,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Diare",
+                "Muntah",
+                "Mual",
+                "Nyeri perut"
+              ],
+              "advice": "Berikan cairan/oralit dan segera periksa bila anak tidak mau minum, muntah terus, atau tampak dehidrasi."
+            },
+            {
+              "diseaseCode": "P004",
+              "diseaseName": "Dengue / DBD",
+              "severityLevel": "critical",
+              "rawCfResult": 0.8972,
+              "rawPercentage": 89.72,
+              "cfResult": 0.661,
+              "percentage": 66.1,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam tinggi akut",
+                "Mual",
+                "Muntah",
+                "Nyeri perut"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila ada mimisan, gusi berdarah, muntah persisten, nyeri perut berat, atau anak tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S15",
+      "category": "overlap",
+      "name": "Otitis Media vs Influenza (demam + nyeri telinga)",
+      "durationMs": 6146,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.6444,
+      "apiTopThree": [
+        "P003",
+        "P013"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P013",
+      "expectedTopThreeAll": [
+        "P013",
+        "P003"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 0,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow84bg1002pylcwaipqikld",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Influenza) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Eka, sistem menunjukkan kemungkinan kondisi Influenza dengan tingkat kecocokan 64.44%. Selain itu, terdapat kemungkinan kondisi lain yaitu Acute Otitis Media (AOM) dengan tingkat kecocokan 52.53%.",
+            "whyThisDiagnosis": "Analisis sistem mengarah pada Influenza karena ditemukannya kombinasi gejala demam, batuk, dan pilek. Sementara itu, kemungkinan Acute Otitis Media (AOM) dipertimbangkan karena adanya gejala nyeri telinga, demam, dan iritabilitas atau rewel yang dilaporkan.",
+            "evidenceBasedExplanation": "Menurut pedoman kesehatan (CDC), influenza pada anak umumnya ditandai dengan demam, batuk, dan pilek. Di sisi lain, sesuai dengan referensi klinis (AAP/NCBI), otitis media akut atau infeksi telinga tengah pada anak sering kali ditandai dengan nyeri telinga, demam, serta perilaku rewel atau iritabilitas.",
+            "urgencyExplanation": "Kondisi ini dikategorikan dalam tingkat 'Perlu pemantauan' (Medium) karena diagnosis Influenza berada pada tingkat keparahan sedang. Tidak ditemukan tanda bahaya (red flags) yang mendesak saat ini, namun pemantauan terhadap perubahan gejala sangat diperlukan.",
+            "nextStep": "Langkah yang disarankan adalah memastikan Eka mendapatkan istirahat yang cukup dan asupan cairan yang memadai. Segera periksa ke dokter jika gejala tidak membaik, Eka tampak sesak, sangat lemas, tidak mau minum, atau jika nyeri telinga dan rewel semakin memberat.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Acute otitis media symptoms",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "clinical_reference",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7543
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7524
+              },
+              {
+                "title": "Acute otitis media symptoms - Iritabilitas / rewel",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7142
+              },
+              {
+                "title": "Acute otitis media symptoms - Demam",
+                "sourceName": "AAP / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK470332/",
+                "evidenceDoi": null,
+                "score": 0.7105
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7021
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.8479,
+              "rawPercentage": 84.79,
+              "cfResult": 0.6444,
+              "percentage": 64.44,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            },
+            {
+              "diseaseCode": "P013",
+              "diseaseName": "Acute Otitis Media (AOM)",
+              "severityLevel": "medium",
+              "rawCfResult": 0.8085,
+              "rawPercentage": 80.85,
+              "cfResult": 0.5253,
+              "percentage": 52.53,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Nyeri telinga",
+                "Demam",
+                "Iritabilitas / rewel"
+              ],
+              "advice": "Periksakan ke dokter bila nyeri telinga berat, demam tinggi, atau cairan telinga terus keluar."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S16",
+      "category": "overlap",
+      "name": "Pneumonia vs Influenza fase awal",
+      "durationMs": 11377,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.7736,
+      "apiTopThree": [
+        "P003",
+        "P006"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [
+        "Napas cepat"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P006",
+      "expectedTopThreeAll": [
+        "P006",
+        "P003"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Napas cepat"
+      ],
+      "topOneCorrect": 0,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow84kcb002xylcw9eo21201",
+          "redFlags": [
+            "Napas cepat"
+          ],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Napas cepat"
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Faza, sistem mendeteksi kecenderungan ke arah Influenza dengan tingkat kepercayaan 77.36%. Selain itu, terdapat temuan lain yang perlu diwaspadai yaitu Pneumonia / CAP dengan tingkat kepercayaan 68.86%.",
+            "whyThisDiagnosis": "Analisis sistem menunjukkan gejala batuk, demam, dan pilek yang dialami Faza mendukung diagnosis Influenza. Namun, adanya keluhan napas cepat membuat sistem juga mempertimbangkan kemungkinan Pneumonia / CAP yang memerlukan perhatian serius.",
+            "evidenceBasedExplanation": "Menurut pedoman kesehatan (WHO & CDC), Influenza pada anak ditandai dengan demam, batuk, dan pilek. Sementara itu, napas cepat pada anak merupakan tanda penting yang sering dikaitkan dengan risiko Pneumonia, yang memerlukan pemeriksaan lebih lanjut guna memastikan kondisi kesehatan pernapasan anak.",
+            "urgencyExplanation": "Kondisi Faza dikategorikan sebagai prioritas tinggi karena ditemukannya gejala 'napas cepat'. Napas cepat merupakan tanda bahaya yang harus segera mendapatkan evaluasi medis untuk memastikan tidak ada gangguan pada paru-paru.",
+            "nextStep": "Mengingat adanya gejala napas cepat, sangat disarankan agar Faza segera dibawa ke dokter atau fasilitas kesehatan terdekat untuk pemeriksaan fisik langsung agar mendapatkan penanganan yang tepat dan cepat.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pneumonia signs in children",
+                "sourceName": "WHO",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.8226
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7909
+              },
+              {
+                "title": "Pneumonia signs in children - Napas cepat",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7705
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7617
+              },
+              {
+                "title": "Pneumonia signs in children - Sesak napas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7584
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9406,
+              "rawPercentage": 94.06,
+              "cfResult": 0.7736,
+              "percentage": 77.36,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            },
+            {
+              "diseaseCode": "P006",
+              "diseaseName": "Pneumonia / CAP",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9117,
+              "rawPercentage": 91.17,
+              "cfResult": 0.6886,
+              "percentage": 68.86,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Batuk",
+                "Demam",
+                "Napas cepat"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila anak bernapas cepat, sesak, atau tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S17",
+      "category": "overlap",
+      "name": "Enterobiasis vs Gastroenteritis (nyeri perut + gatal anus)",
+      "durationMs": 25341,
+      "apiTopOne": "P001",
+      "apiTopOneCf": 0.6668,
+      "apiTopThree": [
+        "P001",
+        "P005"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P001",
+      "expectedTopThreeAll": [
+        "P001",
+        "P005"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow8540f0034ylcwyyjkgtxl",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Threadworm / Enterobiasis) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan untuk Dini, sistem mengidentifikasi kemungkinan adanya Threadworm / Enterobiasis dengan tingkat kecocokan 66.68%.",
+            "whyThisDiagnosis": "Analisis sistem menunjukkan adanya kecocokan dengan gejala yang Anda sampaikan, yaitu gatal di sekitar anus, gatal yang meningkat pada malam hari, serta nyeri perut.",
+            "evidenceBasedExplanation": "Menurut data CDC, infeksi pinworm (cacing kremi) sering terjadi pada anak-anak. Gejala khasnya memang berupa gatal di area sekitar anus, terutama saat malam hari. Dalam beberapa kasus, cacing terkadang dapat terlihat di sekitar anus atau pada pakaian tidur beberapa jam setelah anak tertidur.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai tingkat keparahan sedang (medium). Status urgensi saat ini adalah 'Perlu pemantauan' karena diagnosis utama yang terdeteksi membutuhkan perhatian terhadap kebersihan untuk mencegah penyebaran.",
+            "nextStep": "Jaga kebersihan tangan, kuku, sprei, dan pakaian Dini. Pertimbangkan untuk berkonsultasi dengan dokter mengenai kemungkinan pengobatan bagi seluruh anggota keluarga di rumah. Selain itu, pantau kondisi anak, pastikan ia cukup cairan dan beristirahat, serta segera periksa ke dokter jika gejala tidak membaik atau muncul keluhan baru seperti diare yang berisiko menyebabkan dehidrasi.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pinworm infection symptoms",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.7625
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7484
+              },
+              {
+                "title": "Pinworm infection symptoms - Gatal pada malam hari",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.7399
+              },
+              {
+                "title": "Pinworm infection symptoms - Gatal di sekitar anus",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.7389
+              },
+              {
+                "title": "Pinworm infection symptoms - Iritabilitas / rewel",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/pinworm/about/index.html",
+                "evidenceDoi": null,
+                "score": 0.734
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P001",
+              "diseaseName": "Threadworm / Enterobiasis",
+              "severityLevel": "medium",
+              "rawCfResult": 0.8875,
+              "rawPercentage": 88.75,
+              "cfResult": 0.6668,
+              "percentage": 66.68,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Gatal di sekitar anus",
+                "Gatal pada malam hari",
+                "Nyeri perut"
+              ],
+              "advice": "Jaga kebersihan tangan, kuku, sprei, dan pakaian. Konsultasikan pengobatan seluruh anggota rumah bila perlu."
+            },
+            {
+              "diseaseCode": "P005",
+              "diseaseName": "Acute Gastroenteritis with Dehydration",
+              "severityLevel": "high",
+              "rawCfResult": 0.552,
+              "rawPercentage": 55.2,
+              "cfResult": 0.3144,
+              "percentage": 31.44,
+              "matchCount": 2,
+              "supportingSymptoms": [
+                "Diare",
+                "Nyeri perut"
+              ],
+              "advice": "Berikan cairan/oralit dan segera periksa bila anak tidak mau minum, muntah terus, atau tampak dehidrasi."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S18",
+      "category": "overlap",
+      "name": "Demam-sakit kepala-nyeri otot (3-way overlap)",
+      "durationMs": 10656,
+      "apiTopOne": "P004",
+      "apiTopOneCf": 0.6346,
+      "apiTopThree": [
+        "P004",
+        "P003"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003",
+        "P004",
+        "P014"
+      ],
+      "expectedUrgency": "MEDIUM",
+      "expectedRedFlags": [],
+      "topOneCorrect": 0,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 0.667,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow85cci003bylcwe1ri6zkf",
+          "redFlags": [],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Diagnosis teratas (Dengue / DBD) memiliki tingkat keparahan kritis."
+            ],
+            "action": "Segera bawa anak ke fasilitas kesehatan untuk pemeriksaan langsung oleh tenaga medis."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Bram (6 tahun), sistem menemukan kemungkinan kondisi yang memerlukan perhatian medis segera.",
+            "whyThisDiagnosis": "Hasil analisis mengidentifikasi Dengue / DBD (tingkat keparahan kritis) dengan tingkat keyakinan 63,46% berdasarkan gejala demam tinggi akut, sakit kepala, nyeri otot, dan mual. Selain itu, terdapat kemungkinan Influenza (tingkat keparahan menengah) dengan tingkat keyakinan 62,11% berdasarkan gejala demam, batuk, sakit kepala, dan nyeri otot.",
+            "evidenceBasedExplanation": "Gejala yang dilaporkan Bram sesuai dengan indikasi medis yang tercatat dalam panduan kesehatan. Menurut WHO dan CDC, Dengue memiliki tanda bahaya yang perlu diwaspadai seperti nyeri perut berat, muntah persisten, serta perdarahan gusi atau hidung. Influenza juga dapat menyebabkan demam dan nyeri tubuh, namun harus segera dipantau jika anak menunjukkan napas cepat atau tampak sangat lemas.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai Darurat karena diagnosis teratas (Dengue / DBD) memiliki tingkat keparahan yang bersifat kritis. Penjelasan ini terbatas pada data sistem dan tidak menggantikan pemeriksaan fisik langsung.",
+            "nextStep": "Segera bawa Bram ke fasilitas kesehatan (dokter, puskesmas, atau RS) untuk mendapatkan pemeriksaan medis langsung. Segera cari pertolongan jika muncul mimisan, gusi berdarah, muntah terus-menerus, nyeri perut hebat, atau anak terlihat sangat lemas.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7749
+              },
+              {
+                "title": "Dengue warning signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7344
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Nyeri otot",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7287
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7257
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Demam",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7222
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P004",
+              "diseaseName": "Dengue / DBD",
+              "severityLevel": "critical",
+              "rawCfResult": 0.921,
+              "rawPercentage": 92.1,
+              "cfResult": 0.6346,
+              "percentage": 63.46,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam tinggi akut",
+                "Sakit kepala",
+                "Nyeri otot",
+                "Mual"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila ada mimisan, gusi berdarah, muntah persisten, nyeri perut berat, atau anak tampak sangat lemas."
+            },
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.8913,
+              "rawPercentage": 89.13,
+              "cfResult": 0.6211,
+              "percentage": 62.11,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Sakit kepala",
+                "Nyeri otot"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S19",
+      "category": "redflag",
+      "name": "Pneumonia berat dengan sesak napas",
+      "durationMs": 2446,
+      "apiTopOne": "P006",
+      "apiTopOneCf": 0.8858,
+      "apiTopThree": [
+        "P006"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [
+        "Napas cepat",
+        "Sesak napas",
+        "Sulit bernapas"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P006",
+      "expectedTopThreeAll": [
+        "P006"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Sesak napas",
+        "Sulit bernapas",
+        "Napas cepat"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow85ecy003kylcw7yhv9vr5",
+          "redFlags": [
+            "Napas cepat",
+            "Sesak napas",
+            "Sulit bernapas"
+          ],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Diagnosis teratas (Pneumonia / CAP) memiliki tingkat keparahan kritis.",
+              "Napas cepat",
+              "Sesak napas",
+              "Sulit bernapas"
+            ],
+            "action": "Segera bawa anak ke fasilitas kesehatan untuk pemeriksaan langsung oleh tenaga medis."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan, sistem mengidentifikasi kondisi Hafiz (18 bulan) yang mengarah pada Pneumonia / CAP dengan tingkat kecocokan 88.58%.",
+            "whyThisDiagnosis": "Analisis sistem menunjukkan adanya 4 gejala pendukung yaitu batuk, demam, sulit bernapas, dan napas cepat yang secara klinis sering dikaitkan dengan Pneumonia / CAP.",
+            "evidenceBasedExplanation": "Menurut pedoman WHO, pada anak-anak, kecurigaan terhadap pneumonia sering muncul bila ditemukan batuk atau sulit bernapas, baik disertai demam maupun tidak. Tanda-tanda penting seperti napas cepat dan sesak napas merupakan indikator yang perlu mendapatkan perhatian serius.",
+            "urgencyExplanation": "Kondisi Hafiz dikategorikan sebagai Darurat (Emergency) karena adanya indikator bahaya (red flags) berupa napas cepat, sesak napas, dan sulit bernapas, yang dikategorikan dalam tingkat keparahan kritis.",
+            "nextStep": "Segera bawa Hafiz ke fasilitas kesehatan terdekat (puskesmas, klinik, atau rumah sakit) untuk dilakukan pemeriksaan langsung oleh tenaga medis guna mendapatkan penanganan yang tepat.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pneumonia signs in children",
+                "sourceName": "WHO",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.8187
+              },
+              {
+                "title": "Pneumonia signs in children - Sulit bernapas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7551
+              },
+              {
+                "title": "Pneumonia signs in children - Sesak napas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7547
+              },
+              {
+                "title": "Pneumonia signs in children - Napas cepat",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7515
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7488
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P006",
+              "diseaseName": "Pneumonia / CAP",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9919,
+              "rawPercentage": 99.19,
+              "cfResult": 0.8858,
+              "percentage": 88.58,
+              "matchCount": 4,
+              "supportingSymptoms": [
+                "Batuk",
+                "Demam",
+                "Sulit bernapas",
+                "Napas cepat"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila anak bernapas cepat, sesak, atau tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S20",
+      "category": "redflag",
+      "name": "DBD dengan tanda perdarahan (warning signs)",
+      "durationMs": 13582,
+      "apiTopOne": "P004",
+      "apiTopOneCf": 0.9219,
+      "apiTopThree": [
+        "P004"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [
+        "Muntah persisten",
+        "Mimisan",
+        "Gusi berdarah",
+        "Letih berat / sangat lemas"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P004",
+      "expectedTopThreeAll": [
+        "P004"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Muntah persisten",
+        "Mimisan",
+        "Gusi berdarah",
+        "Letih berat / sangat lemas"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow85oy5003rylcwiivfkr00",
+          "redFlags": [
+            "Muntah persisten",
+            "Mimisan",
+            "Gusi berdarah",
+            "Letih berat / sangat lemas"
+          ],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Diagnosis teratas (Dengue / DBD) memiliki tingkat keparahan kritis.",
+              "Muntah persisten",
+              "Mimisan",
+              "Gusi berdarah",
+              "Letih berat / sangat lemas"
+            ],
+            "action": "Segera bawa anak ke fasilitas kesehatan untuk pemeriksaan langsung oleh tenaga medis."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan, hasil analisis sistem mengarahkan pada kemungkinan Dengue / DBD dengan tingkat persentase sebesar 92,19%. Kondisi ini dikategorikan sebagai kondisi kritis yang memerlukan perhatian medis segera.",
+            "whyThisDiagnosis": "Analisis ini didasarkan pada adanya 6 gejala utama yang ditemukan pada Indra, yaitu demam tinggi akut, nyeri perut, mimisan, gusi berdarah, muntah persisten, serta kondisi letih berat atau sangat lemas.",
+            "evidenceBasedExplanation": "Menurut pedoman kesehatan dari WHO dan CDC, gejala-gejala yang dialami Indra seperti nyeri perut berat, muntah terus-menerus, perdarahan pada gusi atau hidung (mimisan), serta kondisi sangat lemas merupakan tanda bahaya (warning signs) dari Dengue. Kondisi tersebut menunjukkan bahwa penyakit berisiko berkembang menjadi lebih berat dan memerlukan evaluasi medis secara langsung.",
+            "urgencyExplanation": "Status anak saat ini adalah Darurat (Emergency). Alasan utamanya adalah tingkat keparahan yang diklasifikasikan sebagai kritis, serta adanya tanda-tanda bahaya seperti muntah persisten, mimisan, gusi berdarah, dan kondisi fisik yang sangat lemas yang membutuhkan penanganan medis segera.",
+            "nextStep": "Segera bawa Indra ke fasilitas kesehatan terdekat (rumah sakit atau puskesmas) untuk mendapatkan pemeriksaan langsung oleh tenaga medis profesional. Jangan menunda untuk mencari pertolongan medis.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Dengue warning signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.8239
+              },
+              {
+                "title": "Dengue warning signs - Gusi berdarah",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7912
+              },
+              {
+                "title": "Dengue warning signs - Letih berat / sangat lemas",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7902
+              },
+              {
+                "title": "Dengue warning signs - Mimisan",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7896
+              },
+              {
+                "title": "Dengue warning signs - Mudah memar / bintik perdarahan",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7853
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P004",
+              "diseaseName": "Dengue / DBD",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9994,
+              "rawPercentage": 99.94,
+              "cfResult": 0.9219,
+              "percentage": 92.19,
+              "matchCount": 6,
+              "supportingSymptoms": [
+                "Demam tinggi akut",
+                "Nyeri perut",
+                "Mimisan",
+                "Gusi berdarah",
+                "Muntah persisten",
+                "Letih berat / sangat lemas"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila ada mimisan, gusi berdarah, muntah persisten, nyeri perut berat, atau anak tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S21",
+      "category": "redflag",
+      "name": "Malaria berat dengan kejang",
+      "durationMs": 12948,
+      "apiTopOne": "P014",
+      "apiTopOneCf": 0.714,
+      "apiTopThree": [
+        "P014"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [
+        "Kejang"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P014",
+      "expectedTopThreeAll": [
+        "P014"
+      ],
+      "expectedUrgency": "EMERGENCY",
+      "expectedRedFlags": [
+        "Kejang"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow85z29003zylcwoehvexwk",
+          "redFlags": [
+            "Kejang"
+          ],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Kejang",
+              "Terdapat gejala darurat seperti gangguan kesadaran, kejang, atau tanda syok."
+            ],
+            "action": "Segera bawa anak ke IGD atau fasilitas kesehatan terdekat. Jangan menunggu gejala membaik sendiri."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan, sistem mendeteksi kecenderungan penyakit Malaria pada Joni (usia 60 bulan) dengan tingkat keyakinan sistem sebesar 71,4%.",
+            "whyThisDiagnosis": "Analisis sistem mengaitkan gejala demam dan menggigil yang dialami Joni dengan pola gejala malaria. Penting untuk diingat bahwa hasil ini bukan diagnosis pasti dan memerlukan pemeriksaan medis lebih lanjut oleh dokter.",
+            "evidenceBasedExplanation": "Menurut data WHO dan CDC, malaria memang umum ditandai dengan demam dan menggigil. Gejala lain yang sering menyertai dapat berupa sakit kepala, kelelahan, atau nyeri otot. Riwayat perjalanan ke daerah endemis malaria merupakan informasi pendukung yang sangat penting bagi dokter dalam menentukan diagnosis.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai DARURAT karena ditemukan tanda bahaya (red flag) berupa kejang. Kejang merupakan gejala berat yang memerlukan penanganan medis segera untuk mencegah komplikasi lebih lanjut.",
+            "nextStep": "Segera bawa Joni ke IGD atau fasilitas kesehatan terdekat sekarang juga. Jangan menunggu gejala membaik dengan sendirinya. Sampaikan kepada tenaga medis mengenai gejala demam, menggigil, dan kejang yang dialami anak, serta informasikan jika ada riwayat perjalanan ke daerah endemis.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Malaria symptoms and severe signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7494
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Kejang",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7143
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Menggigil",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7088
+              },
+              {
+                "title": "Malaria symptoms and severe signs - Demam",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/malaria/symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7082
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7023
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P014",
+              "diseaseName": "Malaria",
+              "severityLevel": "high",
+              "rawCfResult": 0.92,
+              "rawPercentage": 92,
+              "cfResult": 0.714,
+              "percentage": 71.4,
+              "matchCount": 2,
+              "supportingSymptoms": [
+                "Demam",
+                "Menggigil"
+              ],
+              "advice": "Segera periksa ke fasilitas kesehatan, terutama bila ada riwayat perjalanan ke daerah endemis malaria."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S22",
+      "category": "redflag",
+      "name": "Roseola dengan kejang demam (G032 vs G045)",
+      "durationMs": 7003,
+      "apiTopOne": "P010",
+      "apiTopOneCf": 0.8774,
+      "apiTopThree": [
+        "P010"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [
+        "Kejang demam"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P010",
+      "expectedTopThreeAll": [
+        "P010"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Kejang demam"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow864l20045ylcwqebfxhqy",
+          "redFlags": [
+            "Kejang demam"
+          ],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Kejang demam"
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dialami Aira (usia 9 bulan), sistem menganalisis kemungkinan kondisi yang disebut Roseola infantum dengan tingkat keyakinan 87.74%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena Aira menunjukkan gejala yang sesuai dengan pola klinis Roseola infantum, yaitu adanya demam tinggi selama 3-4 hari yang diikuti dengan munculnya ruam setelah demam mulai turun.",
+            "evidenceBasedExplanation": "Menurut referensi klinis, Roseola umumnya terjadi pada bayi dan anak kecil. Pola khasnya memang dimulai dengan demam tinggi selama beberapa hari, kemudian muncul ruam saat demam mulai turun. Sebagian anak dengan kondisi ini juga dapat mengalami rewel, penurunan nafsu makan, hingga kejang demam.",
+            "urgencyExplanation": "Kondisi ini masuk dalam kategori prioritas tinggi karena ditemukannya gejala kejang demam. Kejang demam merupakan tanda yang memerlukan perhatian medis profesional untuk memastikan keamanan dan kondisi kesehatan anak.",
+            "nextStep": "Sangat disarankan agar Aira segera diperiksakan ke dokter atau fasilitas kesehatan terdekat untuk mendapatkan pemeriksaan langsung, terutama karena adanya riwayat kejang demam. Sembari menunggu, pastikan Aira mendapatkan asupan cairan yang cukup dan terus pantau suhu tubuhnya.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Roseola fever and rash pattern",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "clinical_reference",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.8342
+              },
+              {
+                "title": "Roseola fever and rash pattern - Demam tinggi 3-4 hari",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.8111
+              },
+              {
+                "title": "Roseola fever and rash pattern - Kejang demam",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.8084
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.8009
+              },
+              {
+                "title": "Roseola fever and rash pattern - Ruam muncul saat demam turun",
+                "sourceName": "Mayo Clinic / NCBI",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.ncbi.nlm.nih.gov/books/NBK448190/",
+                "evidenceDoi": null,
+                "score": 0.7974
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P010",
+              "diseaseName": "Roseola infantum",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9914,
+              "rawPercentage": 99.14,
+              "cfResult": 0.8774,
+              "percentage": 87.74,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam tinggi 3-4 hari",
+                "Ruam muncul saat demam turun",
+                "Ruam"
+              ],
+              "advice": "Pantau suhu tubuh, cukupkan cairan, dan periksa bila anak kejang, sangat lemas, atau sulit minum."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S23",
+      "category": "redflag",
+      "name": "Gastroenteritis dengan dehidrasi berat",
+      "durationMs": 11520,
+      "apiTopOne": "P005",
+      "apiTopOneCf": 0.843,
+      "apiTopThree": [
+        "P005"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [
+        "Tidak mau minum",
+        "Letih berat / sangat lemas"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P005",
+      "expectedTopThreeAll": [
+        "P005"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Tidak mau minum",
+        "Letih berat / sangat lemas"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow86dl4004bylcw65gcbi7g",
+          "redFlags": [
+            "Tidak mau minum",
+            "Letih berat / sangat lemas"
+          ],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Tidak mau minum",
+              "Letih berat / sangat lemas"
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan data gejala yang Anda masukkan untuk Naufal, sistem mengidentifikasi kemungkinan Acute Gastroenteritis with Dehydration dengan tingkat kecocokan 84.3%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena Naufal menunjukkan kombinasi gejala diare, muntah, dan tidak mau minum. Gejala-gejala ini secara klinis sering dikaitkan dengan risiko kehilangan cairan dan elektrolit pada anak.",
+            "evidenceBasedExplanation": "Menurut pedoman dari WHO dan CDC, diare akut pada anak dapat memicu risiko dehidrasi, terutama jika anak mengalami muntah dan menolak untuk minum. Kondisi ini memerlukan perhatian karena tubuh anak kehilangan cairan dan elektrolit lebih cepat dibandingkan orang dewasa.",
+            "urgencyExplanation": "Hasil diagnosis ini memiliki tingkat urgensi 'Prioritas tinggi' karena ditemukannya tanda bahaya (red flags) yaitu anak tidak mau minum dan tampak sangat lemas. Kondisi ini menuntut tindakan medis segera agar tidak jatuh pada dehidrasi berat.",
+            "nextStep": "Sangat disarankan agar Naufal segera diperiksakan ke dokter atau fasilitas kesehatan terdekat. Berikan cairan atau oralit sebagai langkah awal, namun jangan menunda kunjungan ke tenaga medis jika anak terus muntah atau tampak semakin tidak bertenaga lemah.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Acute diarrhea and dehydration risk",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.8172
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Tidak mau minum",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.764
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Nafsu makan menurun",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7565
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Muntah",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7502
+              },
+              {
+                "title": "Acute diarrhea and dehydration risk - Mual",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                "evidenceDoi": null,
+                "score": 0.7404
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P005",
+              "diseaseName": "Acute Gastroenteritis with Dehydration",
+              "severityLevel": "high",
+              "rawCfResult": 0.9956,
+              "rawPercentage": 99.56,
+              "cfResult": 0.843,
+              "percentage": 84.3,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Diare",
+                "Muntah",
+                "Tidak mau minum"
+              ],
+              "advice": "Berikan cairan/oralit dan segera periksa bila anak tidak mau minum, muntah terus, atau tampak dehidrasi."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S24",
+      "category": "redflag",
+      "name": "Demam dengan gangguan kesadaran (EMERGENCY override)",
+      "durationMs": 6929,
+      "apiTopOne": "P004",
+      "apiTopOneCf": 0.7957,
+      "apiTopThree": [
+        "P004"
+      ],
+      "apiUrgency": "EMERGENCY",
+      "apiRedFlags": [
+        "Letih berat / sangat lemas",
+        "Gangguan kesadaran"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P004",
+      "expectedTopThreeAll": [
+        "P004"
+      ],
+      "expectedUrgency": "EMERGENCY",
+      "expectedRedFlags": [
+        "Letih berat / sangat lemas",
+        "Gangguan kesadaran"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow86j1o004hylcwglzwayfs",
+          "redFlags": [
+            "Letih berat / sangat lemas",
+            "Gangguan kesadaran"
+          ],
+          "urgency": {
+            "level": "EMERGENCY",
+            "label": "Darurat",
+            "reasons": [
+              "Letih berat / sangat lemas",
+              "Gangguan kesadaran",
+              "Terdapat gejala darurat seperti gangguan kesadaran, kejang, atau tanda syok."
+            ],
+            "action": "Segera bawa anak ke IGD atau fasilitas kesehatan terdekat. Jangan menunggu gejala membaik sendiri."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan, sistem mengidentifikasi kemungkinan kondisi yang dialami Bila (36 bulan) adalah Dengue / DBD dengan tingkat kecocokan sebesar 79.57%.",
+            "whyThisDiagnosis": "Hasil ini diperoleh karena adanya 5 gejala pendukung yang ditemukan pada Bila, yaitu demam tinggi akut, mual, muntah, nyeri perut, dan kondisi letih berat atau sangat lemas.",
+            "evidenceBasedExplanation": "Menurut pedoman dari WHO dan CDC, gejala-gejala tersebut merupakan tanda yang perlu diwaspadai karena Dengue dapat berkembang menjadi kondisi berat. Tanda bahaya yang harus diperhatikan secara serius meliputi nyeri perut berat, muntah terus-menerus, lemas, serta tanda-tanda lainnya seperti perdarahan pada gusi atau hidung.",
+            "urgencyExplanation": "Kondisi ini dikategorikan sebagai DARURAT (Emergency). Hal ini dikarenakan adanya temuan gejala kritis berupa letih berat/sangat lemas serta potensi adanya gangguan kesadaran, yang merupakan tanda bahaya yang memerlukan perhatian medis segera.",
+            "nextStep": "Segera bawa Bila ke IGD atau fasilitas kesehatan terdekat sekarang juga. Jangan menunggu gejala membaik dengan sendirinya di rumah. Jika muncul mimisan, gusi berdarah, atau muntah terus-menerus, segera laporkan kepada petugas medis.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Dengue warning signs",
+                "sourceName": "WHO and CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7871
+              },
+              {
+                "title": "Dengue warning signs - Letih berat / sangat lemas",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7465
+              },
+              {
+                "title": "Dengue warning signs - Nyeri perut",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7333
+              },
+              {
+                "title": "Dengue warning signs - Muntah persisten",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7297
+              },
+              {
+                "title": "Dengue warning signs - Mudah memar / bintik perdarahan",
+                "sourceName": "WHO and CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+                "evidenceDoi": null,
+                "score": 0.7231
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P004",
+              "diseaseName": "Dengue / DBD",
+              "severityLevel": "critical",
+              "rawCfResult": 0.9796,
+              "rawPercentage": 97.96,
+              "cfResult": 0.7957,
+              "percentage": 79.57,
+              "matchCount": 5,
+              "supportingSymptoms": [
+                "Demam tinggi akut",
+                "Mual",
+                "Muntah",
+                "Nyeri perut",
+                "Letih berat / sangat lemas"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila ada mimisan, gusi berdarah, muntah persisten, nyeri perut berat, atau anak tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S25",
+      "category": "edge",
+      "name": "Gejala tunggal tidak spesifik",
+      "durationMs": 457,
+      "apiTopOne": null,
+      "apiTopOneCf": null,
+      "apiTopThree": [],
+      "apiUrgency": "LOW",
+      "apiRedFlags": [],
+      "apiExplanationSource": "template",
+      "apiRetrievedEvidenceCount": 0,
+      "expectedTopOne": null,
+      "expectedTopThreeAll": [],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow86jiy004pylcwjksfpkjp",
+          "redFlags": [],
+          "urgency": {
+            "level": "LOW",
+            "label": "Risiko rendah",
+            "reasons": [
+              "Tidak ditemukan tanda bahaya dari gejala yang diberikan."
+            ],
+            "action": "Lakukan pemantauan mandiri. Jika muncul tanda bahaya atau kondisi memburuk, segera periksa ke fasilitas kesehatan."
+          },
+          "explanation": {
+            "source": "template",
+            "summary": "Sistem belum menemukan kecocokan penyakit yang cukup kuat berdasarkan gejala yang diberikan.",
+            "whyThisDiagnosis": "Gejala yang diberikan belum memenuhi aturan minimum pada knowledge base sistem pakar.",
+            "evidenceBasedExplanation": "Belum ada evidence yang cukup relevan untuk ditampilkan.",
+            "urgencyExplanation": "Lakukan pemantauan mandiri. Jika muncul tanda bahaya atau kondisi memburuk, segera periksa ke fasilitas kesehatan.",
+            "nextStep": "Lengkapi gejala yang dialami anak atau lakukan pemeriksaan langsung bila kondisi anak mengkhawatirkan.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": []
+          },
+          "results": []
+        }
+      }
+    },
+    {
+      "scenarioId": "S26",
+      "category": "edge",
+      "name": "Keyakinan rendah pada semua gejala",
+      "durationMs": 2464,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.2808,
+      "apiTopThree": [
+        "P003"
+      ],
+      "apiUrgency": "MEDIUM",
+      "apiRedFlags": [],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003"
+      ],
+      "expectedUrgency": "LOW",
+      "expectedRedFlags": [],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow86ljf004rylcwsx0fqkvc",
+          "redFlags": [],
+          "urgency": {
+            "level": "MEDIUM",
+            "label": "Perlu pemantauan",
+            "reasons": [
+              "Diagnosis teratas (Influenza) berada pada tingkat keparahan sedang."
+            ],
+            "action": "Pantau kondisi anak, cukupkan cairan dan istirahat, serta konsultasikan ke dokter bila gejala tidak membaik."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan informasi gejala yang Anda berikan untuk Vira, sistem mengidentifikasi adanya kemungkinan Influenza dengan tingkat kecocokan sebesar 28,08%. Perlu diingat bahwa hasil ini bukanlah diagnosis medis yang pasti.",
+            "whyThisDiagnosis": "Hasil ini muncul karena ditemukan kesesuaian gejala yang dialami Vira, yaitu demam, batuk, dan pilek. Gejala-gejala tersebut merupakan indikasi umum yang sering ditemukan pada kondisi Influenza.",
+            "evidenceBasedExplanation": "Menurut pedoman kesehatan (CDC), Influenza pada anak memang sering kali ditandai dengan demam, batuk, dan pilek. Namun, karena sistem kami bekerja berdasarkan data gejala yang dimasukkan, hasil ini bersifat terbatas pada informasi tersebut dan perlu diperhatikan secara saksama.",
+            "urgencyExplanation": "Kondisi Vira berada pada tingkat keparahan sedang. Ini berarti kondisi anak memerlukan pemantauan yang cukup ketat untuk memastikan tidak ada perburukan gejala.",
+            "nextStep": "Sangat disarankan untuk memastikan Vira mendapatkan istirahat yang cukup dan asupan cairan yang memadai. Pantau kondisi Vira secara rutin dan segera konsultasikan ke dokter apabila muncul tanda-tanda sesak napas, anak terlihat sangat lemas, atau tidak mau minum.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7557
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Pilek",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7002
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Demam",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.6991
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children - Batuk",
+                "sourceName": "CDC",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.693
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.681
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.4075,
+              "rawPercentage": 40.75,
+              "cfResult": 0.2808,
+              "percentage": 28.08,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S27",
+      "category": "edge",
+      "name": "Top-2 hampir sama (diferensial sulit)",
+      "durationMs": 14136,
+      "apiTopOne": "P003",
+      "apiTopOneCf": 0.7736,
+      "apiTopThree": [
+        "P003",
+        "P006"
+      ],
+      "apiUrgency": "HIGH",
+      "apiRedFlags": [
+        "Napas cepat"
+      ],
+      "apiExplanationSource": "rag_llm",
+      "apiRetrievedEvidenceCount": 5,
+      "expectedTopOne": "P003",
+      "expectedTopThreeAll": [
+        "P003",
+        "P006"
+      ],
+      "expectedUrgency": "HIGH",
+      "expectedRedFlags": [
+        "Napas cepat"
+      ],
+      "topOneCorrect": 1,
+      "topThreeCorrect": 1,
+      "topThreeCoverageScore": 1,
+      "urgencyCorrect": 1,
+      "redFlagRecall": 1,
+      "refusalAppropriate": null,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Diagnosis awal berhasil diproses",
+        "disclaimer": "Hasil ini adalah diagnosis awal dan bukan pengganti pemeriksaan dokter.",
+        "data": {
+          "consultationId": "cmow86wka004wylcweulkbpqj",
+          "redFlags": [
+            "Napas cepat"
+          ],
+          "urgency": {
+            "level": "HIGH",
+            "label": "Prioritas tinggi",
+            "reasons": [
+              "Napas cepat"
+            ],
+            "action": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama bila gejala menetap atau memburuk."
+          },
+          "explanation": {
+            "source": "rag_llm",
+            "summary": "Berdasarkan gejala yang dilaporkan untuk Pram (8 tahun), sistem mendeteksi adanya indikasi Influenza dengan tingkat kecocokan 77,36%. Selain itu, terdapat kemungkinan Pneumonia / CAP dengan tingkat kecocokan 63,24%.",
+            "whyThisDiagnosis": "Hasil ini didapatkan karena Pram mengalami gejala demam, batuk, dan pilek yang cocok dengan indikasi Influenza. Namun, adanya gejala napas cepat membuat sistem juga mempertimbangkan kemungkinan Pneumonia / CAP sebagai diagnosis alternatif.",
+            "evidenceBasedExplanation": "Menurut panduan kesehatan, Influenza pada anak ditandai dengan demam, batuk, dan pilek. Di sisi lain, Pneumonia sering dicurigai pada anak yang mengalami batuk dan demam, terutama jika disertai tanda penting berupa napas cepat yang memerlukan perhatian khusus.",
+            "urgencyExplanation": "Hasil pemeriksaan menunjukkan status 'Prioritas tinggi' karena terdeteksinya gejala 'Napas cepat'. Gejala ini merupakan tanda bahaya pada anak yang harus segera diwaspadai.",
+            "nextStep": "Sebaiknya anak segera diperiksakan ke dokter atau fasilitas kesehatan, terutama karena adanya napas cepat, agar kondisi Pram dapat diperiksa secara fisik oleh tenaga medis secara langsung.",
+            "disclaimer": "Hasil ini merupakan identifikasi awal dan bukan pengganti diagnosis dokter.",
+            "retrievedEvidence": [
+              {
+                "title": "Pneumonia signs in children",
+                "sourceName": "WHO",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.8226
+              },
+              {
+                "title": "Influenza symptoms and emergency warning signs in children",
+                "sourceName": "CDC",
+                "sourceType": "guideline",
+                "sourceUrl": "https://www.cdc.gov/flu/signs-symptoms/index.html",
+                "evidenceDoi": null,
+                "score": 0.7909
+              },
+              {
+                "title": "Pneumonia signs in children - Napas cepat",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7705
+              },
+              {
+                "title": "Pneumonia signs in children - Demam",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7617
+              },
+              {
+                "title": "Pneumonia signs in children - Sesak napas",
+                "sourceName": "WHO",
+                "sourceType": "symptom_evidence",
+                "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+                "evidenceDoi": null,
+                "score": 0.7584
+              }
+            ]
+          },
+          "results": [
+            {
+              "diseaseCode": "P003",
+              "diseaseName": "Influenza",
+              "severityLevel": "medium",
+              "rawCfResult": 0.9406,
+              "rawPercentage": 94.06,
+              "cfResult": 0.7736,
+              "percentage": 77.36,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Demam",
+                "Batuk",
+                "Pilek"
+              ],
+              "advice": "Istirahat cukup, cukupkan cairan, dan periksa bila anak sesak, sangat lemas, atau tidak mau minum."
+            },
+            {
+              "diseaseCode": "P006",
+              "diseaseName": "Pneumonia / CAP",
+              "severityLevel": "critical",
+              "rawCfResult": 0.8771,
+              "rawPercentage": 87.71,
+              "cfResult": 0.6324,
+              "percentage": 63.24,
+              "matchCount": 3,
+              "supportingSymptoms": [
+                "Batuk",
+                "Demam",
+                "Napas cepat"
+              ],
+              "advice": "Segera ke fasilitas kesehatan bila anak bernapas cepat, sesak, atau tampak sangat lemas."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenarioId": "S28",
+      "category": "out_of_context",
+      "name": "Pertanyaan cuaca (non-medis)",
+      "durationMs": 9223,
+      "apiTopOne": null,
+      "apiTopOneCf": null,
+      "apiTopThree": [],
+      "apiUrgency": null,
+      "apiRedFlags": [],
+      "apiExplanationSource": null,
+      "apiRetrievedEvidenceCount": 0,
+      "expectedTopOne": null,
+      "expectedTopThreeAll": [],
+      "expectedUrgency": null,
+      "expectedRedFlags": [],
+      "topOneCorrect": 0,
+      "topThreeCorrect": 0,
+      "topThreeCoverageScore": 0,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 0,
+      "refusalAppropriate": 1,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Pesan chatbot berhasil diproses",
+        "data": {
+          "reply": "Halo! Saya adalah asisten kesehatan anak yang membantu memantau gejala. Mohon maaf, saya tidak memiliki informasi cuaca. Untuk membantu saya memberikan panduan kesehatan, bolehkah saya mengetahui nama, usia dalam bulan, dan jenis kelamin anak Anda?",
+          "profile": {
+            "childName": null,
+            "childAgeMonths": null,
+            "gender": null
+          },
+          "structured": {
+            "symptoms": [],
+            "negativeSymptoms": [],
+            "missingFields": [
+              "nama anak",
+              "usia anak dalam bulan",
+              "jenis kelamin anak"
+            ],
+            "canDiagnose": false
+          },
+          "meta": {
+            "source": "llm",
+            "note": "Structured extraction via Gemini"
+          }
+        }
+      }
+    },
+    {
+      "scenarioId": "S29",
+      "category": "out_of_context",
+      "name": "Pertanyaan finansial / non-diagnostik",
+      "durationMs": 10092,
+      "apiTopOne": null,
+      "apiTopOneCf": null,
+      "apiTopThree": [],
+      "apiUrgency": null,
+      "apiRedFlags": [],
+      "apiExplanationSource": null,
+      "apiRetrievedEvidenceCount": 0,
+      "expectedTopOne": null,
+      "expectedTopThreeAll": [],
+      "expectedUrgency": null,
+      "expectedRedFlags": [],
+      "topOneCorrect": 0,
+      "topThreeCorrect": 0,
+      "topThreeCoverageScore": 0,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 0,
+      "refusalAppropriate": 1,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Pesan chatbot berhasil diproses",
+        "data": {
+          "reply": "Saya adalah asisten kesehatan yang membantu melakukan triase awal gejala anak. Untuk membantu Anda, bolehkah saya tahu siapa nama anak Anda, berapa usianya dalam bulan, dan apa jenis kelaminnya?",
+          "profile": {
+            "childName": null,
+            "childAgeMonths": null,
+            "gender": null
+          },
+          "structured": {
+            "symptoms": [],
+            "negativeSymptoms": [],
+            "missingFields": [
+              "nama anak",
+              "usia anak dalam bulan",
+              "jenis kelamin anak"
+            ],
+            "canDiagnose": false
+          },
+          "meta": {
+            "source": "llm",
+            "note": "Structured extraction via Gemini"
+          }
+        }
+      }
+    },
+    {
+      "scenarioId": "S30",
+      "category": "out_of_context",
+      "name": "Penyakit dewasa / di luar scope",
+      "durationMs": 5197,
+      "apiTopOne": null,
+      "apiTopOneCf": null,
+      "apiTopThree": [],
+      "apiUrgency": null,
+      "apiRedFlags": [],
+      "apiExplanationSource": null,
+      "apiRetrievedEvidenceCount": 0,
+      "expectedTopOne": null,
+      "expectedTopThreeAll": [],
+      "expectedUrgency": null,
+      "expectedRedFlags": [],
+      "topOneCorrect": 0,
+      "topThreeCorrect": 0,
+      "topThreeCoverageScore": 0,
+      "urgencyCorrect": 0,
+      "redFlagRecall": 0,
+      "refusalAppropriate": 1,
+      "ok": true,
+      "rawResponse": {
+        "success": true,
+        "message": "Pesan chatbot berhasil diproses",
+        "data": {
+          "reply": "Mohon maaf, saya adalah asisten kesehatan khusus untuk membantu memantau gejala pada anak. Untuk keluhan pusing dan jantung berdebar pada orang dewasa, sangat disarankan untuk melakukan pemeriksaan langsung ke dokter atau fasilitas kesehatan terdekat agar mendapatkan diagnosis yang tepat.",
+          "profile": {
+            "childName": null,
+            "childAgeMonths": null,
+            "gender": null
+          },
+          "structured": {
+            "symptoms": [],
+            "negativeSymptoms": [],
+            "missingFields": [
+              "nama anak",
+              "usia anak dalam bulan",
+              "jenis kelamin anak"
+            ],
+            "canDiagnose": false
+          },
+          "meta": {
+            "source": "llm",
+            "note": "Structured extraction via Gemini"
+          }
+        }
+      }
+    }
+  ]
+}

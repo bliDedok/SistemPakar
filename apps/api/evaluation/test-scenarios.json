@@ -1,0 +1,904 @@
+{
+  "metadata": {
+    "title": "Test Scenarios — Hybrid Expert System Penyakit Anak (CF + RAG)",
+    "version": "1.0",
+    "totalScenarios": 30,
+    "categories": {
+      "typical": "Skenario gejala khas, satu penyakit dominan (S01-S10)",
+      "overlap": "Skenario gejala tumpang tindih, uji top-3 (S11-S18)",
+      "redflag": "Skenario red flag / emergency, uji urgency engine (S19-S24)",
+      "edge": "Skenario sulit / gejala minim / keyakinan rendah (S25-S27)",
+      "out_of_context": "Skenario di luar scope, uji refusal chatbot (S28-S30)"
+    },
+    "userCfScale": {
+      "0": "Tidak — gejala tidak dialami",
+      "0.2": "Kurang yakin — mungkin ada, belum jelas",
+      "0.4": "Sedikit yakin — terlihat ringan",
+      "0.6": "Cukup yakin — cukup terasa",
+      "0.8": "Yakin — jelas terlihat",
+      "1.0": "Sangat yakin — sangat jelas dan kuat"
+    },
+    "evaluationMetrics": [
+      "Top-1 Accuracy",
+      "Top-3 Accuracy",
+      "Macro Precision / Recall / F1",
+      "Urgency Classification Accuracy",
+      "Red Flag Detection Recall",
+      "Refusal Appropriateness (out-of-context)"
+    ],
+    "diseaseCatalog": {
+      "P001": "Enterobiasis (cacing kremi)",
+      "P003": "Influenza",
+      "P004": "Dengue / DBD",
+      "P005": "Acute Gastroenteritis",
+      "P006": "Pneumonia (CAP)",
+      "P010": "Roseola Infantum",
+      "P013": "Otitis Media Akut",
+      "P014": "Malaria"
+    },
+    "ruleConstraints": {
+      "P001": { "mandatory": ["G033"], "minMatch": 2 },
+      "P003": { "mandatory": ["G001", "G003"], "minMatch": 3 },
+      "P004": { "mandatory": ["G002"], "minMatch": 4 },
+      "P005": { "mandatory": ["G025"], "minMatch": 2 },
+      "P006": { "mandatory": ["G003"], "minMatch": 3 },
+      "P010": { "mandatory": ["G029", "G030"], "minMatch": 2 },
+      "P013": { "mandatory": ["G027"], "minMatch": 2 },
+      "P014": { "mandatory": ["G001"], "minMatch": 3 }
+    },
+    "emergencyCodes": ["G044", "G045", "G046"],
+    "redFlagCodes": [
+      "G013", "G015", "G016", "G017", "G018", "G019",
+      "G021", "G022", "G023", "G024", "G032", "G041",
+      "G044", "G045", "G046"
+    ]
+  },
+
+  "scenarios": [
+    {
+      "id": "S01",
+      "category": "typical",
+      "name": "Pneumonia klasik dengan distres napas",
+      "description": "Anak balita dengan batuk, demam, dan napas cepat — pola pneumonia yang khas.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Aldi",
+        "childAgeMonths": 36,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G003", "userCf": 1.0, "symptomName": "Batuk" },
+          { "symptomCode": "G001", "userCf": 1.0, "symptomName": "Demam" },
+          { "symptomCode": "G023", "userCf": 0.8, "symptomName": "Napas cepat" },
+          { "symptomCode": "G022", "userCf": 0.6, "symptomName": "Sulit bernapas" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P006",
+        "topThreeShouldContain": ["P006"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Sulit bernapas", "Napas cepat"],
+        "shouldRefuse": false
+      },
+      "rationale": "Tiga gejala CORE pneumonia (G003, G023, G022) dengan keyakinan tinggi. Red flag G022/G023 → urgency HIGH."
+    },
+    {
+      "id": "S02",
+      "category": "typical",
+      "name": "DBD klasik fase febris",
+      "description": "Anak dengan demam tinggi mendadak, nyeri belakang mata, mual-muntah — pola DBD fase febrile.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Maya",
+        "childAgeMonths": 84,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G002", "userCf": 1.0, "symptomName": "Demam tinggi akut" },
+          { "symptomCode": "G009", "userCf": 0.8, "symptomName": "Nyeri belakang mata" },
+          { "symptomCode": "G006", "userCf": 0.6, "symptomName": "Sakit kepala" },
+          { "symptomCode": "G011", "userCf": 0.6, "symptomName": "Mual" },
+          { "symptomCode": "G012", "userCf": 0.6, "symptomName": "Muntah" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P004",
+        "topThreeShouldContain": ["P004"],
+        "expectedUrgency": "MEDIUM",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G002 mandatory + 4 supporting symptoms (≥minMatch=4). Tidak ada warning sign DBD → urgency MEDIUM (severityLevel disease)."
+    },
+    {
+      "id": "S03",
+      "category": "typical",
+      "name": "Influenza klasik pada anak sekolah",
+      "description": "Pola flu tipikal: demam, batuk, pilek, nyeri otot, sakit kepala, sakit tenggorokan.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Rizki",
+        "childAgeMonths": 60,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 1.0, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 1.0, "symptomName": "Pilek" },
+          { "symptomCode": "G005", "userCf": 0.6, "symptomName": "Sakit tenggorokan" },
+          { "symptomCode": "G006", "userCf": 0.6, "symptomName": "Sakit kepala" },
+          { "symptomCode": "G007", "userCf": 0.6, "symptomName": "Nyeri otot" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "Mandatory G001+G003 terpenuhi, total 6 gejala (≥minMatch=3). Pola flu klasik tanpa red flag."
+    },
+    {
+      "id": "S04",
+      "category": "typical",
+      "name": "Gastroenteritis akut tanpa dehidrasi",
+      "description": "Anak balita dengan diare, muntah, mual, nyeri perut — pola gastro biasa.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Sari",
+        "childAgeMonths": 24,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G025", "userCf": 1.0, "symptomName": "Diare" },
+          { "symptomCode": "G012", "userCf": 0.8, "symptomName": "Muntah" },
+          { "symptomCode": "G011", "userCf": 0.6, "symptomName": "Mual" },
+          { "symptomCode": "G014", "userCf": 0.6, "symptomName": "Nyeri perut" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P005",
+        "topThreeShouldContain": ["P005"],
+        "expectedUrgency": "MEDIUM",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G025 mandatory + 3 supporting. Tidak ada G024 (tidak mau minum) atau G019 → tanpa warning sign dehidrasi."
+    },
+    {
+      "id": "S05",
+      "category": "typical",
+      "name": "Enterobiasis dengan tanda khas",
+      "description": "Anak usia sekolah dengan gatal anus terutama malam hari, cacing terlihat.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Doni",
+        "childAgeMonths": 72,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G033", "userCf": 1.0, "symptomName": "Gatal di sekitar anus" },
+          { "symptomCode": "G034", "userCf": 1.0, "symptomName": "Gatal pada malam hari" },
+          { "symptomCode": "G035", "userCf": 0.8, "symptomName": "Cacing terlihat" },
+          { "symptomCode": "G036", "userCf": 0.6, "symptomName": "Gangguan tidur" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P001",
+        "topThreeShouldContain": ["P001"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "Gejala highly specific: G033, G034, G035 semua CORE dengan CF tinggi. CF score harus ≥ 0.85."
+    },
+    {
+      "id": "S06",
+      "category": "typical",
+      "name": "Roseola dengan pola signature",
+      "description": "Bayi dengan demam tinggi 3-4 hari, kemudian ruam muncul saat demam turun.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Aira",
+        "childAgeMonths": 12,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G029", "userCf": 1.0, "symptomName": "Demam tinggi 3-4 hari" },
+          { "symptomCode": "G030", "userCf": 1.0, "symptomName": "Ruam muncul saat demam turun" },
+          { "symptomCode": "G010", "userCf": 0.8, "symptomName": "Ruam" },
+          { "symptomCode": "G031", "userCf": 0.6, "symptomName": "Ruam mulai di badan" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P010",
+        "topThreeShouldContain": ["P010"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G029 + G030 dual mandatory terpenuhi. Pola signature roseola sangat spesifik."
+    },
+    {
+      "id": "S07",
+      "category": "typical",
+      "name": "Otitis Media Akut pada balita",
+      "description": "Balita dengan nyeri telinga, demam, telinga mengeluarkan cairan.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Lia",
+        "childAgeMonths": 30,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G027", "userCf": 1.0, "symptomName": "Nyeri telinga" },
+          { "symptomCode": "G028", "userCf": 0.6, "symptomName": "Telinga keluar cairan" },
+          { "symptomCode": "G001", "userCf": 0.6, "symptomName": "Demam" },
+          { "symptomCode": "G037", "userCf": 0.8, "symptomName": "Iritabilitas / rewel" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P013",
+        "topThreeShouldContain": ["P013"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G027 mandatory + 3 supporting symptoms (≥minMatch=2). Pola AOM klasik."
+    },
+    {
+      "id": "S08",
+      "category": "typical",
+      "name": "Malaria dengan riwayat endemis",
+      "description": "Anak baru pulang dari Papua (area endemis), demam, menggigil, sakit kepala.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Bayu",
+        "childAgeMonths": 96,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 1.0, "symptomName": "Demam" },
+          { "symptomCode": "G039", "userCf": 0.8, "symptomName": "Menggigil" },
+          { "symptomCode": "G006", "userCf": 0.6, "symptomName": "Sakit kepala" },
+          { "symptomCode": "G007", "userCf": 0.6, "symptomName": "Nyeri otot" },
+          { "symptomCode": "G040", "userCf": 1.0, "symptomName": "Riwayat perjalanan ke area endemis malaria" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P014",
+        "topThreeShouldContain": ["P014"],
+        "expectedUrgency": "MEDIUM",
+        "expectedRedFlags": [],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi G040 (CONTEXT_ONLY) tidak menambah CF tetapi context-aware patch (×0.65) TIDAK diaktifkan karena G040 hadir."
+      },
+      "rationale": "Test integrasi context symptom: G040 berperan sebagai konteks endemis dan mengaktifkan diagnosis P014 secara penuh."
+    },
+    {
+      "id": "S09",
+      "category": "typical",
+      "name": "Pneumonia ringan tanpa distres",
+      "description": "Pneumonia dengan gejala dasar tanpa sesak — variasi ringan untuk uji minMatch ketat.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Tina",
+        "childAgeMonths": 48,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G003", "userCf": 1.0, "symptomName": "Batuk" },
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G023", "userCf": 0.6, "symptomName": "Napas cepat" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P006",
+        "topThreeShouldContain": ["P006"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Napas cepat"],
+        "shouldRefuse": false
+      },
+      "rationale": "Tepat di batas minMatch=3 untuk P006. G023 isRedFlag → urgency HIGH meski gejala ringan."
+    },
+    {
+      "id": "S10",
+      "category": "typical",
+      "name": "Influenza dengan keluhan GI ringan",
+      "description": "Flu yang disertai mual, muntah, dan diare ringan (umum pada anak).",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Rama",
+        "childAgeMonths": 84,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 0.6, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 0.8, "symptomName": "Pilek" },
+          { "symptomCode": "G007", "userCf": 0.6, "symptomName": "Nyeri otot" },
+          { "symptomCode": "G012", "userCf": 0.4, "symptomName": "Muntah" },
+          { "symptomCode": "G025", "userCf": 0.4, "symptomName": "Diare" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003", "P005"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G012 dan G025 KEEP_OPTIONAL untuk P003. P005 mungkin masuk top-3 karena G025 mandatory + G012."
+    },
+
+    {
+      "id": "S11",
+      "category": "overlap",
+      "name": "Demam batuk pilek standar (Influenza dominan)",
+      "description": "Pola common cold yang harus mengarah ke Influenza dengan kepastian sedang.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Anto",
+        "childAgeMonths": 60,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 0.8, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 0.8, "symptomName": "Pilek" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "Tepat di minMatch=3 P003. P006 minMatch=3 tidak terpenuhi (hanya G003+G001 dari rule)."
+    },
+    {
+      "id": "S12",
+      "category": "overlap",
+      "name": "DBD vs Roseola (demam tinggi + ruam)",
+      "description": "Anak demam tinggi dengan ruam — overlap antara DBD fase febrile dan Roseola.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Lala",
+        "childAgeMonths": 18,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G002", "userCf": 0.8, "symptomName": "Demam tinggi akut" },
+          { "symptomCode": "G010", "userCf": 0.8, "symptomName": "Ruam" },
+          { "symptomCode": "G029", "userCf": 0.8, "symptomName": "Demam tinggi 3-4 hari" },
+          { "symptomCode": "G030", "userCf": 0.6, "symptomName": "Ruam muncul saat demam turun" },
+          { "symptomCode": "G011", "userCf": 0.4, "symptomName": "Mual" },
+          { "symptomCode": "G012", "userCf": 0.4, "symptomName": "Muntah" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P010",
+        "topThreeShouldContain": ["P010", "P004"],
+        "expectedUrgency": "MEDIUM",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "Kedua disease memenuhi rule. P010 menang karena G030 (signature pattern, CF pakar 0.95)."
+    },
+    {
+      "id": "S13",
+      "category": "overlap",
+      "name": "Demam menggigil tanpa endemis (Influenza vs Malaria)",
+      "description": "Anak dengan flu-like symptoms + menggigil, tetapi tanpa riwayat ke area endemis malaria.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Adi",
+        "childAgeMonths": 84,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G039", "userCf": 0.8, "symptomName": "Menggigil" },
+          { "symptomCode": "G003", "userCf": 0.6, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 0.6, "symptomName": "Pilek" },
+          { "symptomCode": "G006", "userCf": 0.6, "symptomName": "Sakit kepala" },
+          { "symptomCode": "G007", "userCf": 0.6, "symptomName": "Nyeri otot" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003", "P014"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi context-aware patch P014: tanpa G040, CF P014 dikalikan 0.65 sehingga P003 menang."
+      },
+      "rationale": "Test mekanisme penalty kontekstual. Tanpa G040, sistem harus menurunkan kepercayaan terhadap malaria."
+    },
+    {
+      "id": "S14",
+      "category": "overlap",
+      "name": "Diare muntah demam tinggi (Gastro vs DBD)",
+      "description": "Gejala GI berat dengan demam tinggi — overlap gastroenteritis dan DBD fase awal.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Bagas",
+        "childAgeMonths": 36,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G002", "userCf": 0.6, "symptomName": "Demam tinggi akut" },
+          { "symptomCode": "G025", "userCf": 1.0, "symptomName": "Diare" },
+          { "symptomCode": "G012", "userCf": 0.8, "symptomName": "Muntah" },
+          { "symptomCode": "G014", "userCf": 0.6, "symptomName": "Nyeri perut" },
+          { "symptomCode": "G011", "userCf": 0.6, "symptomName": "Mual" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P005",
+        "topThreeShouldContain": ["P005", "P004"],
+        "expectedUrgency": "MEDIUM",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G025 mandatory CORE (0.90) untuk P005 mengalahkan G002 mandatory (0.90) untuk P004 karena 4 gejala P005 lebih spesifik."
+    },
+    {
+      "id": "S15",
+      "category": "overlap",
+      "name": "Otitis Media vs Influenza (demam + nyeri telinga)",
+      "description": "Anak dengan keluhan utama nyeri telinga + gejala flu ringan.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Eka",
+        "childAgeMonths": 36,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G027", "userCf": 0.8, "symptomName": "Nyeri telinga" },
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 0.4, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 0.4, "symptomName": "Pilek" },
+          { "symptomCode": "G037", "userCf": 0.4, "symptomName": "Iritabilitas / rewel" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P013",
+        "topThreeShouldContain": ["P013", "P003"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G027 highly specific untuk otitis. Walau gejala flu ada, otitis menang karena pendukung kuat."
+    },
+    {
+      "id": "S16",
+      "category": "overlap",
+      "name": "Pneumonia vs Influenza fase awal",
+      "description": "Batuk demam dengan napas cepat ringan — pneumonia yang berkembang dari ISPA.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Faza",
+        "childAgeMonths": 24,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 0.8, "symptomName": "Batuk" },
+          { "symptomCode": "G023", "userCf": 0.6, "symptomName": "Napas cepat" },
+          { "symptomCode": "G004", "userCf": 0.6, "symptomName": "Pilek" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P006",
+        "topThreeShouldContain": ["P006", "P003"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Napas cepat"],
+        "shouldRefuse": false
+      },
+      "rationale": "G023 (red flag, CF pakar 0.90 CORE) memberikan boost ke P006. Influenza ikut top-3 karena G001+G003+G004."
+    },
+    {
+      "id": "S17",
+      "category": "overlap",
+      "name": "Enterobiasis vs Gastroenteritis (nyeri perut + gatal anus)",
+      "description": "Pola tidak khas: nyeri perut umum + gejala spesifik kremi.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Dini",
+        "childAgeMonths": 60,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G014", "userCf": 0.6, "symptomName": "Nyeri perut" },
+          { "symptomCode": "G033", "userCf": 0.8, "symptomName": "Gatal di sekitar anus" },
+          { "symptomCode": "G034", "userCf": 0.6, "symptomName": "Gatal pada malam hari" },
+          { "symptomCode": "G025", "userCf": 0.4, "symptomName": "Diare" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P001",
+        "topThreeShouldContain": ["P001", "P005"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false
+      },
+      "rationale": "G033+G034 spesifik untuk Enterobiasis. P005 minMatch=2 dipenuhi G025+G014."
+    },
+    {
+      "id": "S18",
+      "category": "overlap",
+      "name": "Demam-sakit kepala-nyeri otot (3-way overlap)",
+      "description": "Pola gejala umum yang bisa cocok untuk Influenza, DBD, dan Malaria sekaligus.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Bram",
+        "childAgeMonths": 72,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.6, "symptomName": "Demam" },
+          { "symptomCode": "G002", "userCf": 0.8, "symptomName": "Demam tinggi akut" },
+          { "symptomCode": "G006", "userCf": 0.8, "symptomName": "Sakit kepala" },
+          { "symptomCode": "G007", "userCf": 0.8, "symptomName": "Nyeri otot" },
+          { "symptomCode": "G003", "userCf": 0.4, "symptomName": "Batuk" },
+          { "symptomCode": "G011", "userCf": 0.4, "symptomName": "Mual" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003", "P004", "P014"],
+        "expectedUrgency": "MEDIUM",
+        "expectedRedFlags": [],
+        "shouldRefuse": false,
+        "evaluationFocus": "Stress test kemampuan ranking 3-way; verifikasi top-3 mencakup ketiga kandidat."
+      },
+      "rationale": "Test paling sulit untuk top-3 accuracy. Idealnya sistem menampilkan ketiga kandidat dengan ranking informatif."
+    },
+
+    {
+      "id": "S19",
+      "category": "redflag",
+      "name": "Pneumonia berat dengan sesak napas",
+      "description": "Pneumonia dengan distres napas berat — uji urgency HIGH dari multiple red flags.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Hafiz",
+        "childAgeMonths": 18,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G003", "userCf": 1.0, "symptomName": "Batuk" },
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G023", "userCf": 0.8, "symptomName": "Napas cepat" },
+          { "symptomCode": "G021", "userCf": 0.8, "symptomName": "Sesak napas" },
+          { "symptomCode": "G022", "userCf": 0.8, "symptomName": "Sulit bernapas" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P006",
+        "topThreeShouldContain": ["P006"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Sesak napas", "Sulit bernapas", "Napas cepat"],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi G021 (SEVERE/URGENCY_ONLY) tidak menambah CF tetapi tetap berkontribusi sebagai red flag."
+      },
+      "rationale": "G021 multiplier=0 untuk CF, namun masuk daftar red flag → urgency HIGH triggered."
+    },
+    {
+      "id": "S20",
+      "category": "redflag",
+      "name": "DBD dengan tanda perdarahan (warning signs)",
+      "description": "DBD yang sudah masuk fase critical dengan perdarahan dan letargi.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Indra",
+        "childAgeMonths": 96,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G002", "userCf": 1.0, "symptomName": "Demam tinggi akut" },
+          { "symptomCode": "G013", "userCf": 0.8, "symptomName": "Muntah persisten" },
+          { "symptomCode": "G016", "userCf": 0.8, "symptomName": "Mimisan" },
+          { "symptomCode": "G017", "userCf": 0.6, "symptomName": "Gusi berdarah" },
+          { "symptomCode": "G019", "userCf": 0.8, "symptomName": "Letih berat / sangat lemas" },
+          { "symptomCode": "G014", "userCf": 0.6, "symptomName": "Nyeri perut" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P004",
+        "topThreeShouldContain": ["P004"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Muntah persisten", "Mimisan", "Gusi berdarah", "Letih berat / sangat lemas"],
+        "shouldRefuse": false
+      },
+      "rationale": "Multiple WARNING_SIGN role symptoms → CF tinggi dan urgency HIGH dari banyak red flag."
+    },
+    {
+      "id": "S21",
+      "category": "redflag",
+      "name": "Malaria berat dengan kejang",
+      "description": "Malaria komplikasi: kejang menunjukkan keterlibatan SSP (cerebral malaria).",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Joni",
+        "childAgeMonths": 60,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 1.0, "symptomName": "Demam" },
+          { "symptomCode": "G039", "userCf": 0.8, "symptomName": "Menggigil" },
+          { "symptomCode": "G040", "userCf": 1.0, "symptomName": "Riwayat perjalanan ke area endemis malaria" },
+          { "symptomCode": "G045", "userCf": 1.0, "symptomName": "Kejang" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P014",
+        "topThreeShouldContain": ["P014"],
+        "expectedUrgency": "EMERGENCY",
+        "expectedRedFlags": ["Kejang"],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi emergency override: G045 di emergencyCodes → urgency=EMERGENCY apapun severity penyakit."
+      },
+      "rationale": "G045 hardcoded sebagai emergency symptom. Sistem harus return EMERGENCY tanpa pertimbangan severity."
+    },
+    {
+      "id": "S22",
+      "category": "redflag",
+      "name": "Roseola dengan kejang demam (G032 vs G045)",
+      "description": "Bayi dengan roseola yang mengalami kejang demam — uji apakah G032 (specific code) ditangani sebagai urgency yang berbeda dari G045.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Aira",
+        "childAgeMonths": 9,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G029", "userCf": 1.0, "symptomName": "Demam tinggi 3-4 hari" },
+          { "symptomCode": "G030", "userCf": 0.8, "symptomName": "Ruam muncul saat demam turun" },
+          { "symptomCode": "G010", "userCf": 0.8, "symptomName": "Ruam" },
+          { "symptomCode": "G032", "userCf": 0.8, "symptomName": "Kejang demam" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P010",
+        "topThreeShouldContain": ["P010"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Kejang demam"],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi G032 (SEVERE+URGENCY_ONLY+isRedFlag) trigger HIGH bukan EMERGENCY karena hanya G044/G045/G046 yang trigger EMERGENCY override."
+      },
+      "rationale": "Edge case penting: G032 adalah red flag khusus roseola tetapi tidak dalam emergencyCodes hardcode. Diskusi: apakah seharusnya emergency?"
+    },
+    {
+      "id": "S23",
+      "category": "redflag",
+      "name": "Gastroenteritis dengan dehidrasi berat",
+      "description": "Anak diare berat dengan tidak mau minum, lemas — risiko dehidrasi tinggi.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Naufal",
+        "childAgeMonths": 18,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G025", "userCf": 1.0, "symptomName": "Diare" },
+          { "symptomCode": "G012", "userCf": 0.8, "symptomName": "Muntah" },
+          { "symptomCode": "G024", "userCf": 1.0, "symptomName": "Tidak mau minum" },
+          { "symptomCode": "G019", "userCf": 0.8, "symptomName": "Letih berat / sangat lemas" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P005",
+        "topThreeShouldContain": ["P005"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Tidak mau minum", "Letih berat / sangat lemas"],
+        "shouldRefuse": false
+      },
+      "rationale": "G024 WARNING_SIGN role (multiplier 0.45) berkontribusi ke CF, dan kedua red flag mendorong urgency HIGH."
+    },
+    {
+      "id": "S24",
+      "category": "redflag",
+      "name": "Demam dengan gangguan kesadaran (EMERGENCY override)",
+      "description": "Anak dengan demam tinggi dan tidak responsif — segera EMERGENCY apapun penyakitnya.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Bila",
+        "childAgeMonths": 36,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G002", "userCf": 0.8, "symptomName": "Demam tinggi akut" },
+          { "symptomCode": "G019", "userCf": 0.8, "symptomName": "Letih berat / sangat lemas" },
+          { "symptomCode": "G011", "userCf": 0.6, "symptomName": "Mual" },
+          { "symptomCode": "G012", "userCf": 0.6, "symptomName": "Muntah" },
+          { "symptomCode": "G014", "userCf": 0.6, "symptomName": "Nyeri perut" },
+          { "symptomCode": "G044", "userCf": 1.0, "symptomName": "Gangguan kesadaran" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P004",
+        "topThreeShouldContain": ["P004"],
+        "expectedUrgency": "EMERGENCY",
+        "expectedRedFlags": ["Letih berat / sangat lemas", "Gangguan kesadaran"],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi G044 trigger EMERGENCY override meski penyakit utama (DBD) hanya HIGH."
+      },
+      "rationale": "Test kasus paling kritis: gangguan kesadaran adalah tanda darurat yang harus override semua severity logic."
+    },
+
+    {
+      "id": "S25",
+      "category": "edge",
+      "name": "Gejala tunggal tidak spesifik",
+      "description": "Hanya satu gejala umum (demam) — uji bagaimana sistem menangani input minim.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Tio",
+        "childAgeMonths": 60,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.6, "symptomName": "Demam" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": null,
+        "topThreeShouldContain": [],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi sistem return empty results array (semua rule gagal mandatory check) dan template explanation digunakan."
+      },
+      "rationale": "Tidak ada disease yang lolos rule (semua butuh ≥2 mandatory atau minMatch yang tidak terpenuhi). Sistem harus graceful."
+    },
+    {
+      "id": "S26",
+      "category": "edge",
+      "name": "Keyakinan rendah pada semua gejala",
+      "description": "Pengguna sangat tidak yakin pada semua gejala — uji CF rendah.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Vira",
+        "childAgeMonths": 48,
+        "gender": "FEMALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.2, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 0.2, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 0.2, "symptomName": "Pilek" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003"],
+        "expectedUrgency": "LOW",
+        "expectedRedFlags": [],
+        "shouldRefuse": false,
+        "evaluationFocus": "Verifikasi sistem tetap mengidentifikasi tetapi dengan CF rendah (≤ 0.30); pesan harus mengindikasikan kepastian rendah."
+      },
+      "rationale": "P003 lolos rule, tetapi nilai CF efektif rendah karena userCf=0.2 di seluruh gejala."
+    },
+    {
+      "id": "S27",
+      "category": "edge",
+      "name": "Top-2 hampir sama (diferensial sulit)",
+      "description": "Skenario di mana top-1 dan top-2 punya CF yang berdekatan — uji ranking stabilitas.",
+      "inputType": "diagnosis",
+      "input": {
+        "childName": "Pram",
+        "childAgeMonths": 96,
+        "gender": "MALE",
+        "answers": [
+          { "symptomCode": "G001", "userCf": 0.8, "symptomName": "Demam" },
+          { "symptomCode": "G003", "userCf": 0.8, "symptomName": "Batuk" },
+          { "symptomCode": "G004", "userCf": 0.6, "symptomName": "Pilek" },
+          { "symptomCode": "G023", "userCf": 0.4, "symptomName": "Napas cepat" }
+        ]
+      },
+      "expected": {
+        "topOneTarget": "P003",
+        "topThreeShouldContain": ["P003", "P006"],
+        "expectedUrgency": "HIGH",
+        "expectedRedFlags": ["Napas cepat"],
+        "shouldRefuse": false,
+        "evaluationFocus": "Periksa selisih CF top-1 vs top-2; selisih kecil → sistem harus menampilkan kedua kandidat dengan jelas di UI."
+      },
+      "rationale": "G023 trigger red flag dan menambah CF P006, tetapi G004 mendukung P003. Diskusikan threshold confidence."
+    },
+
+    {
+      "id": "S28",
+      "category": "out_of_context",
+      "name": "Pertanyaan cuaca (non-medis)",
+      "description": "Uji apakah chatbot menolak input non-medis tanpa mengekstrak gejala palsu.",
+      "inputType": "chatbot",
+      "input": {
+        "messages": [
+          { "role": "user", "content": "Halo, bagaimana cuaca di Jakarta hari ini?" }
+        ],
+        "profile": {}
+      },
+      "expected": {
+        "shouldRefuse": true,
+        "expectedBehavior": "Chatbot tidak mengekstrak symptom apapun; reply harus mengarahkan user untuk mendeskripsikan gejala anak.",
+        "checkedFields": {
+          "structured.symptoms": "harus array kosong []",
+          "structured.canDiagnose": "harus false",
+          "reply": "harus berisi redirect ke topik kesehatan anak"
+        }
+      },
+      "rationale": "Test guardrail prompt LLM extractor: tidak boleh hallucinate gejala dari pesan non-medis."
+    },
+    {
+      "id": "S29",
+      "category": "out_of_context",
+      "name": "Pertanyaan finansial / non-diagnostik",
+      "description": "Pertanyaan tentang biaya pengobatan — bukan deskripsi gejala.",
+      "inputType": "chatbot",
+      "input": {
+        "messages": [
+          { "role": "user", "content": "Berapa biaya berobat anak demam di puskesmas? Apakah ditanggung BPJS?" }
+        ],
+        "profile": {}
+      },
+      "expected": {
+        "shouldRefuse": true,
+        "expectedBehavior": "Chatbot tidak mengekstrak G001 (Demam) dari kata 'demam' dalam konteks pertanyaan biaya. Reply harus menjelaskan bahwa pertanyaan biaya di luar kemampuan sistem dan mengundang user untuk menjelaskan kondisi anak.",
+        "checkedFields": {
+          "structured.symptoms": "harus array kosong [] atau dengan confidence sangat rendah",
+          "structured.canDiagnose": "harus false"
+        }
+      },
+      "rationale": "Test paling halus: kata kunci medis muncul tetapi BUKAN sebagai keluhan. Membutuhkan kontekstualisasi yang baik."
+    },
+    {
+      "id": "S30",
+      "category": "out_of_context",
+      "name": "Penyakit dewasa / di luar scope",
+      "description": "User mengeluhkan kondisi diri sendiri (dewasa) — di luar scope sistem pediatrik.",
+      "inputType": "chatbot",
+      "input": {
+        "messages": [
+          { "role": "user", "content": "Saya umur 35 tahun, sering merasa pusing dan jantung berdebar. Mungkin gejala apa ya?" }
+        ],
+        "profile": {}
+      },
+      "expected": {
+        "shouldRefuse": true,
+        "expectedBehavior": "Chatbot harus menyatakan bahwa sistem ini khusus untuk gejala anak dan tidak bisa membantu untuk pasien dewasa. Tidak boleh mencoba mengekstrak gejala (G006 sakit kepala mungkin terdeteksi tetapi profile menunjukkan dewasa).",
+        "checkedFields": {
+          "profile.childAgeMonths": "harus null atau 35*12=420 dengan flag warning",
+          "structured.canDiagnose": "harus false dengan alasan scope mismatch"
+        }
+      },
+      "rationale": "Test scope filtering: walau gejala medis valid, populasi target salah. Penting untuk audit safety."
+    }
+  ],
+
+  "evaluationProtocol": {
+    "diagnosticScenarios": {
+      "applicableTo": "S01 hingga S27",
+      "metrics": {
+        "topOneAccuracy": "Hitung: jumlah skenario dengan results[0].diseaseCode == topOneTarget / total skenario diagnostik",
+        "topThreeAccuracy": "Hitung: jumlah skenario dengan setiap target di topThreeShouldContain ada di results[0..2] / total",
+        "perDiseasePrecisionRecall": "Untuk setiap disease, hitung TP, FP, FN dari hasil top-1 across all scenarios → P, R, F1 macro-averaged",
+        "urgencyAccuracy": "Hitung: jumlah skenario dengan urgency.level == expectedUrgency / total",
+        "redFlagDetectionRecall": "Untuk setiap expectedRedFlags, cek apakah di redFlags response → recall per skenario, lalu rata-rata"
+      }
+    },
+    "outOfContextScenarios": {
+      "applicableTo": "S28, S29, S30",
+      "metrics": {
+        "refusalAppropriateness": "Cek apakah structured.canDiagnose==false AND structured.symptoms.length==0; nilai 1 jika sesuai, 0 jika tidak",
+        "qualityOfRedirection": "Rating manual 1-5: apakah reply chatbot mengarahkan user dengan baik ke topik valid"
+      }
+    },
+    "ragQualityEvaluation": {
+      "applicableTo": "S01-S27 (untuk skenario yang menghasilkan diagnosis valid)",
+      "method": "Manual rating skala 1-5 oleh annotator",
+      "metrics": {
+        "faithfulness": "Apakah explanation tidak mengubah/menambah hasil di luar output CF? (5=sempurna)",
+        "contextRelevance": "Apakah retrieved evidence relevan dengan disease/symptoms? (5=sangat relevan)",
+        "sourceSupport": "Apakah evidence chunks mendukung klaim dalam explanation? (5=mendukung penuh)",
+        "explanationClarity": "Apakah orang tua awam bisa memahami? (5=sangat jelas)",
+        "refusalAppropriateness": "Apakah sistem mengakui keterbatasan ketika evidence kurang? (5=sangat hati-hati)"
+      }
+    }
+  },
+
+  "scriptHints": {
+    "diagnosticEndpoint": "POST http://localhost:3001/api/consultations/diagnose",
+    "diagnosticPayloadShape": {
+      "childName": "string | null",
+      "childAgeMonths": "number",
+      "gender": "MALE | FEMALE",
+      "answers": "Array<{ symptomCode: string, userCf: number }>"
+    },
+    "chatbotEndpoint": "POST http://localhost:3001/api/chatbot/message",
+    "chatbotPayloadShape": {
+      "message": "string",
+      "history": "ChatMessage[]",
+      "profile": "ChildProfileDraft",
+      "knownSymptoms": "KnownSymptomDto[]"
+    },
+    "evaluationScript": "Loop semua scenarios, kirim ke endpoint sesuai inputType, simpan hasil, hitung metrik, output ke results.json + summary.csv"
+  }
+}

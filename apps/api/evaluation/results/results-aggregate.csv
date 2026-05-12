@@ -1,0 +1,11 @@
+metric,value,notes
+Top-1 Accuracy,0.889,24 / 27
+Top-3 Accuracy,1,target ada di top-3
+Top-3 Coverage,0.988,fraksi target overlap di top-3
+Macro Precision,0.938,rata-rata precision per kelas
+Macro Recall,0.888,rata-rata recall per kelas
+Macro F1,0.898,rata-rata F1 per kelas
+Urgency Accuracy,0.296,ketepatan klasifikasi urgensi
+Red Flag Recall,1,rata-rata recall deteksi red flag
+Refusal Appropriateness,1,3 / 3
+Average Latency (ms),10922,"30 skenario, 0 error"

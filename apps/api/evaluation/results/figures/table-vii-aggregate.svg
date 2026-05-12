@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="357" viewBox="0 0 1200 357" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="357" fill="#ffffff"/>
+  <text x="600" y="32" text-anchor="middle" font-family="Times New Roman, serif" font-size="18" font-weight="700">Tabel VII. Ringkasan Metrik Agregat Inferensi Certainty Factor</text>
+  
+      <rect x="36" y="55" width="300" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="186" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Metrik</text>
+      <rect x="336" y="55" width="180" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="426" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Nilai</text>
+      <rect x="516" y="55" width="610" height="38" fill="#eaf2ff" stroke="#1f2937" stroke-width="1"/>
+      <text x="821" y="79" text-anchor="middle" font-family="Times New Roman, serif" font-size="15" font-weight="700">Keterangan</text>
+        <rect x="36" y="93" width="300" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="186" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Top-1 Accuracy</text>
+        <rect x="336" y="93" width="180" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="426" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">88.9%</text>
+        <rect x="516" y="93" width="610" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="117" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">24 dari 27 skenario diagnostik</text>
+        <rect x="36" y="131" width="300" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="186" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Top-3 Accuracy</text>
+        <rect x="336" y="131" width="180" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="426" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">100.0%</text>
+        <rect x="516" y="131" width="610" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="155" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Target selalu masuk tiga kandidat teratas</text>
+        <rect x="36" y="169" width="300" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="186" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Macro Precision</text>
+        <rect x="336" y="169" width="180" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="426" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.938</text>
+        <rect x="516" y="169" width="610" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="193" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Rata-rata precision seluruh kelas</text>
+        <rect x="36" y="207" width="300" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="186" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Macro Recall</text>
+        <rect x="336" y="207" width="180" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="426" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.888</text>
+        <rect x="516" y="207" width="610" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="231" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Rata-rata recall seluruh kelas</text>
+        <rect x="36" y="245" width="300" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="186" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Macro F1-score</text>
+        <rect x="336" y="245" width="180" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="426" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0.898</text>
+        <rect x="516" y="245" width="610" height="38" fill="#ffffff" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="269" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Rata-rata F1 seluruh kelas</text>
+        <rect x="36" y="283" width="300" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="186" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Error Count</text>
+        <rect x="336" y="283" width="180" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="426" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">0</text>
+        <rect x="516" y="283" width="610" height="38" fill="#f8fafc" stroke="#1f2937" stroke-width="0.8"/>
+        <text x="821" y="307" text-anchor="middle" font-family="Times New Roman, serif" font-size="15">Tidak ada error komunikasi API</text>
+</svg>
