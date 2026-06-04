@@ -8,6 +8,8 @@ import {
   submitDiagnosis,
 } from "@/src/lib/api";
 
+import DiagnosisResultPanel from "./DiagnosisResultPanel";
+
 type Symptom = {
   id: string;
   code: string;
@@ -102,6 +104,7 @@ export default function ConsultationPage() {
   const [submitting, setSubmitting] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState("");
+const [diagnosisData, setDiagnosisData] = useState<any>(null);
 
   const [step, setStep] = useState<Step>("intro");
   const [currentSymptomIndex, setCurrentSymptomIndex] = useState(0);
@@ -495,49 +498,52 @@ export default function ConsultationPage() {
 }
 
   async function handleProcessDiagnosis() {
-    setError("");
+  setError("");
 
-    const formattedAnswers = Object.entries(answers).map(([symptomCode, userCf]) => ({
+  const formattedAnswers = Object.entries(answers)
+    .filter(([, userCf]) => Number(userCf) > 0)
+    .map(([symptomCode, userCf]) => ({
       symptomCode,
       userCf,
     }));
 
-    if (formattedAnswers.length === 0) {
-      setError("Pilih minimal satu gejala terlebih dahulu.");
-      return;
-    }
-
-    if (!childName.trim() || childAgeMonths === null || !gender) {
-      setError("Data anak belum lengkap.");
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-
-      const response = await submitDiagnosis({
-        childName,
-        childAgeMonths,
-        gender,
-        answers: formattedAnswers,
-      });
-
-      const consultationId = response?.data?.consultationId;
-      if (!consultationId) {
-        throw new Error("Consultation ID tidak ditemukan.");
-      }
-
-      router.push(`/consultation/result?id=${consultationId}`);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message || "Gagal memproses diagnosis."
-          : "Gagal memproses diagnosis."
-      );
-    } finally {
-      setSubmitting(false);
-    }
+  if (formattedAnswers.length === 0) {
+    setError("Pilih minimal satu gejala terlebih dahulu.");
+    return;
   }
+
+  if (!childName.trim() || childAgeMonths === null || !gender) {
+    setError("Data anak belum lengkap.");
+    return;
+  }
+
+  try {
+    setSubmitting(true);
+
+    const response = await submitDiagnosis({
+      childName,
+      childAgeMonths,
+      gender,
+      answers: formattedAnswers,
+    });
+
+    const consultationId = response?.data?.consultationId;
+
+    if (!consultationId) {
+      throw new Error("Consultation ID tidak ditemukan.");
+    }
+
+    router.push(`/consultation/result?id=${consultationId}`);
+  } catch (err) {
+    setError(
+      err instanceof Error
+        ? err.message || "Gagal memproses diagnosis."
+        : "Gagal memproses diagnosis."
+    );
+  } finally {
+    setSubmitting(false);
+  }
+}
 
 return (
   <main className="relative min-h-[100dvh] bg-[#F9FAFB] bg-[radial-gradient(#C7BBB5_1px,transparent_1px)] [background-size:24px_24px] p-2 md:p-4 font-sans overflow-hidden">
@@ -788,6 +794,9 @@ return (
                 <li className="flex gap-2 font-medium"><span className="text-[#8BA49A]">✦</span> Ke IGD jika kondisi darurat.</li>
               </ul>
             </div>
+            {/* {diagnosisData && (
+  <DiagnosisResultPanel data={diagnosisData} />
+)} */}
           </div>
         </aside>
 

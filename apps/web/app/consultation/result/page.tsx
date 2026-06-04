@@ -5,15 +5,37 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { fetchConsultationById } from "@/src/lib/api";
 
+type CalculationDetail = {
+  symptomCode: string;
+  symptomName: string;
+  role: string;
+  mb: number;
+  md: number;
+  cfExpert: number;
+  cfUser: number;
+  cfPartial: number;
+};
+
+type MatchedSymptom = {
+  symptomCode: string;
+  symptomName: string;
+  role: string;
+};
+
 type ConsultationResultItem = {
-  diseaseCode: string;
-  diseaseName: string;
-  severityLevel?: string | null;
-  cfResult: number;
-  percentage: number;
-  matchCount: number;
-  supportingSymptoms: string[];
-  advice: string | null;
+rank?: number;
+cfFinal?: number;
+cfPercent?: number;
+calculationDetails?: {
+  symptomCode: string;
+  symptomName: string;
+  role: string;
+  mb: number;
+  md: number;
+  cfExpert: number;
+  cfUser: number;
+  cfPartial: number;
+}[];
 };
 
 type UrgencyLevel = "LOW" | "MEDIUM" | "HIGH" | "EMERGENCY";
@@ -56,7 +78,12 @@ type ConsultationPayload = {
   redFlags: string[];
   urgency?: UrgencyResult;
   explanation?: ExplanationResult;
+
   results: ConsultationResultItem[];
+
+  rankedResults?: ConsultationResultItem[];
+  top1?: ConsultationResultItem | null;
+  top3?: ConsultationResultItem[];
 };
 
 type ConsultationDetailResponse = {
@@ -171,6 +198,22 @@ function getExplanationSourceLabel(source?: ExplanationResult["source"]) {
   return "Template";
 }
 
+function getCfPercent(item: ConsultationResultItem | null | undefined) {
+  if (!item) return 0;
+  return item.cfPercent ?? item.percentage ?? 0;
+}
+
+function getCfFinal(item: ConsultationResultItem | null | undefined) {
+  if (!item) return 0;
+  return item.cfFinal ?? item.cfResult ?? 0;
+}
+
+function truncateText(text: string | null | undefined, max = 160) {
+  if (!text) return "-";
+  if (text.length <= max) return text;
+  return `${text.slice(0, max)}...`;
+}
+
 function AnimatedPercentage({
   value,
   delay = 0,
@@ -272,358 +315,442 @@ export default function ConsultationResultPage() {
   const riskTone = topResult ? getRiskTone(topResult.percentage) : null;
   const urgencyTone = getUrgencyTone(urgency?.level);
 
+  const top3Results =
+  normalizedPayload?.top3 ??
+  normalizedPayload?.rankedResults?.slice(0, 3) ??
+  diagnosisResults.slice(0, 3);
+
+  const topCalculationDetails = topResult?.calculationDetails ?? [];
+
+  const topCfPercent =
+    topResult?.cfPercent ?? topResult?.percentage ?? 0;
+
+  const topCfFinal =
+    topResult?.cfFinal ?? topResult?.cfResult ?? 0;
+
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl space-y-6">
-        <header className="flex flex-col justify-between gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
-              Tahap Akhir
+  <main className="h-[100dvh] overflow-hidden bg-slate-100 p-3 text-slate-900">
+    <div className="mx-auto grid h-full max-w-[1600px] grid-rows-[72px_1fr] gap-3">
+      <header className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-3 shadow-sm">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-blue-600">
+            Hybrid Expert System Result
+          </p>
+          <h1 className="text-xl font-black tracking-tight text-slate-950">
+            Hasil Diagnosis Awal Penyakit Anak
+          </h1>
+          <p className="text-[11px] font-medium text-slate-500">
+            Certainty Factor • Red Flag • Urgency Logic • RAG Explanation
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-slate-50 px-4 py-2 text-right">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+              Consultation ID
             </p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">
-              Hasil Diagnosis Awal
-            </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Berikut adalah simpulan dari sistem pakar berbasis Certainty
-              Factor, urgency logic, dan RAG explanation berdasarkan gejala yang
-              diberikan.
+            <p className="max-w-[220px] truncate text-[11px] font-bold text-slate-700">
+              {patientData?.id || "-"}
             </p>
           </div>
 
           <Link
             href="/consultation"
-            className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+            className="rounded-xl bg-slate-950 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-white transition hover:bg-slate-800"
           >
-            Mulai Konsultasi Baru
+            Konsultasi Baru
           </Link>
-        </header>
+        </div>
+      </header>
 
-        {loading ? (
-          <section className="rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+      {loading ? (
+        <section className="flex items-center justify-center rounded-3xl border border-slate-200 bg-white shadow-sm">
+          <div className="text-center">
             <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
-            <p className="mt-4 text-sm font-medium text-slate-600">
+            <p className="mt-4 text-sm font-bold text-slate-600">
               Menyusun hasil diagnosis...
             </p>
-          </section>
-        ) : error ? (
-          <section className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
-            {error}
-          </section>
-        ) : !normalizedPayload ? (
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
-            Data hasil diagnosis belum tersedia.
-          </section>
-        ) : (
-          <>
-            <section className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
-              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-500">
-                      Diagnosis Paling Memungkinkan
-                    </p>
-                    <h2 className="mt-2 text-3xl font-bold text-slate-950">
-                      {topResult?.diseaseName || "Belum ada hasil"}
-                    </h2>
-                    <p className="mt-3 text-sm leading-6 text-slate-600">
-                      {disclaimer}
-                    </p>
-                  </div>
-
-                  {topResult && riskTone && (
-                    <div
-                      className={`rounded-2xl border px-4 py-3 text-center ${riskTone.className}`}
-                    >
-                      <p className="text-xs font-semibold uppercase tracking-wide">
-                        {riskTone.label}
-                      </p>
-                      <p className="mt-1 text-3xl font-bold">
-                        <AnimatedPercentage value={topResult.percentage} />%
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {topResult && riskTone && (
-                  <div className="mt-6">
-                    <div className="h-3 overflow-hidden rounded-full bg-slate-100">
-                      <div
-                        className={`h-full rounded-full ${riskTone.barClassName}`}
-                        style={{
-                          width: `${Math.min(topResult.percentage, 100)}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {topResult && (
-                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                    <StatCard label="Kode Penyakit" value={topResult.diseaseCode} />
-                    <StatCard label="Nilai CF" value={topResult.cfResult} />
-                    <StatCard
-                      label="Gejala Cocok"
-                      value={`${topResult.matchCount} Gejala`}
-                    />
-                  </div>
-                )}
-
-                {topResult && (
-                  <div className="mt-6 grid gap-5 lg:grid-cols-2">
-                    <div className="rounded-2xl bg-slate-50 p-4">
-                      <h3 className="font-semibold text-slate-950">
-                        Gejala Pendukung
-                      </h3>
-
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {topResult.supportingSymptoms.length > 0 ? (
-                          topResult.supportingSymptoms.map((symptom) => (
-                            <Pill key={symptom}>{symptom}</Pill>
-                          ))
-                        ) : (
-                          <p className="text-sm text-slate-500">
-                            Belum ada gejala pendukung yang tercatat.
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl bg-blue-50 p-4">
-                      <h3 className="font-semibold text-blue-950">
-                        Saran Medis Awal
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-blue-900">
-                        {topResult.advice ||
-                          "Belum ada saran awal yang tersedia."}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <aside className="space-y-6">
-                {urgency && (
-                  <section
-                    className={`rounded-3xl border p-5 shadow-sm ${urgencyTone.wrapper}`}
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-sm font-semibold opacity-80">
-                          Tingkat Urgensi
-                        </p>
-                        <h3
-                          className={`mt-1 text-2xl font-bold ${urgencyTone.title}`}
-                        >
-                          {urgency.label}
-                        </h3>
-                      </div>
-
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-bold ${urgencyTone.badge}`}
-                      >
-                        {urgency.level}
-                      </span>
-                    </div>
-
-                    {urgency.reasons.length > 0 && (
-                      <div className="mt-4">
-                        <p
-                          className={`text-sm font-semibold ${urgencyTone.title}`}
-                        >
-                          Alasan:
-                        </p>
-                        <ul
-                          className={`mt-2 list-disc space-y-1 pl-5 text-sm leading-6 ${urgencyTone.text}`}
-                        >
-                          {urgency.reasons.map((reason, index) => (
-                            <li key={`${reason}-${index}`}>{reason}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    <div className="mt-4 rounded-2xl bg-white/70 p-4 text-sm leading-6 text-slate-800">
-                      {urgency.action}
-                    </div>
-                  </section>
-                )}
-
-                {redFlags.length > 0 && (
-                  <section className="rounded-3xl border border-red-200 bg-white p-5 shadow-sm">
-                    <h3 className="text-lg font-bold text-red-700">
-                      Tanda Bahaya Terdeteksi
-                    </h3>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {redFlags.map((flag) => (
-                        <span
-                          key={flag}
-                          className="rounded-full bg-red-50 px-3 py-1 text-sm font-semibold text-red-700"
-                        >
-                          {flag}
-                        </span>
-                      ))}
-                    </div>
-                  </section>
-                )}
-              </aside>
-            </section>
-
-            {explanation && (
-              <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
-                      RAG Explanation
-                    </p>
-                    <h2 className="mt-2 text-2xl font-bold text-slate-950">
-                      Penjelasan Berbasis Evidence
-                    </h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">
-                      Penjelasan ini dibuat setelah hasil Certainty Factor dan
-                      urgency diperoleh. RAG mengambil evidence relevan, lalu LLM
-                      menyusun penjelasan tanpa mengubah diagnosis utama.
-                    </p>
-                  </div>
-
-                  <span className="w-fit rounded-full bg-blue-50 px-4 py-2 text-xs font-bold text-blue-700">
-                    {getExplanationSourceLabel(explanation.source)}
-                  </span>
-                </div>
-
-                <div className="mt-6 grid gap-4 lg:grid-cols-2">
-                  <ExplanationBlock
-                    title="Ringkasan"
-                    content={explanation.summary}
-                  />
-                  <ExplanationBlock
-                    title="Mengapa hasil ini muncul?"
-                    content={explanation.whyThisDiagnosis}
-                  />
-                  <ExplanationBlock
-                    title="Penjelasan berbasis evidence"
-                    content={
-                      explanation.evidenceBasedExplanation ||
-                      "Evidence tambahan belum tersedia."
-                    }
-                  />
-                  <ExplanationBlock
-                    title="Penjelasan urgensi"
-                    content={explanation.urgencyExplanation}
-                  />
-                </div>
-
-                <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50 p-4">
-                  <p className="text-sm font-bold text-blue-950">
-                    Langkah berikutnya
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-blue-900">
-                    {explanation.nextStep}
-                  </p>
-                </div>
-
-                {retrievedEvidence.length > 0 && (
-                  <div className="mt-6">
-                    <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-                      <div>
-                        <h3 className="text-lg font-bold text-slate-950">
-                          Evidence yang Digunakan
-                        </h3>
-                        <p className="mt-1 text-sm text-slate-600">
-                          Daftar evidence hasil retrieval yang digunakan untuk
-                          menyusun penjelasan.
-                        </p>
-                      </div>
-                      <p className="text-sm font-semibold text-slate-500">
-                        Total: {retrievedEvidence.length} evidence
-                      </p>
-                    </div>
-
-                    <div className="mt-4 grid gap-3 md:grid-cols-2">
-                      {retrievedEvidence.map((evidence, index) => (
-                        <EvidenceCard
-                          key={`${evidence.title}-${index}`}
-                          evidence={evidence}
-                          index={index}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="mt-5 rounded-2xl bg-slate-50 p-4 text-xs leading-6 text-slate-600">
-                  {explanation.disclaimer}
-                </div>
-              </section>
-            )}
-
-            {diagnosisResults.length > 1 && (
-              <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-950">
-                    Kemungkinan Diagnosis Lainnya
-                  </h2>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Alternatif penyakit dengan tingkat kecocokan yang lebih
-                    rendah.
-                  </p>
-                </div>
-
-                <div className="mt-5 space-y-3">
-                  {diagnosisResults
-                    .slice(1)
-                    .map((item: ConsultationResultItem, index: number) => (
-                      <ExpandableDiagnosisCard
-                        key={item.diseaseCode}
-                        item={item}
-                        index={index}
-                      />
-                    ))}
-                </div>
-              </section>
-            )}
-
-            <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
-              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 className="text-2xl font-bold text-slate-950">
-                  Data Pasien
+          </div>
+        </section>
+      ) : error ? (
+        <section className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+          {error}
+        </section>
+      ) : !normalizedPayload ? (
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
+          Data hasil diagnosis belum tersedia.
+        </section>
+      ) : (
+        <section className="grid min-h-0 grid-cols-[1.05fr_1.05fr_0.9fr] grid-rows-[0.9fr_1.1fr] gap-3">
+          {/* TOP-1 DIAGNOSIS */}
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                  Top-1 Diagnosis
+                </p>
+                <h2 className="mt-1 line-clamp-2 text-2xl font-black leading-tight text-slate-950">
+                  {topResult?.diseaseName || "Belum ada hasil"}
                 </h2>
+                <p className="mt-1 text-xs font-bold text-slate-500">
+                  {topResult?.diseaseCode || "-"} • {topResult?.matchCount ?? 0} gejala cocok
+                </p>
+              </div>
 
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  <StatCard
-                    label="Nama anak"
-                    value={patientData?.childName || "-"}
-                  />
-                  <StatCard
-                    label="Usia"
-                    value={formatAge(patientData?.childAgeMonths)}
-                  />
-                  <StatCard
-                    label="Jenis kelamin"
-                    value={formatGender(patientData?.gender)}
-                  />
-                  <StatCard label="ID Konsultasi" value={patientData?.id || "-"} />
+              <div className="shrink-0 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-center">
+                <p className="text-[9px] font-black uppercase tracking-widest text-blue-600">
+                  CF Final
+                </p>
+                <p className="text-3xl font-black text-blue-700">
+                  {topCfPercent.toFixed(0)}%
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Nama
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {patientData?.childName || "-"}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Usia
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {formatAge(patientData?.childAgeMonths)}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Gender
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {formatGender(patientData?.gender)}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 min-h-0 flex-1 overflow-hidden rounded-2xl bg-slate-50 p-3">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                Gejala Pendukung Top-1
+              </p>
+
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {topResult?.supportingSymptoms?.length ? (
+                  topResult.supportingSymptoms.slice(0, 7).map((symptom) => (
+                    <span
+                      key={symptom}
+                      className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-slate-700 ring-1 ring-slate-200"
+                    >
+                      {symptom}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-xs font-semibold text-slate-500">
+                    Belum ada gejala pendukung.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* TOP-3 DIAGNOSIS */}
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
+              Ranking Diagnosis
+            </p>
+            <h2 className="mt-1 text-lg font-black text-slate-950">
+              Top-3 Diagnosis
+            </h2>
+
+            <div className="mt-3 grid min-h-0 flex-1 grid-cols-3 gap-2">
+              {top3Results.length > 0 ? (
+                top3Results.map((item, index) => {
+                  const percent = item.cfPercent ?? item.percentage ?? 0;
+                  const finalCf = item.cfFinal ?? item.cfResult ?? 0;
+
+                  return (
+                    <div
+                      key={item.diseaseCode}
+                      className="flex min-h-0 flex-col rounded-2xl border border-slate-200 bg-slate-50 p-3"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-black text-white">
+                          #{item.rank ?? index + 1}
+                        </span>
+                        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-black text-blue-700">
+                          {percent.toFixed(0)}%
+                        </span>
+                      </div>
+
+                      <h3 className="mt-3 line-clamp-3 text-base font-black leading-tight text-slate-950">
+                        {item.diseaseName}
+                      </h3>
+
+                      <p className="mt-2 text-[11px] font-bold text-slate-500">
+                        {item.diseaseCode} • Match {item.matchCount}
+                      </p>
+
+                      <div className="mt-auto pt-3">
+                        <div className="h-1.5 overflow-hidden rounded-full bg-white">
+                          <div
+                            className="h-full rounded-full bg-blue-600"
+                            style={{ width: `${Math.min(percent, 100)}%` }}
+                          />
+                        </div>
+                        <p className="mt-1.5 text-[10px] font-bold text-slate-500">
+                          CF Final: {finalCf}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="col-span-3 flex items-center justify-center rounded-2xl bg-slate-50 text-sm font-bold text-slate-500">
+                  Belum ada kandidat diagnosis.
                 </div>
+              )}
+            </div>
+          </div>
+
+          {/* URGENCY & RED FLAG */}
+          <div
+            className={`flex min-h-0 flex-col overflow-hidden rounded-2xl border p-4 shadow-sm ${urgencyTone.wrapper}`}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">
+                  Urgency & Red Flag
+                </p>
+                <h2 className={`mt-1 text-2xl font-black ${urgencyTone.title}`}>
+                  {urgency?.label ?? "Tidak tersedia"}
+                </h2>
               </div>
 
-              <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6 shadow-sm">
-                <h3 className="text-lg font-bold text-amber-900">
-                  Peringatan Medis
-                </h3>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-amber-900">
-                  <li>Hasil ini adalah diagnosis awal.</li>
-                  <li>Bukan pengganti pemeriksaan dokter.</li>
-                  <li>
-                    Segera ke IGD atau fasilitas kesehatan bila kondisi anak
-                    memburuk.
-                  </li>
-                </ul>
+              <span
+                className={`rounded-full px-3 py-1 text-[10px] font-black ${urgencyTone.badge}`}
+              >
+                {urgency?.level ?? "-"}
+              </span>
+            </div>
+
+            <div className="mt-3 rounded-2xl bg-white/70 p-3">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                Action
+              </p>
+              <p className="mt-1 text-xs font-semibold leading-5 text-slate-800">
+                {urgency?.action ?? "-"}
+              </p>
+            </div>
+
+            <div className="mt-3 min-h-0 flex-1 overflow-hidden">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                Red Flags
+              </p>
+
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {redFlags.length > 0 ? (
+                  redFlags.slice(0, 5).map((flag) => (
+                    <span
+                      key={flag}
+                      className="rounded-full bg-white px-2.5 py-1 text-[10px] font-black text-red-700 ring-1 ring-red-100"
+                    >
+                      {flag}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-xs font-semibold text-slate-500">
+                    Tidak ada red flag terdeteksi.
+                  </p>
+                )}
               </div>
-            </section>
-          </>
-        )}
-      </div>
-    </main>
-  );
+            </div>
+          </div>
+
+          {/* EXPLANATION */}
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
+                  Explanation Layer
+                </p>
+                <h2 className="mt-1 text-lg font-black text-slate-950">
+                  RAG / Template Explanation
+                </h2>
+              </div>
+
+              <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-black text-blue-700">
+                {getExplanationSourceLabel(explanation?.source)}
+              </span>
+            </div>
+
+            <div className="mt-3 grid min-h-0 flex-1 grid-rows-3 gap-2">
+              <div className="min-h-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  Ringkasan
+                </p>
+                <p className="mt-1 line-clamp-3 text-[11px] font-medium leading-5 text-slate-700">
+                  {truncateText(explanation?.summary, 170)}
+                </p>
+              </div>
+
+              <div className="min-h-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  Mengapa hasil muncul?
+                </p>
+                <p className="mt-1 line-clamp-3 text-[11px] font-medium leading-5 text-slate-700">
+                  {truncateText(explanation?.whyThisDiagnosis, 190)}
+                </p>
+              </div>
+
+              <div className="min-h-0 overflow-hidden rounded-2xl border border-blue-100 bg-blue-50 p-3">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  Langkah berikutnya
+                </p>
+                <p className="mt-1 line-clamp-3 text-[11px] font-medium leading-5 text-slate-700">
+                  {truncateText(explanation?.nextStep, 180)}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CF TABLE */}
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
+              Certainty Factor Calculation
+            </p>
+
+            <div className="mt-1 flex items-end justify-between gap-3">
+              <h2 className="text-lg font-black text-slate-950">
+                Detail Perhitungan CF
+              </h2>
+              <p className="text-[11px] font-bold text-slate-500">
+                CF Final: {topCfFinal}
+              </p>
+            </div>
+
+            <div className="mt-2 min-h-0 flex-1 overflow-hidden rounded-2xl border border-slate-200">
+              <table className="w-full text-left text-[10px]">
+                <thead className="bg-slate-100 text-slate-600">
+                  <tr>
+                    <th className="px-2 py-1.5">Gejala</th>
+                    <th className="px-2 py-1.5">MB</th>
+                    <th className="px-2 py-1.5">MD</th>
+                    <th className="px-2 py-1.5">CF Exp</th>
+                    <th className="px-2 py-1.5">User</th>
+                    <th className="px-2 py-1.5">Partial</th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-slate-100">
+                  {topCalculationDetails.length > 0 ? (
+                    topCalculationDetails.slice(0, 6).map((detail) => (
+                      <tr key={detail.symptomCode} className="align-top">
+                        <td className="px-2 py-1.5 font-bold text-slate-700">
+                          <span>{detail.symptomCode}</span>
+                          <br />
+                          <span className="font-medium text-slate-500">
+                            {truncateText(detail.symptomName, 38)}
+                          </span>
+                        </td>
+                        <td className="px-2 py-1.5">{detail.mb}</td>
+                        <td className="px-2 py-1.5">{detail.md}</td>
+                        <td className="px-2 py-1.5">{detail.cfExpert}</td>
+                        <td className="px-2 py-1.5">{detail.cfUser}</td>
+                        <td className="px-2 py-1.5 font-black text-blue-700">
+                          {detail.cfPartial}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="px-3 py-8 text-center text-xs font-bold text-slate-500"
+                      >
+                        Detail perhitungan belum tersedia.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <p className="mt-2 text-[10px] leading-4 text-slate-500">
+              CF Expert = MB - MD; CF Partial = CF Expert × CF User; CF Final
+              dihitung menggunakan CF Combine.
+            </p>
+          </div>
+
+          {/* RESEARCH SNAPSHOT */}
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-700">
+              Research Snapshot
+            </p>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Kandidat
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {diagnosisResults.length}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Evidence
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {retrievedEvidence.length}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Source
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {getExplanationSourceLabel(explanation?.source)}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Created
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  {patientData?.createdAt
+                    ? new Date(patientData.createdAt).toLocaleDateString("id-ID")
+                    : "-"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 min-h-0 flex-1 rounded-2xl bg-white/70 p-3">
+              <p className="text-[10px] font-black uppercase tracking-widest text-amber-800">
+                Catatan
+              </p>
+              <ul className="mt-2 space-y-1 text-[11px] font-semibold leading-5 text-amber-900">
+                <li>• Diagnosis bersifat identifikasi awal.</li>
+                <li>• CF menentukan ranking penyakit.</li>
+                <li>• RAG hanya menjelaskan hasil CF.</li>
+                <li>• Hasil final tetap membutuhkan dokter.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
+  </main>
+);
 }
 
 function StatCard({
@@ -732,76 +859,397 @@ function EvidenceCard({
   );
 }
 
-function ExpandableDiagnosisCard({
-  item,
-  index,
+function ResearchTopDiagnosisCard({
+  topResult,
+  patientData,
+  disclaimer,
 }: {
-  item: ConsultationResultItem;
-  index: number;
+  topResult: ConsultationResultItem | null;
+  patientData: ConsultationPayload["consultation"] | null;
+  disclaimer: string;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const tone = getRiskTone(item.percentage);
+  const percent = getCfPercent(topResult);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between gap-4 p-4 text-left"
-      >
+    <div className="flex min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Peringkat #{index + 2} • {item.diseaseCode}
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
+            Top-1 Diagnosis
           </p>
-          <h3 className="mt-1 text-lg font-bold text-slate-950">
-            {item.diseaseName}
-          </h3>
-        </div>
-
-        <div className="text-right">
-          <p className="text-xl font-bold text-slate-950">
-            {item.percentage.toFixed(2)}%
-          </p>
-          <p className={`mt-1 rounded-full px-3 py-1 text-xs ${tone.className}`}>
-            {tone.label}
+          <h2 className="mt-2 text-3xl font-black leading-tight text-slate-950">
+            {topResult?.diseaseName || "Belum ada hasil"}
+          </h2>
+          <p className="mt-1 text-sm font-bold text-slate-500">
+            {topResult?.diseaseCode || "-"} • {topResult?.matchCount ?? 0} gejala cocok
           </p>
         </div>
-      </button>
 
-      {isOpen && (
-        <div className="border-t border-slate-200 p-4">
-          <div className="grid gap-3 sm:grid-cols-3">
-            <StatCard label="Kode Penyakit" value={item.diseaseCode} />
-            <StatCard label="Total CF" value={item.cfResult} />
-            <StatCard label="Gejala Cocok" value={`${item.matchCount} Gejala`} />
-          </div>
+        <div className="rounded-2xl border border-blue-100 bg-blue-50 px-5 py-4 text-center">
+          <p className="text-[10px] font-black uppercase tracking-widest text-blue-600">
+            CF Final
+          </p>
+          <p className="text-4xl font-black text-blue-700">
+            {percent.toFixed(0)}%
+          </p>
+        </div>
+      </div>
 
-          <div className="mt-4">
-            <p className="text-sm font-bold text-slate-950">
-              Gejala Pendukung
-            </p>
+      <div className="mt-5 grid grid-cols-3 gap-2">
+        <MiniStat label="Nama" value={patientData?.childName || "-"} />
+        <MiniStat label="Usia" value={formatAge(patientData?.childAgeMonths)} />
+        <MiniStat label="Gender" value={formatGender(patientData?.gender)} />
+      </div>
 
-            <div className="mt-2 flex flex-wrap gap-2">
-              {item.supportingSymptoms.length > 0 ? (
-                item.supportingSymptoms.map((symptom) => (
-                  <Pill key={symptom}>{symptom}</Pill>
-                ))
-              ) : (
-                <p className="text-sm text-slate-500">
-                  Tidak ada gejala pendukung tercatat.
-                </p>
-              )}
-            </div>
-          </div>
-
-          {item.advice && (
-            <div className="mt-4 rounded-2xl bg-white p-4 text-sm leading-6 text-slate-700">
-              <p className="font-bold text-slate-950">Saran Medis Singkat</p>
-              <p className="mt-2">{item.advice}</p>
-            </div>
+      <div className="mt-4 rounded-2xl bg-slate-50 p-4">
+        <p className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+          Gejala Pendukung Top-1
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {topResult?.supportingSymptoms?.length ? (
+            topResult.supportingSymptoms.slice(0, 6).map((symptom) => (
+              <span
+                key={symptom}
+                className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700 ring-1 ring-slate-200"
+              >
+                {symptom}
+              </span>
+            ))
+          ) : (
+            <p className="text-xs text-slate-500">Belum ada gejala pendukung.</p>
           )}
         </div>
-      )}
+      </div>
+
+      <p className="mt-auto pt-4 text-[11px] leading-5 text-slate-500">
+        {disclaimer}
+      </p>
+    </div>
+  );
+}
+
+function ResearchTop3Card({
+  results,
+}: {
+  results: ConsultationResultItem[];
+}) {
+  return (
+    <div className="flex min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-600">
+        Ranking Diagnosis
+      </p>
+      <h2 className="mt-1 text-xl font-black text-slate-950">
+        Top-3 Diagnosis
+      </h2>
+
+      <div className="mt-4 grid flex-1 grid-cols-3 gap-3">
+        {results.map((item, index) => {
+          const percent = getCfPercent(item);
+          const finalCf = getCfFinal(item);
+
+          return (
+            <div
+              key={item.diseaseCode}
+              className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white">
+                  #{item.rank ?? index + 1}
+                </span>
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
+                  {percent.toFixed(0)}%
+                </span>
+              </div>
+
+              <h3 className="mt-4 text-lg font-black leading-tight text-slate-950">
+                {item.diseaseName}
+              </h3>
+
+              <p className="mt-2 text-xs font-bold text-slate-500">
+                {item.diseaseCode} • Match {item.matchCount}
+              </p>
+
+              <div className="mt-auto pt-4">
+                <div className="h-2 overflow-hidden rounded-full bg-white">
+                  <div
+                    className="h-full rounded-full bg-blue-600"
+                    style={{ width: `${Math.min(percent, 100)}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-[11px] font-bold text-slate-500">
+                  CF Final: {finalCf}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+
+        {results.length === 0 && (
+          <div className="col-span-3 flex items-center justify-center rounded-2xl bg-slate-50 text-sm font-bold text-slate-500">
+            Belum ada kandidat diagnosis.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ResearchUrgencyCard({
+  urgency,
+  redFlags,
+}: {
+  urgency: UrgencyResult | null;
+  redFlags: string[];
+}) {
+  const tone = getUrgencyTone(urgency?.level);
+
+  return (
+    <div className={`flex min-h-0 flex-col rounded-3xl border p-5 shadow-sm ${tone.wrapper}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] opacity-70">
+            Urgency & Red Flag
+          </p>
+          <h2 className={`mt-2 text-3xl font-black ${tone.title}`}>
+            {urgency?.label ?? "Tidak tersedia"}
+          </h2>
+        </div>
+
+        <span className={`rounded-full px-3 py-1 text-xs font-black ${tone.badge}`}>
+          {urgency?.level ?? "-"}
+        </span>
+      </div>
+
+      <div className="mt-4 rounded-2xl bg-white/70 p-3">
+        <p className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+          Action
+        </p>
+        <p className="mt-2 text-sm font-semibold leading-5 text-slate-800">
+          {urgency?.action ?? "-"}
+        </p>
+      </div>
+
+      <div className="mt-4 min-h-0 flex-1 overflow-hidden">
+        <p className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+          Red Flags
+        </p>
+
+        <div className="mt-2 flex flex-wrap gap-2">
+          {redFlags.length > 0 ? (
+            redFlags.slice(0, 5).map((flag) => (
+              <span
+                key={flag}
+                className="rounded-full bg-white px-3 py-1 text-xs font-black text-red-700 ring-1 ring-red-100"
+              >
+                {flag}
+              </span>
+            ))
+          ) : (
+            <p className="text-xs font-semibold text-slate-500">
+              Tidak ada red flag terdeteksi.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResearchExplanationCard({
+  explanation,
+}: {
+  explanation: ExplanationResult | null;
+}) {
+  return (
+    <div className="flex min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-600">
+            Explanation Layer
+          </p>
+          <h2 className="mt-1 text-xl font-black text-slate-950">
+            RAG / Template Explanation
+          </h2>
+        </div>
+
+        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
+          {getExplanationSourceLabel(explanation?.source)}
+        </span>
+      </div>
+
+      <div className="mt-4 grid min-h-0 flex-1 grid-rows-[auto_auto_auto] gap-3">
+        <CompactTextBlock
+          title="Ringkasan"
+          content={truncateText(explanation?.summary, 180)}
+        />
+        <CompactTextBlock
+          title="Mengapa hasil muncul?"
+          content={truncateText(explanation?.whyThisDiagnosis, 220)}
+        />
+        <CompactTextBlock
+          title="Langkah berikutnya"
+          content={truncateText(explanation?.nextStep, 200)}
+          tone="blue"
+        />
+      </div>
+    </div>
+  );
+}
+
+function ResearchCfTable({
+  topResult,
+}: {
+  topResult: ConsultationResultItem | null;
+}) {
+  const details = topResult?.calculationDetails ?? [];
+
+  return (
+    <div className="col-span-1 flex min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-600">
+        Certainty Factor Calculation
+      </p>
+
+      <div className="mt-1 flex items-end justify-between gap-3">
+        <h2 className="text-xl font-black text-slate-950">
+          Detail Perhitungan CF
+        </h2>
+        <p className="text-xs font-bold text-slate-500">
+          CF Final: {getCfFinal(topResult)}
+        </p>
+      </div>
+
+      <div className="mt-3 min-h-0 flex-1 overflow-hidden rounded-2xl border border-slate-200">
+        <table className="h-full w-full text-left text-[11px]">
+          <thead className="bg-slate-100 text-slate-600">
+            <tr>
+              <th className="px-2 py-2">Gejala</th>
+              <th className="px-2 py-2">MB</th>
+              <th className="px-2 py-2">MD</th>
+              <th className="px-2 py-2">CF Exp</th>
+              <th className="px-2 py-2">CF User</th>
+              <th className="px-2 py-2">Partial</th>
+            </tr>
+          </thead>
+
+          <tbody className="divide-y divide-slate-100">
+            {details.slice(0, 6).map((detail) => (
+              <tr key={detail.symptomCode} className="align-top">
+                <td className="px-2 py-2 font-bold text-slate-700">
+                  <span>{detail.symptomCode}</span>
+                  <br />
+                  <span className="font-medium text-slate-500">
+                    {truncateText(detail.symptomName, 42)}
+                  </span>
+                </td>
+                <td className="px-2 py-2">{detail.mb}</td>
+                <td className="px-2 py-2">{detail.md}</td>
+                <td className="px-2 py-2">{detail.cfExpert}</td>
+                <td className="px-2 py-2">{detail.cfUser}</td>
+                <td className="px-2 py-2 font-black text-blue-700">
+                  {detail.cfPartial}
+                </td>
+              </tr>
+            ))}
+
+            {details.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-3 py-8 text-center text-xs font-bold text-slate-500">
+                  Detail perhitungan belum tersedia.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <p className="mt-3 text-[11px] leading-5 text-slate-500">
+        Rumus: CF Expert = MB - MD; CF Partial = CF Expert × CF User; CF Final
+        dihitung menggunakan CF Combine.
+      </p>
+    </div>
+  );
+}
+
+function ResearchPatientCard({
+  patientData,
+  diagnosisResults,
+  retrievedEvidence,
+  explanation,
+}: {
+  patientData: ConsultationPayload["consultation"] | null;
+  diagnosisResults: ConsultationResultItem[];
+  retrievedEvidence: ExplanationEvidence[];
+  explanation: ExplanationResult | null;
+}) {
+  return (
+    <div className="flex min-h-0 flex-col rounded-3xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
+      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-amber-700">
+        Research Snapshot
+      </p>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <MiniStat label="Total Kandidat" value={diagnosisResults.length} />
+        <MiniStat label="Evidence" value={retrievedEvidence.length} />
+        <MiniStat label="Source" value={getExplanationSourceLabel(explanation?.source)} />
+        <MiniStat label="Created" value={patientData?.createdAt ? new Date(patientData.createdAt).toLocaleDateString("id-ID") : "-"} />
+      </div>
+
+      <div className="mt-4 rounded-2xl bg-white/70 p-4">
+        <p className="text-[11px] font-black uppercase tracking-widest text-amber-800">
+          Catatan Medis
+        </p>
+        <ul className="mt-2 space-y-1 text-xs font-semibold leading-5 text-amber-900">
+          <li>• Hasil ini adalah identifikasi awal.</li>
+          <li>• Diagnosis final tetap membutuhkan dokter.</li>
+          <li>• RAG hanya menjelaskan hasil CF, bukan menentukan diagnosis.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function MiniStat({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
+      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+        {label}
+      </p>
+      <p className="mt-1 truncate text-sm font-black text-slate-900">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function CompactTextBlock({
+  title,
+  content,
+  tone = "slate",
+}: {
+  title: string;
+  content: string;
+  tone?: "slate" | "blue";
+}) {
+  return (
+    <div
+      className={
+        tone === "blue"
+          ? "rounded-2xl border border-blue-100 bg-blue-50 p-3"
+          : "rounded-2xl border border-slate-200 bg-slate-50 p-3"
+      }
+    >
+      <p className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+        {title}
+      </p>
+      <p className="mt-1 text-xs font-medium leading-5 text-slate-700">
+        {content || "-"}
+      </p>
     </div>
   );
 }

@@ -1,0 +1,267 @@
+.diagnosis-result {
+  margin-top: 32px;
+  padding: 24px;
+  border-radius: 24px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.section-label {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2563eb;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.result-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.muted {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.cf-score-card {
+  min-width: 140px;
+  padding: 18px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid #dbeafe;
+  text-align: center;
+}
+
+.cf-score-card span {
+  display: block;
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.cf-score-card strong {
+  font-size: 30px;
+  color: #2563eb;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card,
+.result-section,
+.empty-result-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-card h3,
+.result-section h3 {
+  margin: 0 0 12px;
+  color: #0f172a;
+}
+
+.diagnosis-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.urgency-badge {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.urgency-emergency {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.urgency-high {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.urgency-medium {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.urgency-low {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.danger-tag {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.result-section {
+  margin-top: 16px;
+}
+
+.top3-list {
+  display: grid;
+  gap: 12px;
+}
+
+.top3-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.top3-card h4 {
+  margin: 8px 0 4px;
+  color: #0f172a;
+}
+
+.rank-badge {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.top3-score {
+  font-size: 24px;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.matched-symptoms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.symptom-chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.symptom-chip small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.explanation-box p {
+  margin: 0 0 10px;
+  color: #334155;
+  line-height: 1.7;
+}
+
+.disclaimer {
+  font-size: 13px;
+  color: #b45309 !important;
+  background: #fffbeb;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.cf-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+  font-size: 13px;
+}
+
+.cf-table th {
+  background: #f1f5f9;
+  color: #334155;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.cf-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  vertical-align: top;
+}
+
+.cf-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 900px) {
+  .result-header,
+  .summary-grid {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .summary-grid {
+    display: grid;
+  }
+
+  .cf-score-card {
+    width: 100%;
+  }
+}
