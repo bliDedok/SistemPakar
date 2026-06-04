@@ -791,20 +791,84 @@ const weights: SaputraWeight[] = [
   { diseaseCode: "P008", symptomCode: "G041", mb: 1.0, md: 0.0, symptomRole: SymptomRole.CORE },
 ];
 
-const rules = diseases.map((disease, index) => ({
-  code: `R${String(index + 1).padStart(3, "0")}`,
-  name: `Aturan ${disease.name}`,
-  diseaseCode: disease.code,
-  operator: RuleOperator.AND,
-  minMatch: 1,
-  priority: disease.severityLevel === "critical" ? 12 : disease.severityLevel === "high" ? 10 : 8,
-  symptoms: weights
-    .filter((weight) => weight.diseaseCode === disease.code)
-    .map((weight) => ({
-      code: weight.symptomCode,
-      isMandatory: false,
-    })),
-}));
+const diseaseRuleConfig: Record<
+  string,
+  {
+    minMatch: number;
+    priority: number;
+    note: string;
+  }
+> = {
+  P001: {
+    minMatch: 2,
+    priority: 10,
+    note: "Campak minimal membutuhkan dua gejala agar tidak hanya terpicu oleh ruam atau demam tinggi saja.",
+  },
+  P002: {
+    minMatch: 2,
+    priority: 10,
+    note: "Malaria minimal dua gejala agar tidak hanya terpicu oleh demam umum.",
+  },
+  P003: {
+    minMatch: 2,
+    priority: 10,
+    note: "Tifoid minimal dua gejala agar demam saja tidak langsung menghasilkan kandidat diagnosis.",
+  },
+  P004: {
+    minMatch: 2,
+    priority: 8,
+    note: "Diare minimal dua gejala, misalnya BAB cair dan sering BAB atau kram perut.",
+  },
+  P005: {
+    minMatch: 2,
+    priority: 8,
+    note: "ISPA minimal dua gejala, misalnya batuk dan pilek atau batuk dan demam.",
+  },
+  P006: {
+    minMatch: 2,
+    priority: 12,
+    note: "DBD minimal dua gejala agar demam saja tidak langsung dominan.",
+  },
+  P007: {
+    minMatch: 2,
+    priority: 12,
+    note: "Pneumonia minimal dua gejala, terutama batuk dengan gejala pernapasan atau red flag.",
+  },
+  P008: {
+    minMatch: 2,
+    priority: 8,
+    note: "Cacar air minimal dua gejala, terutama bintik merah dan vesikel/lentingan.",
+  },
+};
+
+const rules = diseases.map((disease, index) => {
+  const config = diseaseRuleConfig[disease.code] ?? {
+    minMatch: 2,
+    priority:
+      disease.severityLevel === "critical"
+        ? 12
+        : disease.severityLevel === "high"
+          ? 10
+          : 8,
+    note: "Default rule minimal dua gejala.",
+  };
+
+  return {
+    code: `R${String(index + 1).padStart(3, "0")}`,
+    name: `Aturan ${disease.name}`,
+    diseaseCode: disease.code,
+    operator: RuleOperator.AND,
+    minMatch: config.minMatch,
+    priority: config.priority,
+    note: config.note,
+    symptoms: weights
+      .filter((weight) => weight.diseaseCode === disease.code)
+      .map((weight) => ({
+        code: weight.symptomCode,
+        isMandatory: false,
+      })),
+  };
+});
 
 async function main() {
   const resetConsultations = process.env.RESET_CONSULTATIONS === "true";
@@ -862,16 +926,16 @@ async function main() {
       throw new Error(`Disease tidak ditemukan untuk rule ${rule.code}: ${rule.diseaseCode}`);
     }
 
-    const createdRule = await prisma.rule.create({
-      data: {
-        code: rule.code,
-        name: rule.name,
-        diseaseId,
-        operator: rule.operator,
-        minMatch: rule.minMatch,
-        priority: rule.priority,
-      },
-    });
+  const createdRule = await prisma.rule.create({
+    data: {
+      code: rule.code,
+      name: rule.name,
+      diseaseId,
+      operator: rule.operator,
+      minMatch: rule.minMatch,
+      priority: rule.priority,
+    },
+  });
 
     for (const item of rule.symptoms) {
       const symptomId = symptomMap.get(item.code);
