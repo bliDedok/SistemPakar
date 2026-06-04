@@ -27,12 +27,16 @@ export type AggregateDiseaseSymptomWeight = {
 }
 
 export type DiseaseSymptomWeightAvgAggregateOutputType = {
+  mb: number | null
+  md: number | null
   cfExpert: number | null
   candidateCfMin: number | null
   candidateCfMax: number | null
 }
 
 export type DiseaseSymptomWeightSumAggregateOutputType = {
+  mb: number | null
+  md: number | null
   cfExpert: number | null
   candidateCfMin: number | null
   candidateCfMax: number | null
@@ -42,6 +46,8 @@ export type DiseaseSymptomWeightMinAggregateOutputType = {
   id: string | null
   diseaseId: string | null
   symptomId: string | null
+  mb: number | null
+  md: number | null
   cfExpert: number | null
   candidateCfMin: number | null
   candidateCfMax: number | null
@@ -57,6 +63,8 @@ export type DiseaseSymptomWeightMaxAggregateOutputType = {
   id: string | null
   diseaseId: string | null
   symptomId: string | null
+  mb: number | null
+  md: number | null
   cfExpert: number | null
   candidateCfMin: number | null
   candidateCfMax: number | null
@@ -72,6 +80,8 @@ export type DiseaseSymptomWeightCountAggregateOutputType = {
   id: number
   diseaseId: number
   symptomId: number
+  mb: number
+  md: number
   cfExpert: number
   candidateCfMin: number
   candidateCfMax: number
@@ -86,12 +96,16 @@ export type DiseaseSymptomWeightCountAggregateOutputType = {
 
 
 export type DiseaseSymptomWeightAvgAggregateInputType = {
+  mb?: true
+  md?: true
   cfExpert?: true
   candidateCfMin?: true
   candidateCfMax?: true
 }
 
 export type DiseaseSymptomWeightSumAggregateInputType = {
+  mb?: true
+  md?: true
   cfExpert?: true
   candidateCfMin?: true
   candidateCfMax?: true
@@ -101,6 +115,8 @@ export type DiseaseSymptomWeightMinAggregateInputType = {
   id?: true
   diseaseId?: true
   symptomId?: true
+  mb?: true
+  md?: true
   cfExpert?: true
   candidateCfMin?: true
   candidateCfMax?: true
@@ -116,6 +132,8 @@ export type DiseaseSymptomWeightMaxAggregateInputType = {
   id?: true
   diseaseId?: true
   symptomId?: true
+  mb?: true
+  md?: true
   cfExpert?: true
   candidateCfMin?: true
   candidateCfMax?: true
@@ -131,6 +149,8 @@ export type DiseaseSymptomWeightCountAggregateInputType = {
   id?: true
   diseaseId?: true
   symptomId?: true
+  mb?: true
+  md?: true
   cfExpert?: true
   candidateCfMin?: true
   candidateCfMax?: true
@@ -233,6 +253,8 @@ export type DiseaseSymptomWeightGroupByOutputType = {
   id: string
   diseaseId: string
   symptomId: string
+  mb: number
+  md: number
   cfExpert: number
   candidateCfMin: number | null
   candidateCfMax: number | null
@@ -271,6 +293,8 @@ export type DiseaseSymptomWeightWhereInput = {
   id?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
+  mb?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  md?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
   candidateCfMin?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
   candidateCfMax?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
@@ -288,6 +312,8 @@ export type DiseaseSymptomWeightOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrderInput | Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -309,6 +335,8 @@ export type DiseaseSymptomWeightWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DiseaseSymptomWeightWhereInput | Prisma.DiseaseSymptomWeightWhereInput[]
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
+  mb?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  md?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
   candidateCfMin?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
   candidateCfMax?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
@@ -326,6 +354,8 @@ export type DiseaseSymptomWeightOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrderInput | Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -349,6 +379,8 @@ export type DiseaseSymptomWeightScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
   diseaseId?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringWithAggregatesFilter<"DiseaseSymptomWeight"> | string
+  mb?: Prisma.FloatWithAggregatesFilter<"DiseaseSymptomWeight"> | number
+  md?: Prisma.FloatWithAggregatesFilter<"DiseaseSymptomWeight"> | number
   cfExpert?: Prisma.FloatWithAggregatesFilter<"DiseaseSymptomWeight"> | number
   candidateCfMin?: Prisma.FloatNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | number | null
   candidateCfMax?: Prisma.FloatNullableWithAggregatesFilter<"DiseaseSymptomWeight"> | number | null
@@ -362,6 +394,8 @@ export type DiseaseSymptomWeightScalarWhereWithAggregatesInput = {
 
 export type DiseaseSymptomWeightCreateInput = {
   id?: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -379,6 +413,8 @@ export type DiseaseSymptomWeightUncheckedCreateInput = {
   id?: string
   diseaseId: string
   symptomId: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -392,6 +428,8 @@ export type DiseaseSymptomWeightUncheckedCreateInput = {
 
 export type DiseaseSymptomWeightUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -409,6 +447,8 @@ export type DiseaseSymptomWeightUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -424,6 +464,8 @@ export type DiseaseSymptomWeightCreateManyInput = {
   id?: string
   diseaseId: string
   symptomId: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -437,6 +479,8 @@ export type DiseaseSymptomWeightCreateManyInput = {
 
 export type DiseaseSymptomWeightUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -452,6 +496,8 @@ export type DiseaseSymptomWeightUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -482,6 +528,8 @@ export type DiseaseSymptomWeightCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrder
@@ -494,6 +542,8 @@ export type DiseaseSymptomWeightCountOrderByAggregateInput = {
 }
 
 export type DiseaseSymptomWeightAvgOrderByAggregateInput = {
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrder
@@ -503,6 +553,8 @@ export type DiseaseSymptomWeightMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrder
@@ -518,6 +570,8 @@ export type DiseaseSymptomWeightMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   diseaseId?: Prisma.SortOrder
   symptomId?: Prisma.SortOrder
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrder
@@ -530,6 +584,8 @@ export type DiseaseSymptomWeightMinOrderByAggregateInput = {
 }
 
 export type DiseaseSymptomWeightSumOrderByAggregateInput = {
+  mb?: Prisma.SortOrder
+  md?: Prisma.SortOrder
   cfExpert?: Prisma.SortOrder
   candidateCfMin?: Prisma.SortOrder
   candidateCfMax?: Prisma.SortOrder
@@ -649,6 +705,8 @@ export type EnumUrgencyModeFieldUpdateOperationsInput = {
 
 export type DiseaseSymptomWeightCreateWithoutDiseaseInput = {
   id?: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -664,6 +722,8 @@ export type DiseaseSymptomWeightCreateWithoutDiseaseInput = {
 export type DiseaseSymptomWeightUncheckedCreateWithoutDiseaseInput = {
   id?: string
   symptomId: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -708,6 +768,8 @@ export type DiseaseSymptomWeightScalarWhereInput = {
   id?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   diseaseId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
   symptomId?: Prisma.StringFilter<"DiseaseSymptomWeight"> | string
+  mb?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
+  md?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
   cfExpert?: Prisma.FloatFilter<"DiseaseSymptomWeight"> | number
   candidateCfMin?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
   candidateCfMax?: Prisma.FloatNullableFilter<"DiseaseSymptomWeight"> | number | null
@@ -721,6 +783,8 @@ export type DiseaseSymptomWeightScalarWhereInput = {
 
 export type DiseaseSymptomWeightCreateWithoutSymptomInput = {
   id?: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -736,6 +800,8 @@ export type DiseaseSymptomWeightCreateWithoutSymptomInput = {
 export type DiseaseSymptomWeightUncheckedCreateWithoutSymptomInput = {
   id?: string
   diseaseId: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -776,6 +842,8 @@ export type DiseaseSymptomWeightUpdateManyWithWhereWithoutSymptomInput = {
 export type DiseaseSymptomWeightCreateManyDiseaseInput = {
   id?: string
   symptomId: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -789,6 +857,8 @@ export type DiseaseSymptomWeightCreateManyDiseaseInput = {
 
 export type DiseaseSymptomWeightUpdateWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -804,6 +874,8 @@ export type DiseaseSymptomWeightUpdateWithoutDiseaseInput = {
 export type DiseaseSymptomWeightUncheckedUpdateWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -818,6 +890,8 @@ export type DiseaseSymptomWeightUncheckedUpdateWithoutDiseaseInput = {
 export type DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symptomId?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -832,6 +906,8 @@ export type DiseaseSymptomWeightUncheckedUpdateManyWithoutDiseaseInput = {
 export type DiseaseSymptomWeightCreateManySymptomInput = {
   id?: string
   diseaseId: string
+  mb?: number
+  md?: number
   cfExpert: number
   candidateCfMin?: number | null
   candidateCfMax?: number | null
@@ -845,6 +921,8 @@ export type DiseaseSymptomWeightCreateManySymptomInput = {
 
 export type DiseaseSymptomWeightUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -860,6 +938,8 @@ export type DiseaseSymptomWeightUpdateWithoutSymptomInput = {
 export type DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -874,6 +954,8 @@ export type DiseaseSymptomWeightUncheckedUpdateWithoutSymptomInput = {
 export type DiseaseSymptomWeightUncheckedUpdateManyWithoutSymptomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   diseaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  mb?: Prisma.FloatFieldUpdateOperationsInput | number
+  md?: Prisma.FloatFieldUpdateOperationsInput | number
   cfExpert?: Prisma.FloatFieldUpdateOperationsInput | number
   candidateCfMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   candidateCfMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -891,6 +973,8 @@ export type DiseaseSymptomWeightSelect<ExtArgs extends runtime.Types.Extensions.
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
+  mb?: boolean
+  md?: boolean
   cfExpert?: boolean
   candidateCfMin?: boolean
   candidateCfMax?: boolean
@@ -908,6 +992,8 @@ export type DiseaseSymptomWeightSelectCreateManyAndReturn<ExtArgs extends runtim
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
+  mb?: boolean
+  md?: boolean
   cfExpert?: boolean
   candidateCfMin?: boolean
   candidateCfMax?: boolean
@@ -925,6 +1011,8 @@ export type DiseaseSymptomWeightSelectUpdateManyAndReturn<ExtArgs extends runtim
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
+  mb?: boolean
+  md?: boolean
   cfExpert?: boolean
   candidateCfMin?: boolean
   candidateCfMax?: boolean
@@ -942,6 +1030,8 @@ export type DiseaseSymptomWeightSelectScalar = {
   id?: boolean
   diseaseId?: boolean
   symptomId?: boolean
+  mb?: boolean
+  md?: boolean
   cfExpert?: boolean
   candidateCfMin?: boolean
   candidateCfMax?: boolean
@@ -953,7 +1043,7 @@ export type DiseaseSymptomWeightSelectScalar = {
   note?: boolean
 }
 
-export type DiseaseSymptomWeightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "diseaseId" | "symptomId" | "cfExpert" | "candidateCfMin" | "candidateCfMax" | "symptomRole" | "phase" | "keepStatus" | "urgencyMode" | "evidenceDoi" | "note", ExtArgs["result"]["diseaseSymptomWeight"]>
+export type DiseaseSymptomWeightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "diseaseId" | "symptomId" | "mb" | "md" | "cfExpert" | "candidateCfMin" | "candidateCfMax" | "symptomRole" | "phase" | "keepStatus" | "urgencyMode" | "evidenceDoi" | "note", ExtArgs["result"]["diseaseSymptomWeight"]>
 export type DiseaseSymptomWeightInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
   symptom?: boolean | Prisma.SymptomDefaultArgs<ExtArgs>
@@ -977,6 +1067,8 @@ export type $DiseaseSymptomWeightPayload<ExtArgs extends runtime.Types.Extension
     id: string
     diseaseId: string
     symptomId: string
+    mb: number
+    md: number
     cfExpert: number
     candidateCfMin: number | null
     candidateCfMax: number | null
@@ -1414,6 +1506,8 @@ export interface DiseaseSymptomWeightFieldRefs {
   readonly id: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly diseaseId: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
   readonly symptomId: Prisma.FieldRef<"DiseaseSymptomWeight", 'String'>
+  readonly mb: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
+  readonly md: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
   readonly cfExpert: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
   readonly candidateCfMin: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>
   readonly candidateCfMax: Prisma.FieldRef<"DiseaseSymptomWeight", 'Float'>

@@ -23,7 +23,7 @@ export class PrismaDiagnosisRepository {
         code: true,
         name: true,
         description: true,
-        recommendation: true,
+        advice: true,
       },
     });
   }

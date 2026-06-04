@@ -45,6 +45,7 @@ export type ConsultationResultMinAggregateOutputType = {
   matchCount: number | null
   cfResult: number | null
   rank: number | null
+  urgencyLevel: string | null
 }
 
 export type ConsultationResultMaxAggregateOutputType = {
@@ -54,6 +55,7 @@ export type ConsultationResultMaxAggregateOutputType = {
   matchCount: number | null
   cfResult: number | null
   rank: number | null
+  urgencyLevel: string | null
 }
 
 export type ConsultationResultCountAggregateOutputType = {
@@ -63,6 +65,10 @@ export type ConsultationResultCountAggregateOutputType = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails: number
+  matchedSymptoms: number
+  redFlags: number
+  urgencyLevel: number
   _all: number
 }
 
@@ -86,6 +92,7 @@ export type ConsultationResultMinAggregateInputType = {
   matchCount?: true
   cfResult?: true
   rank?: true
+  urgencyLevel?: true
 }
 
 export type ConsultationResultMaxAggregateInputType = {
@@ -95,6 +102,7 @@ export type ConsultationResultMaxAggregateInputType = {
   matchCount?: true
   cfResult?: true
   rank?: true
+  urgencyLevel?: true
 }
 
 export type ConsultationResultCountAggregateInputType = {
@@ -104,6 +112,10 @@ export type ConsultationResultCountAggregateInputType = {
   matchCount?: true
   cfResult?: true
   rank?: true
+  calculationDetails?: true
+  matchedSymptoms?: true
+  redFlags?: true
+  urgencyLevel?: true
   _all?: true
 }
 
@@ -200,6 +212,10 @@ export type ConsultationResultGroupByOutputType = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails: runtime.JsonValue | null
+  matchedSymptoms: runtime.JsonValue | null
+  redFlags: runtime.JsonValue | null
+  urgencyLevel: string | null
   _count: ConsultationResultCountAggregateOutputType | null
   _avg: ConsultationResultAvgAggregateOutputType | null
   _sum: ConsultationResultSumAggregateOutputType | null
@@ -232,6 +248,10 @@ export type ConsultationResultWhereInput = {
   matchCount?: Prisma.IntFilter<"ConsultationResult"> | number
   cfResult?: Prisma.FloatFilter<"ConsultationResult"> | number
   rank?: Prisma.IntFilter<"ConsultationResult"> | number
+  calculationDetails?: Prisma.JsonNullableFilter<"ConsultationResult">
+  matchedSymptoms?: Prisma.JsonNullableFilter<"ConsultationResult">
+  redFlags?: Prisma.JsonNullableFilter<"ConsultationResult">
+  urgencyLevel?: Prisma.StringNullableFilter<"ConsultationResult"> | string | null
   consultation?: Prisma.XOR<Prisma.ConsultationScalarRelationFilter, Prisma.ConsultationWhereInput>
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
 }
@@ -243,6 +263,10 @@ export type ConsultationResultOrderByWithRelationInput = {
   matchCount?: Prisma.SortOrder
   cfResult?: Prisma.SortOrder
   rank?: Prisma.SortOrder
+  calculationDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  matchedSymptoms?: Prisma.SortOrderInput | Prisma.SortOrder
+  redFlags?: Prisma.SortOrderInput | Prisma.SortOrder
+  urgencyLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   consultation?: Prisma.ConsultationOrderByWithRelationInput
   disease?: Prisma.DiseaseOrderByWithRelationInput
 }
@@ -258,6 +282,10 @@ export type ConsultationResultWhereUniqueInput = Prisma.AtLeast<{
   matchCount?: Prisma.IntFilter<"ConsultationResult"> | number
   cfResult?: Prisma.FloatFilter<"ConsultationResult"> | number
   rank?: Prisma.IntFilter<"ConsultationResult"> | number
+  calculationDetails?: Prisma.JsonNullableFilter<"ConsultationResult">
+  matchedSymptoms?: Prisma.JsonNullableFilter<"ConsultationResult">
+  redFlags?: Prisma.JsonNullableFilter<"ConsultationResult">
+  urgencyLevel?: Prisma.StringNullableFilter<"ConsultationResult"> | string | null
   consultation?: Prisma.XOR<Prisma.ConsultationScalarRelationFilter, Prisma.ConsultationWhereInput>
   disease?: Prisma.XOR<Prisma.DiseaseScalarRelationFilter, Prisma.DiseaseWhereInput>
 }, "id" | "consultationId_diseaseId">
@@ -269,6 +297,10 @@ export type ConsultationResultOrderByWithAggregationInput = {
   matchCount?: Prisma.SortOrder
   cfResult?: Prisma.SortOrder
   rank?: Prisma.SortOrder
+  calculationDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  matchedSymptoms?: Prisma.SortOrderInput | Prisma.SortOrder
+  redFlags?: Prisma.SortOrderInput | Prisma.SortOrder
+  urgencyLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ConsultationResultCountOrderByAggregateInput
   _avg?: Prisma.ConsultationResultAvgOrderByAggregateInput
   _max?: Prisma.ConsultationResultMaxOrderByAggregateInput
@@ -286,6 +318,10 @@ export type ConsultationResultScalarWhereWithAggregatesInput = {
   matchCount?: Prisma.IntWithAggregatesFilter<"ConsultationResult"> | number
   cfResult?: Prisma.FloatWithAggregatesFilter<"ConsultationResult"> | number
   rank?: Prisma.IntWithAggregatesFilter<"ConsultationResult"> | number
+  calculationDetails?: Prisma.JsonNullableWithAggregatesFilter<"ConsultationResult">
+  matchedSymptoms?: Prisma.JsonNullableWithAggregatesFilter<"ConsultationResult">
+  redFlags?: Prisma.JsonNullableWithAggregatesFilter<"ConsultationResult">
+  urgencyLevel?: Prisma.StringNullableWithAggregatesFilter<"ConsultationResult"> | string | null
 }
 
 export type ConsultationResultCreateInput = {
@@ -293,6 +329,10 @@ export type ConsultationResultCreateInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
   consultation: Prisma.ConsultationCreateNestedOneWithoutResultsInput
   disease: Prisma.DiseaseCreateNestedOneWithoutResultsInput
 }
@@ -304,6 +344,10 @@ export type ConsultationResultUncheckedCreateInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
 }
 
 export type ConsultationResultUpdateInput = {
@@ -311,6 +355,10 @@ export type ConsultationResultUpdateInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consultation?: Prisma.ConsultationUpdateOneRequiredWithoutResultsNestedInput
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutResultsNestedInput
 }
@@ -322,6 +370,10 @@ export type ConsultationResultUncheckedUpdateInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ConsultationResultCreateManyInput = {
@@ -331,6 +383,10 @@ export type ConsultationResultCreateManyInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
 }
 
 export type ConsultationResultUpdateManyMutationInput = {
@@ -338,6 +394,10 @@ export type ConsultationResultUpdateManyMutationInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ConsultationResultUncheckedUpdateManyInput = {
@@ -347,6 +407,10 @@ export type ConsultationResultUncheckedUpdateManyInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ConsultationResultListRelationFilter = {
@@ -371,6 +435,10 @@ export type ConsultationResultCountOrderByAggregateInput = {
   matchCount?: Prisma.SortOrder
   cfResult?: Prisma.SortOrder
   rank?: Prisma.SortOrder
+  calculationDetails?: Prisma.SortOrder
+  matchedSymptoms?: Prisma.SortOrder
+  redFlags?: Prisma.SortOrder
+  urgencyLevel?: Prisma.SortOrder
 }
 
 export type ConsultationResultAvgOrderByAggregateInput = {
@@ -386,6 +454,7 @@ export type ConsultationResultMaxOrderByAggregateInput = {
   matchCount?: Prisma.SortOrder
   cfResult?: Prisma.SortOrder
   rank?: Prisma.SortOrder
+  urgencyLevel?: Prisma.SortOrder
 }
 
 export type ConsultationResultMinOrderByAggregateInput = {
@@ -395,6 +464,7 @@ export type ConsultationResultMinOrderByAggregateInput = {
   matchCount?: Prisma.SortOrder
   cfResult?: Prisma.SortOrder
   rank?: Prisma.SortOrder
+  urgencyLevel?: Prisma.SortOrder
 }
 
 export type ConsultationResultSumOrderByAggregateInput = {
@@ -492,6 +562,10 @@ export type ConsultationResultCreateWithoutDiseaseInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
   consultation: Prisma.ConsultationCreateNestedOneWithoutResultsInput
 }
 
@@ -501,6 +575,10 @@ export type ConsultationResultUncheckedCreateWithoutDiseaseInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
 }
 
 export type ConsultationResultCreateOrConnectWithoutDiseaseInput = {
@@ -539,6 +617,10 @@ export type ConsultationResultScalarWhereInput = {
   matchCount?: Prisma.IntFilter<"ConsultationResult"> | number
   cfResult?: Prisma.FloatFilter<"ConsultationResult"> | number
   rank?: Prisma.IntFilter<"ConsultationResult"> | number
+  calculationDetails?: Prisma.JsonNullableFilter<"ConsultationResult">
+  matchedSymptoms?: Prisma.JsonNullableFilter<"ConsultationResult">
+  redFlags?: Prisma.JsonNullableFilter<"ConsultationResult">
+  urgencyLevel?: Prisma.StringNullableFilter<"ConsultationResult"> | string | null
 }
 
 export type ConsultationResultCreateWithoutConsultationInput = {
@@ -546,6 +628,10 @@ export type ConsultationResultCreateWithoutConsultationInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
   disease: Prisma.DiseaseCreateNestedOneWithoutResultsInput
 }
 
@@ -555,6 +641,10 @@ export type ConsultationResultUncheckedCreateWithoutConsultationInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
 }
 
 export type ConsultationResultCreateOrConnectWithoutConsultationInput = {
@@ -589,6 +679,10 @@ export type ConsultationResultCreateManyDiseaseInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
 }
 
 export type ConsultationResultUpdateWithoutDiseaseInput = {
@@ -596,6 +690,10 @@ export type ConsultationResultUpdateWithoutDiseaseInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consultation?: Prisma.ConsultationUpdateOneRequiredWithoutResultsNestedInput
 }
 
@@ -605,6 +703,10 @@ export type ConsultationResultUncheckedUpdateWithoutDiseaseInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ConsultationResultUncheckedUpdateManyWithoutDiseaseInput = {
@@ -613,6 +715,10 @@ export type ConsultationResultUncheckedUpdateManyWithoutDiseaseInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ConsultationResultCreateManyConsultationInput = {
@@ -621,6 +727,10 @@ export type ConsultationResultCreateManyConsultationInput = {
   matchCount: number
   cfResult: number
   rank: number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: string | null
 }
 
 export type ConsultationResultUpdateWithoutConsultationInput = {
@@ -628,6 +738,10 @@ export type ConsultationResultUpdateWithoutConsultationInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   disease?: Prisma.DiseaseUpdateOneRequiredWithoutResultsNestedInput
 }
 
@@ -637,6 +751,10 @@ export type ConsultationResultUncheckedUpdateWithoutConsultationInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ConsultationResultUncheckedUpdateManyWithoutConsultationInput = {
@@ -645,6 +763,10 @@ export type ConsultationResultUncheckedUpdateManyWithoutConsultationInput = {
   matchCount?: Prisma.IntFieldUpdateOperationsInput | number
   cfResult?: Prisma.FloatFieldUpdateOperationsInput | number
   rank?: Prisma.IntFieldUpdateOperationsInput | number
+  calculationDetails?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedSymptoms?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  redFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  urgencyLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -656,6 +778,10 @@ export type ConsultationResultSelect<ExtArgs extends runtime.Types.Extensions.In
   matchCount?: boolean
   cfResult?: boolean
   rank?: boolean
+  calculationDetails?: boolean
+  matchedSymptoms?: boolean
+  redFlags?: boolean
+  urgencyLevel?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationResult"]>
@@ -667,6 +793,10 @@ export type ConsultationResultSelectCreateManyAndReturn<ExtArgs extends runtime.
   matchCount?: boolean
   cfResult?: boolean
   rank?: boolean
+  calculationDetails?: boolean
+  matchedSymptoms?: boolean
+  redFlags?: boolean
+  urgencyLevel?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationResult"]>
@@ -678,6 +808,10 @@ export type ConsultationResultSelectUpdateManyAndReturn<ExtArgs extends runtime.
   matchCount?: boolean
   cfResult?: boolean
   rank?: boolean
+  calculationDetails?: boolean
+  matchedSymptoms?: boolean
+  redFlags?: boolean
+  urgencyLevel?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationResult"]>
@@ -689,9 +823,13 @@ export type ConsultationResultSelectScalar = {
   matchCount?: boolean
   cfResult?: boolean
   rank?: boolean
+  calculationDetails?: boolean
+  matchedSymptoms?: boolean
+  redFlags?: boolean
+  urgencyLevel?: boolean
 }
 
-export type ConsultationResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "consultationId" | "diseaseId" | "matchCount" | "cfResult" | "rank", ExtArgs["result"]["consultationResult"]>
+export type ConsultationResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "consultationId" | "diseaseId" | "matchCount" | "cfResult" | "rank" | "calculationDetails" | "matchedSymptoms" | "redFlags" | "urgencyLevel", ExtArgs["result"]["consultationResult"]>
 export type ConsultationResultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   disease?: boolean | Prisma.DiseaseDefaultArgs<ExtArgs>
@@ -718,6 +856,10 @@ export type $ConsultationResultPayload<ExtArgs extends runtime.Types.Extensions.
     matchCount: number
     cfResult: number
     rank: number
+    calculationDetails: runtime.JsonValue | null
+    matchedSymptoms: runtime.JsonValue | null
+    redFlags: runtime.JsonValue | null
+    urgencyLevel: string | null
   }, ExtArgs["result"]["consultationResult"]>
   composites: {}
 }
@@ -1149,6 +1291,10 @@ export interface ConsultationResultFieldRefs {
   readonly matchCount: Prisma.FieldRef<"ConsultationResult", 'Int'>
   readonly cfResult: Prisma.FieldRef<"ConsultationResult", 'Float'>
   readonly rank: Prisma.FieldRef<"ConsultationResult", 'Int'>
+  readonly calculationDetails: Prisma.FieldRef<"ConsultationResult", 'Json'>
+  readonly matchedSymptoms: Prisma.FieldRef<"ConsultationResult", 'Json'>
+  readonly redFlags: Prisma.FieldRef<"ConsultationResult", 'Json'>
+  readonly urgencyLevel: Prisma.FieldRef<"ConsultationResult", 'String'>
 }
     
 

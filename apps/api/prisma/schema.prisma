@@ -164,21 +164,27 @@ model RuleDetail {
 }
 
 model DiseaseSymptomWeight {
-  id             String       @id @default(cuid())
-  diseaseId      String
-  symptomId      String
-  cfExpert       Float
+  id String @id @default(cuid())
+
+  diseaseId String
+  symptomId String
+
+  mb Float @default(0)
+  md Float @default(0)
+  cfExpert Float
+
   candidateCfMin Float?
   candidateCfMax Float?
-  symptomRole    SymptomRole  @default(SUPPORTING)
-  phase          String?
-  keepStatus     KeepStatus   @default(KEEP)
-  urgencyMode    UrgencyMode  @default(ORDINARY)
-  evidenceDoi    String?
-  note           String?
 
-  disease        Disease      @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
-  symptom        Symptom      @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+  symptomRole SymptomRole @default(SUPPORTING)
+  phase String?
+  keepStatus KeepStatus @default(KEEP)
+  urgencyMode UrgencyMode @default(ORDINARY)
+  evidenceDoi String?
+  note String?
+
+  disease Disease @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  symptom Symptom @relation(fields: [symptomId], references: [id], onDelete: Cascade)
 
   @@unique([diseaseId, symptomId])
 }
@@ -208,15 +214,22 @@ model ConsultationAnswer {
 }
 
 model ConsultationResult {
-  id             String        @id @default(cuid())
-  consultationId String
-  diseaseId      String
-  matchCount     Int
-  cfResult       Float
-  rank           Int
+  id String @id @default(cuid())
 
-  consultation   Consultation  @relation(fields: [consultationId], references: [id], onDelete: Cascade)
-  disease        Disease       @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  consultationId String
+  diseaseId String
+
+  matchCount Int
+  cfResult Float
+  rank Int
+
+  calculationDetails Json?
+  matchedSymptoms Json?
+  redFlags Json?
+  urgencyLevel String?
+
+  consultation Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  disease Disease @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
 
   @@unique([consultationId, diseaseId])
 }

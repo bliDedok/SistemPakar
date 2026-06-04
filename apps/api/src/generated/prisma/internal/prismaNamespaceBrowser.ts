@@ -173,6 +173,8 @@ export const DiseaseSymptomWeightScalarFieldEnum = {
   id: 'id',
   diseaseId: 'diseaseId',
   symptomId: 'symptomId',
+  mb: 'mb',
+  md: 'md',
   cfExpert: 'cfExpert',
   candidateCfMin: 'candidateCfMin',
   candidateCfMax: 'candidateCfMax',
@@ -214,7 +216,11 @@ export const ConsultationResultScalarFieldEnum = {
   diseaseId: 'diseaseId',
   matchCount: 'matchCount',
   cfResult: 'cfResult',
-  rank: 'rank'
+  rank: 'rank',
+  calculationDetails: 'calculationDetails',
+  matchedSymptoms: 'matchedSymptoms',
+  redFlags: 'redFlags',
+  urgencyLevel: 'urgencyLevel'
 } as const
 
 export type ConsultationResultScalarFieldEnum = (typeof ConsultationResultScalarFieldEnum)[keyof typeof ConsultationResultScalarFieldEnum]
