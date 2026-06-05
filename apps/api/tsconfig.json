@@ -1,25 +1,22 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "lib": ["ES2022"],
-    "types": ["node"],
+    "module": "ES2022",
+    "moduleResolution": "node",
     "strict": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts",
-    "prisma/**/*.ts"
+    "prisma/**/*.ts",
+    "scripts/**/*.ts",
+    "prisma.config.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "**/*.old.ts"
   ]
 }

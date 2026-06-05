@@ -22,20 +22,33 @@ type MatchedSymptom = {
   role: string;
 };
 
+
 type ConsultationResultItem = {
-rank?: number;
-cfFinal?: number;
-cfPercent?: number;
-calculationDetails?: {
-  symptomCode: string;
-  symptomName: string;
-  role: string;
-  mb: number;
-  md: number;
-  cfExpert: number;
-  cfUser: number;
-  cfPartial: number;
-}[];
+  rank?: number;
+
+  diseaseCode: string;
+  diseaseName: string;
+  severityLevel?: string | null;
+
+  // field lama
+  cfResult: number;
+  percentage: number;
+
+  // field baru dari backend CF
+  cfFinal?: number;
+  cfPercent?: number;
+
+  matchCount: number;
+
+  // field lama
+  supportingSymptoms: string[];
+
+  // field baru
+  matchedSymptoms?: MatchedSymptom[];
+  calculationDetails?: CalculationDetail[];
+  redFlags?: string[];
+
+  advice: string | null;
 };
 
 type UrgencyLevel = "LOW" | "MEDIUM" | "HIGH" | "EMERGENCY";
@@ -75,12 +88,15 @@ type ConsultationPayload = {
     gender: "MALE" | "FEMALE" | null;
     createdAt?: string;
   };
+
   redFlags: string[];
   urgency?: UrgencyResult;
   explanation?: ExplanationResult;
 
+  // backward compatibility
   results: ConsultationResultItem[];
 
+  // response baru
   rankedResults?: ConsultationResultItem[];
   top1?: ConsultationResultItem | null;
   top3?: ConsultationResultItem[];
@@ -214,6 +230,34 @@ function truncateText(text: string | null | undefined, max = 160) {
   return `${text.slice(0, max)}...`;
 }
 
+function getSourceHost(url: string | null | undefined) {
+  if (!url) return null;
+
+  try {
+    return new URL(url).hostname.replace("www.", "");
+  } catch {
+    return url;
+  }
+}
+
+function buildCfCombineText(
+  details: { cfPartial: number }[] | undefined,
+  cfFinal: number
+) {
+  if (!details || details.length === 0) return "-";
+
+  const partials = details.map((detail) => detail.cfPartial);
+
+  const visiblePartials = partials
+    .slice(0, 6)
+    .map((value) => Number(value).toFixed(2))
+    .join(" ⊕ ");
+
+  const suffix = partials.length > 6 ? " ⊕ ..." : "";
+
+  return `${visiblePartials}${suffix} = ${Number(cfFinal).toFixed(2)}`;
+}
+
 function AnimatedPercentage({
   value,
   delay = 0,
@@ -320,13 +364,16 @@ export default function ConsultationResultPage() {
   normalizedPayload?.rankedResults?.slice(0, 3) ??
   diagnosisResults.slice(0, 3);
 
-  const topCalculationDetails = topResult?.calculationDetails ?? [];
+const topCalculationDetails = topResult?.calculationDetails ?? [];
 
-  const topCfPercent =
-    topResult?.cfPercent ?? topResult?.percentage ?? 0;
+const topCfPercent = topResult?.cfPercent ?? topResult?.percentage ?? 0;
 
-  const topCfFinal =
-    topResult?.cfFinal ?? topResult?.cfResult ?? 0;
+const topCfFinal = topResult?.cfFinal ?? topResult?.cfResult ?? 0;
+
+const cfCombineText = buildCfCombineText(
+  topCalculationDetails,
+  topCfFinal
+);
 
   return (
   <main className="h-[100dvh] overflow-hidden bg-slate-100 p-3 text-slate-900">
@@ -466,7 +513,7 @@ export default function ConsultationResultPage() {
               Ranking Diagnosis
             </p>
             <h2 className="mt-1 text-lg font-black text-slate-950">
-              Top-3 Diagnosis
+              Top Diagnosis Candidates
             </h2>
 
             <div className="mt-3 grid min-h-0 flex-1 grid-cols-3 gap-2">
@@ -575,13 +622,13 @@ export default function ConsultationResultPage() {
 
           {/* EXPLANATION */}
           <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex shrink-0 items-start justify-between gap-3">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
                   Explanation Layer
                 </p>
                 <h2 className="mt-1 text-lg font-black text-slate-950">
-                  RAG / Template Explanation
+                  RAG Evidence Explanation
                 </h2>
               </div>
 
@@ -590,32 +637,104 @@ export default function ConsultationResultPage() {
               </span>
             </div>
 
-            <div className="mt-3 grid min-h-0 flex-1 grid-rows-3 gap-2">
-              <div className="min-h-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                  Ringkasan
-                </p>
-                <p className="mt-1 line-clamp-3 text-[11px] font-medium leading-5 text-slate-700">
-                  {truncateText(explanation?.summary, 170)}
-                </p>
-              </div>
+            <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1 [scrollbar-width:thin]">
+              <div className="space-y-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    Ringkasan Hasil
+                  </p>
+                  <p className="mt-1 text-[11px] font-medium leading-5 text-slate-700">
+                    {explanation?.summary || "-"}
+                  </p>
+                </div>
 
-              <div className="min-h-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                  Mengapa hasil muncul?
-                </p>
-                <p className="mt-1 line-clamp-3 text-[11px] font-medium leading-5 text-slate-700">
-                  {truncateText(explanation?.whyThisDiagnosis, 190)}
-                </p>
-              </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    Alasan Diagnosis
+                  </p>
+                  <p className="mt-1 text-[11px] font-medium leading-5 text-slate-700">
+                    {explanation?.whyThisDiagnosis || "-"}
+                  </p>
+                </div>
 
-              <div className="min-h-0 overflow-hidden rounded-2xl border border-blue-100 bg-blue-50 p-3">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                  Langkah berikutnya
-                </p>
-                <p className="mt-1 line-clamp-3 text-[11px] font-medium leading-5 text-slate-700">
-                  {truncateText(explanation?.nextStep, 180)}
-                </p>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    Penjelasan Berbasis Evidence
+                  </p>
+                  <p className="mt-1 text-[11px] font-medium leading-5 text-slate-700">
+                    {explanation?.evidenceBasedExplanation ||
+                      "Evidence tambahan belum tersedia."}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-blue-100 bg-blue-50 p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-blue-700">
+                      Evidence Sources
+                    </p>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-blue-700">
+                      {retrievedEvidence.length} sources
+                    </span>
+                  </div>
+
+                  <div className="mt-2 space-y-1.5">
+                    {retrievedEvidence.length > 0 ? (
+                      retrievedEvidence.map((evidence, index) => (
+                        <div
+                          key={`${evidence.title}-${index}`}
+                          className="rounded-xl bg-white px-3 py-2 ring-1 ring-blue-100"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="text-[11px] font-black leading-4 text-slate-900">
+                                {index + 1}. {evidence.title}
+                              </p>
+
+                              <p className="mt-1 text-[10px] font-semibold text-slate-500">
+                                {evidence.sourceName || "Unknown source"} •{" "}
+                                {getSourceHost(evidence.sourceUrl) || evidence.sourceType}
+                              </p>
+
+                              {evidence.evidenceDoi && (
+                                <p className="mt-1 text-[10px] font-semibold text-slate-500">
+                                  DOI: {evidence.evidenceDoi}
+                                </p>
+                              )}
+                            </div>
+
+                            <span className="shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-black text-blue-700">
+                              {Number(evidence.score ?? 0).toFixed(2)}
+                            </span>
+                          </div>
+
+                          {evidence.sourceUrl && (
+                            <a
+                              href={evidence.sourceUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="mt-1 inline-flex text-[10px] font-bold text-blue-700 underline underline-offset-2"
+                            >
+                              Open source
+                            </a>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-[11px] font-semibold text-slate-600">
+                        Evidence belum tersedia. Sistem menggunakan template explanation.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-blue-100 bg-blue-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-700">
+                    Langkah Berikutnya
+                  </p>
+                  <p className="mt-1 text-[11px] font-medium leading-5 text-slate-700">
+                    {explanation?.nextStep || "-"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -628,7 +747,7 @@ export default function ConsultationResultPage() {
 
             <div className="mt-1 flex items-end justify-between gap-3">
               <h2 className="text-lg font-black text-slate-950">
-                Detail Perhitungan CF
+                Detail Perhitungan CF Top-1
               </h2>
               <p className="text-[11px] font-bold text-slate-500">
                 CF Final: {topCfFinal}
@@ -682,10 +801,18 @@ export default function ConsultationResultPage() {
               </table>
             </div>
 
-            <p className="mt-2 text-[10px] leading-4 text-slate-500">
-              CF Expert = MB - MD; CF Partial = CF Expert × CF User; CF Final
-              dihitung menggunakan CF Combine.
-            </p>
+            <div className="mt-2 rounded-xl bg-slate-50 px-3 py-2">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                CF Combine
+              </p>
+              <p className="mt-1 text-[11px] font-bold text-slate-800">
+                {cfCombineText}
+              </p>
+              <p className="mt-1 text-[10px] leading-4 text-slate-500">
+                CF Expert = MB - MD; CF Partial = CF Expert × CF User; CF Final dihitung
+                menggunakan CF Combine.
+              </p>
+            </div>
           </div>
 
           {/* RESEARCH SNAPSHOT */}
@@ -697,10 +824,37 @@ export default function ConsultationResultPage() {
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
                 <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                  Kandidat
+                  Knowledge Base
                 </p>
                 <p className="mt-1 truncate text-xs font-black text-slate-900">
-                  {diagnosisResults.length}
+                  Saputra et al. 2022
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  CF Formula
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  MB - MD
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  Ranking Rule
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  CF + Match Count
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  RAG Role
+                </p>
+                <p className="mt-1 truncate text-xs font-black text-slate-900">
+                  Explanation Only
                 </p>
               </div>
 
@@ -721,29 +875,17 @@ export default function ConsultationResultPage() {
                   {getExplanationSourceLabel(explanation?.source)}
                 </p>
               </div>
-
-              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
-                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                  Created
-                </p>
-                <p className="mt-1 truncate text-xs font-black text-slate-900">
-                  {patientData?.createdAt
-                    ? new Date(patientData.createdAt).toLocaleDateString("id-ID")
-                    : "-"}
-                </p>
-              </div>
             </div>
 
             <div className="mt-3 min-h-0 flex-1 rounded-2xl bg-white/70 p-3">
               <p className="text-[10px] font-black uppercase tracking-widest text-amber-800">
-                Catatan
+                Guardrail
               </p>
-              <ul className="mt-2 space-y-1 text-[11px] font-semibold leading-5 text-amber-900">
-                <li>• Diagnosis bersifat identifikasi awal.</li>
-                <li>• CF menentukan ranking penyakit.</li>
-                <li>• RAG hanya menjelaskan hasil CF.</li>
-                <li>• Hasil final tetap membutuhkan dokter.</li>
-              </ul>
+
+              <p className="mt-2 text-[11px] font-semibold leading-5 text-amber-900">
+                Diagnosis, ranking, red flag, dan urgency dihitung oleh inference engine.
+                RAG hanya digunakan sebagai explanation layer dan tidak mengubah hasil CF.
+              </p>
             </div>
           </div>
         </section>
@@ -921,9 +1063,21 @@ function ResearchTopDiagnosisCard({
         </div>
       </div>
 
-      <p className="mt-auto pt-4 text-[11px] leading-5 text-slate-500">
-        {disclaimer}
-      </p>
+      <div className="mt-auto pt-3">
+        <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+            Decision Basis
+          </p>
+          <p className="mt-1 text-[11px] font-semibold leading-4 text-slate-700">
+            Top-1 dipilih berdasarkan nilai CF Final tertinggi, kemudian jumlah
+            gejala cocok jika terjadi nilai CF yang sama.
+          </p>
+        </div>
+
+        <p className="mt-2 text-[10px] leading-4 text-slate-500">
+          {disclaimer}
+        </p>
+      </div>
     </div>
   );
 }

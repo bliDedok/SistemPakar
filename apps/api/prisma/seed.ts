@@ -8,8 +8,9 @@ import {
   SymptomItemType,
   SymptomRole,
   UrgencyMode,
-} from "../src/generated/prisma/enums.ts";
+} from "../src/generated/prisma/enums";
 import { normalizeText } from "../src/shared/utils/normalize-text";
+import { generateEmbedding } from "../src/modules/rag/embedding.service";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -870,6 +871,317 @@ const rules = diseases.map((disease, index) => {
   };
 });
 
+type EvidenceChunkSeed = {
+  diseaseCode: string;
+  title: string;
+  content: string;
+  sourceName: string;
+  sourceType:
+    | "disease_description"
+    | "symptom_explanation"
+    | "warning_sign"
+    | "follow_up_suggestion";
+  sourceUrl: string;
+  evidenceDoi?: string | null;
+};
+
+const evidenceChunks: EvidenceChunkSeed[] = [
+  // P001 - Measles / Campak
+  {
+    diseaseCode: "P001",
+    title: "Measles clinical symptoms in children",
+    sourceName: "CDC",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.cdc.gov/measles/signs-symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Campak adalah penyakit infeksi virus yang sangat menular. Gejala awal yang relevan untuk sistem pakar meliputi demam tinggi, batuk, hidung berair, mata merah atau berair, bercak Koplik di mulut, dan ruam kulit. Dalam sistem ini, kombinasi ruam, mata berair, batuk kering, demam tinggi, dan Koplik spots memperkuat kandidat Measles / Campak.",
+  },
+  {
+    diseaseCode: "P001",
+    title: "Measles complications and need for medical attention",
+    sourceName: "CDC",
+    sourceType: "warning_sign",
+    sourceUrl: "https://www.cdc.gov/measles/hcp/clinical-overview/index.html",
+    evidenceDoi: null,
+    content:
+      "Campak dapat menyebabkan penyakit serius pada anak, termasuk komplikasi seperti pneumonia, diare, otitis media, dan perburukan kondisi umum. Demam tinggi, ruam luas, atau anak tampak sangat lemah perlu dipantau sebagai tanda risiko yang membutuhkan pemeriksaan tenaga kesehatan.",
+  },
+  {
+    diseaseCode: "P001",
+    title: "Measles follow-up suggestion",
+    sourceName: "WHO",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/measles",
+    evidenceDoi: null,
+    content:
+      "Jika hasil sistem menunjukkan kemungkinan Campak, orang tua disarankan memantau demam, asupan cairan, ruam, dan tanda perburukan. Hasil sistem bukan diagnosis pasti; anak perlu diperiksa oleh tenaga kesehatan terutama bila demam sangat tinggi, ruam menyebar, atau muncul tanda bahaya.",
+  },
+
+  // P002 - Malaria
+  {
+    diseaseCode: "P002",
+    title: "Malaria common symptoms",
+    sourceName: "CDC",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.cdc.gov/malaria/symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Malaria dapat ditandai demam, menggigil, sakit kepala, nyeri otot, rasa lelah, mual, muntah, dan diare. Pada sistem pakar ini, kombinasi demam, menggigil, sakit kepala, muntah, banyak berkeringat, dan nafsu makan menurun mendukung kandidat Malaria.",
+  },
+  {
+    diseaseCode: "P002",
+    title: "Malaria severe symptoms and urgency",
+    sourceName: "CDC",
+    sourceType: "warning_sign",
+    sourceUrl: "https://www.cdc.gov/malaria/about/index.html",
+    evidenceDoi: null,
+    content:
+      "Malaria dapat berkembang menjadi penyakit berat bila tidak ditangani. Gejala berat dapat meliputi kejang, kebingungan, koma, atau gangguan organ. Bila anak demam disertai sangat lemah, gangguan kesadaran, kejang, atau riwayat wilayah endemis, pemeriksaan medis perlu diprioritaskan.",
+  },
+  {
+    diseaseCode: "P002",
+    title: "Malaria follow-up suggestion",
+    sourceName: "CDC",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.cdc.gov/malaria/symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Jika sistem menampilkan Malaria sebagai kandidat, pengguna perlu mempertimbangkan riwayat perjalanan atau tinggal di daerah endemis malaria. Pemeriksaan tenaga kesehatan dibutuhkan untuk konfirmasi karena diagnosis malaria memerlukan evaluasi klinis dan pemeriksaan penunjang.",
+  },
+
+  // P003 - Typhoid fever
+  {
+    diseaseCode: "P003",
+    title: "Typhoid fever symptoms",
+    sourceName: "WHO",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/typhoid",
+    evidenceDoi: null,
+    content:
+      "Demam tifoid dapat menimbulkan demam tinggi berkepanjangan, kelelahan, sakit kepala, mual, nyeri perut, konstipasi atau diare, dan kadang ruam. Dalam sistem ini, kombinasi demam, sakit kepala, sakit perut, diare, nafsu makan menurun, dan mudah lelah mendukung kandidat Typhoid fever.",
+  },
+  {
+    diseaseCode: "P003",
+    title: "Typhoid fever in children and gastrointestinal symptoms",
+    sourceName: "CDC Yellow Book",
+    sourceType: "symptom_explanation",
+    sourceUrl:
+      "https://www.cdc.gov/yellow-book/hcp/travel-associated-infections-diseases/typhoid-and-paratyphoid-fever.html",
+    evidenceDoi: null,
+    content:
+      "Pada anak, gejala gastrointestinal seperti diare dan muntah dapat lebih sering muncul dibandingkan pada orang dewasa. Gejala lain yang relevan dapat berupa sakit kepala, malaise, nyeri perut, batuk kering, sakit tenggorokan, kelelahan, dan ruam rose spots.",
+  },
+  {
+    diseaseCode: "P003",
+    title: "Typhoid fever follow-up suggestion",
+    sourceName: "CDC",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.cdc.gov/typhoid-fever/about/index.html",
+    evidenceDoi: null,
+    content:
+      "Demam tifoid dan paratifoid dapat menjadi penyakit serius. Jika sistem menunjukkan kandidat tifoid, terutama pada demam menetap disertai sakit perut, diare, lemah, atau nafsu makan menurun, pengguna disarankan mencari pemeriksaan medis untuk konfirmasi dan tata laksana.",
+  },
+
+  // P004 - Diarrhea / Diare
+  {
+    diseaseCode: "P004",
+    title: "Diarrhoeal disease and dehydration risk",
+    sourceName: "WHO",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+    evidenceDoi: null,
+    content:
+      "Diare menyebabkan kehilangan cairan dan elektrolit melalui feses cair, muntah, keringat, urine, dan pernapasan. Risiko utama pada anak adalah dehidrasi. Dalam sistem ini, sering buang air besar, BAB cair, kram perut, mual, nafsu makan menurun, dan lesu mendukung kandidat Diarrhea / Diare.",
+  },
+  {
+    diseaseCode: "P004",
+    title: "Severe dehydration warning signs",
+    sourceName: "CDC",
+    sourceType: "warning_sign",
+    sourceUrl: "https://www.cdc.gov/mmwr/preview/mmwrhtml/00018677.htm",
+    evidenceDoi: null,
+    content:
+      "Tanda dehidrasi berat dapat meliputi letargi berat, perubahan kesadaran, perfusi buruk, ekstremitas dingin, dan tanda penarikan kulit yang memanjang. Pada diare anak, tanda dehidrasi berat perlu diperlakukan sebagai red flag yang membutuhkan evaluasi segera.",
+  },
+  {
+    diseaseCode: "P004",
+    title: "Diarrhea follow-up suggestion",
+    sourceName: "WHO",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+    evidenceDoi: null,
+    content:
+      "Pada diare anak, fokus awal adalah mencegah dehidrasi dengan menjaga asupan cairan. Pemeriksaan medis perlu dilakukan bila anak sangat lemah, tidak mau minum, tampak dehidrasi, BAB sangat sering, atau gejala memburuk.",
+  },
+
+  // P005 - ISPA
+  {
+    diseaseCode: "P005",
+    title: "Upper respiratory infection symptoms",
+    sourceName: "CDC",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.cdc.gov/common-cold/about/index.html",
+    evidenceDoi: null,
+    content:
+      "Infeksi saluran pernapasan atas dapat menimbulkan hidung berair, hidung tersumbat, batuk, bersin, sakit tenggorokan, sakit kepala, nyeri badan ringan, dan demam. Dalam sistem ini, batuk, bersin, hidung tersumbat atau berair, sakit tenggorokan, mata merah, dan demam mendukung kandidat ISPA.",
+  },
+  {
+    diseaseCode: "P005",
+    title: "Respiratory symptoms and monitoring",
+    sourceName: "CDC",
+    sourceType: "symptom_explanation",
+    sourceUrl: "https://www.cdc.gov/rhinoviruses/about/index.html",
+    evidenceDoi: null,
+    content:
+      "Gejala seperti batuk, bersin, hidung berair, hidung tersumbat, sakit tenggorokan, sakit kepala, nyeri badan ringan, dan demam dapat terlihat pada infeksi pernapasan. Sebagian besar ringan, tetapi perlu dipantau bila gejala memburuk atau muncul tanda napas berat.",
+  },
+  {
+    diseaseCode: "P005",
+    title: "ISPA follow-up suggestion",
+    sourceName: "CDC",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.cdc.gov/common-cold/about/index.html",
+    evidenceDoi: null,
+    content:
+      "Jika sistem menunjukkan ISPA sebagai kandidat, orang tua dapat memantau demam, batuk, asupan cairan, dan pola napas. Pemeriksaan medis diperlukan bila anak mengalami sesak, napas cepat, demam tinggi menetap, atau tampak sangat lemah.",
+  },
+
+  // P006 - Dengue Hemorrhagic Fever / DBD
+  {
+    diseaseCode: "P006",
+    title: "Dengue symptoms and severe warning signs",
+    sourceName: "CDC",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.cdc.gov/dengue/signs-symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Dengue dapat ditandai demam disertai sakit kepala, mual, muntah, ruam, nyeri, atau tanda perdarahan. Warning signs dengue berat meliputi nyeri perut, muntah berulang, perdarahan dari hidung atau gusi, sangat lelah, dan gelisah.",
+  },
+  {
+    diseaseCode: "P006",
+    title: "Dengue warning signs in clinical guidance",
+    sourceName: "CDC Yellow Book",
+    sourceType: "warning_sign",
+    sourceUrl:
+      "https://www.cdc.gov/yellow-book/hcp/travel-associated-infections-diseases/dengue.html",
+    evidenceDoi: null,
+    content:
+      "Tanda peringatan dengue berat meliputi nyeri perut berat, muntah persisten, perdarahan mukosa, letargi atau gelisah, pembesaran hati, dan tanda gangguan sirkulasi. Pada sistem ini, perdarahan hidung atau gusi dan sangat gelisah diperlakukan sebagai warning sign.",
+  },
+  {
+    diseaseCode: "P006",
+    title: "Dengue follow-up suggestion",
+    sourceName: "CDC",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.cdc.gov/dengue/signs-symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Jika sistem menunjukkan DBD sebagai kandidat, pengguna disarankan segera mencari pemeriksaan medis bila ada perdarahan, muntah berulang, sangat gelisah, sangat lemah, nyeri perut, atau demam yang menetap. Hasil sistem bukan diagnosis pasti.",
+  },
+
+  // P007 - Pneumonia
+  {
+    diseaseCode: "P007",
+    title: "Pneumonia in children overview",
+    sourceName: "WHO",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+    evidenceDoi: null,
+    content:
+      "Pneumonia adalah infeksi saluran napas akut yang menyerang paru-paru. Saat pneumonia terjadi, alveoli dapat terisi cairan atau nanah sehingga pernapasan terasa nyeri dan asupan oksigen dapat terbatas. Pada sistem ini, batuk, demam, suara napas tidak normal, sesak napas, dan nyeri dada mendukung kandidat Pneumonia.",
+  },
+  {
+    diseaseCode: "P007",
+    title: "Pneumonia warning signs",
+    sourceName: "Mayo Clinic",
+    sourceType: "warning_sign",
+    sourceUrl:
+      "https://www.mayoclinic.org/diseases-conditions/pneumonia/symptoms-causes/syc-20354204",
+    evidenceDoi: null,
+    content:
+      "Kesulitan bernapas, nyeri dada, demam tinggi menetap, dan batuk persisten merupakan tanda yang perlu mendapatkan perhatian medis. Pada sistem ini, sesak napas, suara napas tidak normal, dan nyeri dada dianggap sebagai red flag untuk urgency tinggi atau emergency.",
+  },
+  {
+    diseaseCode: "P007",
+    title: "Pneumonia follow-up suggestion",
+    sourceName: "WHO",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.who.int/news-room/fact-sheets/detail/pneumonia",
+    evidenceDoi: null,
+    content:
+      "Jika sistem menunjukkan Pneumonia sebagai kandidat, terutama bersama sesak napas, napas cepat, suara napas tidak normal, nyeri dada, atau anak tampak sangat lemah, pengguna disarankan segera membawa anak ke fasilitas kesehatan.",
+  },
+
+  // P008 - Varicella / Cacar Air
+  {
+    diseaseCode: "P008",
+    title: "Chickenpox symptoms and vesicular rash",
+    sourceName: "CDC",
+    sourceType: "disease_description",
+    sourceUrl: "https://www.cdc.gov/chickenpox/signs-symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Cacar air atau varicella ditandai ruam yang berubah menjadi lepuhan gatal berisi cairan dan kemudian menjadi keropeng. Ruam dapat muncul pada dada, punggung, wajah, dan menyebar ke bagian tubuh lain. Dalam sistem ini, bintik merah kecil dan lentingan berisi cairan bening memperkuat kandidat Varicella.",
+  },
+  {
+    diseaseCode: "P008",
+    title: "Clinical features of varicella in children",
+    sourceName: "CDC",
+    sourceType: "symptom_explanation",
+    sourceUrl: "https://www.cdc.gov/chickenpox/hcp/clinical-overview/index.html",
+    evidenceDoi: null,
+    content:
+      "Pada anak, ruam sering menjadi tanda pertama varicella. Lesi dapat berkembang dari makula ke papula lalu vesikel sebelum berkerak. Demam ringan, malaise, sakit kepala, atau nafsu makan menurun dapat menyertai.",
+  },
+  {
+    diseaseCode: "P008",
+    title: "Varicella follow-up suggestion",
+    sourceName: "CDC",
+    sourceType: "follow_up_suggestion",
+    sourceUrl: "https://www.cdc.gov/chickenpox/signs-symptoms/index.html",
+    evidenceDoi: null,
+    content:
+      "Jika sistem menunjukkan Varicella sebagai kandidat, orang tua disarankan menjaga kebersihan kulit, menghindari garukan, dan memantau demam atau tanda infeksi kulit. Pemeriksaan medis diperlukan bila ruam berat, demam tinggi, anak sangat lemah, atau muncul komplikasi.",
+  },
+];
+
+async function seedEvidenceChunks(
+  diseaseMap: Map<string, string>
+) {
+  for (const chunk of evidenceChunks) {
+    const diseaseId = diseaseMap.get(chunk.diseaseCode);
+
+    if (!diseaseId) {
+      throw new Error(
+        `Disease tidak ditemukan untuk EvidenceChunk: ${chunk.diseaseCode}`
+      );
+    }
+
+    const embeddingText = [
+      chunk.title,
+      chunk.content,
+      chunk.sourceName,
+      chunk.sourceType,
+    ].join("\n");
+
+    const embedding = await generateEmbedding(embeddingText);
+
+    await prisma.evidenceChunk.create({
+      data: {
+        diseaseId,
+        title: chunk.title,
+        content: chunk.content,
+        sourceName: chunk.sourceName,
+        sourceType: chunk.sourceType,
+        sourceUrl: chunk.sourceUrl,
+        evidenceDoi: chunk.evidenceDoi ?? null,
+        embedding,
+      },
+    });
+  }
+}
+
 async function main() {
   const resetConsultations = process.env.RESET_CONSULTATIONS === "true";
 
@@ -917,9 +1229,10 @@ async function main() {
   }
 
   const diseaseMap = new Map(
-    (await prisma.disease.findMany()).map((disease) => [disease.code, disease.id]),
-  );
+  (await prisma.disease.findMany()).map((disease) => [disease.code, disease.id]),
+);
 
+  
   for (const rule of rules) {
     const diseaseId = diseaseMap.get(rule.diseaseCode);
     if (!diseaseId) {
@@ -987,6 +1300,8 @@ async function main() {
       },
     });
   }
+
+  await seedEvidenceChunks(diseaseMap);
 
   console.log("Seed Saputra 2022 selesai.");
   console.log(`Diseases: ${diseases.length}`);
